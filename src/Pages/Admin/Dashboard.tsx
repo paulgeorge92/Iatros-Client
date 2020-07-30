@@ -14,8 +14,6 @@ const AdminDashboard = (props: any) => {
     requests?: number;
   }
 
-  const months = ['Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'];
-
   const [stats, setStats] = useState<Stats>({});
   const [incomExpenseChartData, setIncomExpenseChartData] = useState<any>({});
   const [incomeExpenseFacts, setIncomeExpenseFacts] = useState<any>({});
@@ -25,6 +23,7 @@ const AdminDashboard = (props: any) => {
   const [requestChartData, setRequestChartData] = useState<any>({});
 
   useEffect(() => {
+    const months = ['Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'];
     setTimeout(function () {
       setStats({
         patients: 1,
@@ -105,12 +104,8 @@ const AdminDashboard = (props: any) => {
         width: '100%',
       });
     }, 1000);
-  }, []);
 
-  useEffect(() => {
-    return () => {
-      console.log('cleaned up');
-    };
+    return () => {};
   }, []);
 
   return (

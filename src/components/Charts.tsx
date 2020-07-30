@@ -57,9 +57,7 @@ export const LineChart = (props: LineChartProps) => {
         setChartWidth(document.getElementById(`linechart-${props.id}`)?.offsetWidth);
       }, 10);
     }
-    return () => {
-      console.log('cleaned up');
-    };
+    return () => {};
   }, []);
 
   return <div id={`linechart-${props.id}`}>{chartData.series ? <Chart {...chartData}></Chart> : ''}</div>;
