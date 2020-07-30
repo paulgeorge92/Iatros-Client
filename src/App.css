@@ -1,0 +1,22 @@
+@import '~antd/dist/antd.css';
+@import './FontFamily.less';
+li.ant-menu-item {
+    font-family: 'Dosis', 'Poppins', sans-serif;
+}
+
+.responsive-img {
+    max-width: 100%;
+}
+
+.mb-5 {
+    margin-bottom: 15px;
+}
+
+.ant-layout-sider-zero-width-trigger {
+    top: 0;
+}
+
+.ant-menu-item .anticon svg, .ant-menu-submenu-title .anticon svg {
+    width: 18px !important;
+    height: 18px !important;
+}
