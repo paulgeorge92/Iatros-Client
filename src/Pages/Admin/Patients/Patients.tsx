@@ -1,10 +1,12 @@
 import React from 'react';
-import { Row, Col } from 'antd';
+import { Row, Col, Button, Space } from 'antd';
 import Title from 'antd/lib/typography/Title';
 import { AdminPath } from '../../../constants';
-import { HomeFilled } from '@ant-design/icons';
+import { HomeFilled, PlusOutlined } from '@ant-design/icons';
 import { HeartBeatIcon } from '../../../CustomIcons';
 import Breadcrumb, { BreadcrumbItem } from '../../../components/Breadcrumb';
+import DateRangePicker from '../../../components/DateRangePicker';
+import { Link } from 'react-router-dom';
 
 const Patients = () => {
   let breadcrumbItems: Array<BreadcrumbItem> = [
@@ -27,7 +29,16 @@ const Patients = () => {
           </Title>
           <Breadcrumb items={breadcrumbItems} className="breadcrumb"></Breadcrumb>
         </Col>
-        <Col xs={24} md={12}></Col>
+        <Col xs={24} md={12} style={{ textAlign: 'right' }}>
+          <Space>
+            <DateRangePicker></DateRangePicker>
+            <Link to={`${AdminPath}/patients/new`}>
+              <Button type="primary" icon={<PlusOutlined />}>
+                New Patient
+              </Button>
+            </Link>
+          </Space>
+        </Col>
       </Row>
     </>
   );

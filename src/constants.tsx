@@ -11,6 +11,7 @@ interface MenuItem {
   icon?: React.ReactElement;
   showInMenu?: boolean;
   component?: ReactNode;
+  showSubMenu?: Boolean;
 }
 
 export const AdminPath = '/admin';
@@ -32,6 +33,15 @@ export const AdminMenuItems: Array<MenuItem> = [
     icon: <HeartBeatIcon />,
     showInMenu: true,
     component: <Patients />,
+    showSubMenu: false,
+    subMenu: [
+      {
+        name: 'Add Patients',
+        path: 'patients/new',
+        showInMenu: true,
+        index: 1,
+      },
+    ],
   },
   {
     name: 'Appointments',
@@ -60,6 +70,7 @@ export const AdminMenuItems: Array<MenuItem> = [
     index: 6,
     icon: <StoreIcon />,
     showInMenu: true,
+    showSubMenu: true,
     subMenu: [
       {
         name: 'POS/Bill',
@@ -113,6 +124,7 @@ export const AdminMenuItems: Array<MenuItem> = [
     index: 9,
     icon: <RupeeIcon />,
     showInMenu: true,
+    showSubMenu: true,
     subMenu: [
       {
         name: 'Salary Template',
@@ -147,6 +159,7 @@ export const AdminMenuItems: Array<MenuItem> = [
     index: 11,
     icon: <UserIcon />,
     showInMenu: true,
+    showSubMenu: true,
     subMenu: [
       {
         name: 'Users',
@@ -168,6 +181,7 @@ export const AdminMenuItems: Array<MenuItem> = [
     index: 12,
     icon: <SettingsIcon />,
     showInMenu: true,
+    showSubMenu: true,
     subMenu: [
       {
         name: 'System Info',

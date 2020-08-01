@@ -46,11 +46,17 @@ let AdminRoutes = (props: any) => {
 
   useEffect(() => {
     if (!userContext.id && !sessionStorage.getItem('userSession')) {
-      history.push(`${path}/login`);
+      history.push({
+        pathname: `${path}/login`,
+        state: { redirectUrl: document.location.pathname.toLowerCase() },
+      });
     } else {
       var session = JSON.parse(sessionStorage.getItem('userSession') || '{}');
       if (session.mode === 'admin' && new Date(parseInt(session.expiry) || '0') <= new Date()) {
-        history.push(`${path}/login`);
+        history.push({
+          pathname: `${path}/login`,
+          state: { redirectUrl: document.location.pathname.toLowerCase() },
+        });
       }
     }
   });
@@ -71,7 +77,7 @@ let AdminRoutes = (props: any) => {
           <Menu theme="light" defaultSelectedKeys={[getcurrentPathIndex()[1]]} defaultOpenKeys={[getcurrentPathIndex()[0]]} mode="inline" title="Dashboard">
             {AdminMenuItems.map((item) => {
               return item.showInMenu ? (
-                !item.subMenu || item.subMenu.length === 0 ? (
+                !item.subMenu || item.subMenu.length === 0 || !item.showSubMenu ? (
                   <Menu.Item key={item.index} icon={item.icon}>
                     {item.name}
                     <Link to={`${path}/${item.path}`}></Link>
@@ -100,18 +106,23 @@ let AdminRoutes = (props: any) => {
               <AdminDashboard />
             </Route>
             {AdminMenuItems.map((item, index) => {
-              return !item.subMenu || item.subMenu.length === 0 ? (
-                <Route exact path={`${path}/${item.path}`} key={index}>
-                  {item.component}
-                </Route>
-              ) : (
-                item.subMenu.map((submenu, subIndex) => {
-                  return (
-                    <Route exact path={`${path}/${submenu.path}`} key={subIndex}>
-                      {submenu.component}
-                    </Route>
-                  );
-                })
+              return (
+                <>
+                  <Route exact path={`${path}/${item.path}`} key={index}>
+                    {item.component}
+                  </Route>
+                  {item.subMenu ? (
+                    item.subMenu.map((submenu, subIndex) => {
+                      return (
+                        <Route exact path={`${path}/${submenu.path}`} key={subIndex}>
+                          {submenu.component}
+                        </Route>
+                      );
+                    })
+                  ) : (
+                    <></>
+                  )}
+                </>
               );
             })}
           </Switch>
