@@ -16,6 +16,7 @@ let AdminRoutes = (props: any) => {
   const [collapsedWidth, setCollpasedWidth] = useState(0);
 
   let getcurrentPathIndex = () => {
+    debugger;
     let currentPath = document.location.pathname.toLowerCase();
     if (currentPath === AdminPath) {
       return ['1', '1'];
@@ -27,8 +28,12 @@ let AdminRoutes = (props: any) => {
         let subMenu: any = AdminMenuItems[i].subMenu || [];
         for (let j = 0; j < subMenu.length; j++) {
           if (`${AdminPath}/${subMenu[j].path}` === currentPath) {
-            console.log(AdminMenuItems[i].index.toString(), subMenu[j].index.toString());
-            return [AdminMenuItems[i].index.toString(), `${AdminMenuItems[i].index.toString()}-${subMenu[j].index.toString()}`];
+            if (AdminMenuItems[i].showSubMenu) {
+              console.log('selected indexs ', AdminMenuItems[i].index.toString(), `${AdminMenuItems[i].index.toString()}-${subMenu[j].index.toString()}`);
+              return [AdminMenuItems[i].index.toString(), `${AdminMenuItems[i].index.toString()}-${subMenu[j].index.toString()}`];
+            }
+            console.log('selected indexs ', AdminMenuItems[i].index.toString(), AdminMenuItems[i].index.toString());
+            return [AdminMenuItems[i].index.toString(), AdminMenuItems[i].index.toString()];
           }
         }
       }
@@ -78,12 +83,12 @@ let AdminRoutes = (props: any) => {
             {AdminMenuItems.map((item) => {
               return item.showInMenu ? (
                 !item.subMenu || item.subMenu.length === 0 || !item.showSubMenu ? (
-                  <Menu.Item key={item.index} icon={item.icon}>
+                  <Menu.Item key={`${item.index}`} icon={item.icon}>
                     {item.name}
                     <Link to={`${path}/${item.path}`}></Link>
                   </Menu.Item>
                 ) : (
-                  <Menu.SubMenu key={item.index} icon={item.icon} title={item.name}>
+                  <Menu.SubMenu key={`${item.index}`} icon={item.icon} title={item.name}>
                     {item.subMenu.map((submenu) => {
                       return (
                         <Menu.Item key={`${item.index}-${submenu.index}`}>
@@ -105,24 +110,24 @@ let AdminRoutes = (props: any) => {
             <Route exact path={`${path}`}>
               <AdminDashboard />
             </Route>
-            {AdminMenuItems.map((item, index) => {
+            {AdminMenuItems.map((item) => {
               return (
-                <>
-                  <Route exact path={`${path}/${item.path}`} key={index}>
-                    {item.component}
-                  </Route>
-                  {item.subMenu ? (
-                    item.subMenu.map((submenu, subIndex) => {
-                      return (
-                        <Route exact path={`${path}/${submenu.path}`} key={subIndex}>
-                          {submenu.component}
-                        </Route>
-                      );
-                    })
-                  ) : (
-                    <></>
-                  )}
-                </>
+                <Route exact path={`${path}/${item.path}`} key={`routes-${item.index}`}>
+                  {item.component}
+                </Route>
+              );
+            })}
+            {AdminMenuItems.map((item) => {
+              return item.subMenu ? (
+                item.subMenu.map((submenu) => {
+                  return (
+                    <Route exact path={`${path}/${submenu.path}`} key={`routes-${item.index}-${submenu.index}`}>
+                      {submenu.component}
+                    </Route>
+                  );
+                })
+              ) : (
+                <></>
               );
             })}
           </Switch>
