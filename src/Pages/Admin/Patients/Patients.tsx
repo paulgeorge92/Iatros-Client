@@ -9,6 +9,7 @@ import DateRangePicker from '../../../components/DateRangePicker';
 import { Link } from 'react-router-dom';
 import { Patients as dummyPatients } from '../../../DummyData';
 import { ColumnsType } from 'antd/lib/table';
+import { Patient } from '../../../models/Patient';
 
 const Patients = () => {
   let breadcrumbItems: Array<BreadcrumbItem> = [
@@ -21,115 +22,68 @@ const Patients = () => {
       title: 'Patients',
     },
   ];
-  const columns1 = [
+  let patients: Patient[] = dummyPatients.map((patient: any) => patient);
+  const columns: ColumnsType<Patient> = [
     {
       title: 'Patient ID',
       dataIndex: 'ID',
       key: 'ID',
-      /* sorter: (a: any, b: any) => a.ID - b.ID,
-      sortDirections: ['ascend', 'descend'], */
+      sorter: (a: Patient, b: Patient) => a.ID - b.ID,
+      sortDirections: ['ascend', 'descend'],
     },
     {
       title: 'Name',
       dataIndex: 'Name',
       key: 'Name',
-      render: (text: any, row: any) => {
-        console.log(text);
+      render: (text: string, row: Patient) => {
         return <span>{row.FirstName + ' ' + row.LastName}</span>;
       },
-      /* sorter: (a: any, b: any) => a.Name - b.Name,
-      sortDirections: ['ascend', 'descend'], */
+      sorter: (a: Patient, b: Patient) => (a.FirstName + ' ' + a.LastName < b.FirstName + ' ' + b.LastName ? -1 : 1),
+      sortDirections: ['ascend', 'descend'],
     },
     {
       title: 'Gender',
       dataIndex: 'Gender',
       key: 'Gender',
-      /* sorter: (a: any, b: any) => a.Gender - b.Gender,
-      sortDirections: ['ascend', 'descend'], */
+      sorter: (a: Patient, b: Patient) => (a.Gender < b.Gender ? -1 : 1),
+      sortDirections: ['ascend', 'descend'],
     },
     {
       title: 'Blood Group',
       dataIndex: 'BloodGroup',
       key: 'BloodGroup',
-      /* sorter: (a: any, b: any) => a.BloodGroup - b.BloodGroup,
-      sortDirections: ['ascend', 'descend'], */
+      sorter: (a: Patient, b: Patient) => (a.BloodGroup < b.BloodGroup ? -1 : 1),
+      sortDirections: ['ascend', 'descend'],
     },
     {
       title: 'Date Of Birth',
       dataIndex: 'DateOfBirth',
       key: 'DateOfBirth',
-      /* sorter: (a: any, b: any) => a.DateOfBirth - b.DateOfBirth,
-      sortDirections: ['ascend', 'descend'], */
+
+      sorter: (a: Patient, b: Patient) => new Date(a.DateOfBirth).getTime() - new Date(b.DateOfBirth).getTime(),
+      sortDirections: ['ascend', 'descend'],
     },
     {
       title: 'Status',
       dataIndex: 'Status',
       key: 'Status',
-      render: (status: string) => <Tag color={status == 'Inactive' ? 'volcano' : 'green'}>{status.toUpperCase()}</Tag>,
-      /* sorter: (a: any, b: any) => a.Status - b.Status,
-      sortDirections: ['ascend', 'descend'], */
+      render: (status: string) => <Tag color={status === 'Inactive' ? 'volcano' : 'green'}>{status.toUpperCase()}</Tag>,
+      sorter: (a: Patient, b: Patient) => (a.Status < b.Status ? -1 : 1),
+      sortDirections: ['ascend', 'descend'],
     },
     {
       title: 'Action',
       key: 'Action',
-      render: (text: any) => (
-        <Space>
-          <EyeIcon title="View"></EyeIcon>
-          <EditIcon title="Edit"></EditIcon>
-          <TrashIcon title="Delete"></TrashIcon>
+      render: (text: any, row: Patient) => (
+        <Space size="large">
+          <EyeIcon title={`View ${row.FirstName} ${row.LastName}`} className="row-view"></EyeIcon>
+          <EditIcon title={`Edit ${row.FirstName} ${row.LastName}`} className="row-edit"></EditIcon>
+          <TrashIcon title={`Delete ${row.FirstName} ${row.LastName}`} className="row-delete"></TrashIcon>
         </Space>
       ),
     },
   ];
 
-  const columns = [
-    {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
-      render: (text: any) => <a>{text}</a>,
-    },
-    {
-      title: 'Age',
-      dataIndex: 'age',
-      key: 'age',
-    },
-    {
-      title: 'Address',
-      dataIndex: 'address',
-      key: 'address',
-    },
-    {
-      title: 'Tags',
-      key: 'tags',
-      dataIndex: 'tags',
-      render: (tags: any) => (
-        <>
-          {tags.map((tag: any) => {
-            let color = tag.length > 5 ? 'geekblue' : 'green';
-            if (tag === 'loser') {
-              color = 'volcano';
-            }
-            return (
-              <Tag color={color} key={tag}>
-                {tag.toUpperCase()}
-              </Tag>
-            );
-          })}
-        </>
-      ),
-    },
-    {
-      title: 'Action',
-      key: 'action',
-      render: (text: any, record: any) => (
-        <Space size="middle">
-          <a>Invite {record.name}</a>
-          <a>Delete</a>
-        </Space>
-      ),
-    },
-  ];
   return (
     <>
       <Row gutter={[16, 24]}>
@@ -152,7 +106,7 @@ const Patients = () => {
       </Row>
       <Row gutter={[16, 24]}>
         <Col xs={24}>
-          <Table className="w-100" size="large" tableLayout="auto" columns={columns1} dataSource={dummyPatients}></Table>
+          <Table className="iatros-table" columns={columns} dataSource={patients}></Table>
         </Col>
       </Row>
     </>

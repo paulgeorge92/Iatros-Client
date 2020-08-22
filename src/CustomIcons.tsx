@@ -1,6 +1,7 @@
 import Icon from '@ant-design/icons';
 import React from 'react';
 
+import { icon as at } from './components/icons/at-solid';
 import { icon as bong } from './components/icons/bong-solid';
 import { icon as openBox } from './components/icons/box-open-solid';
 import { icon as medicalBriefcase } from './components/icons/briefcase-medical-solid';
@@ -27,9 +28,12 @@ import { icon as filePrescription } from './components/icons/file-prescription-s
 import { icon as fileVideo } from './components/icons/file-video-solid';
 import { icon as filter } from './components/icons/filter-solid';
 import { icon as heartBeat } from './components/icons/heartbeat-solid';
+import { icon as home } from './components/icons/home-solid';
 import { icon as userMedical } from './components/icons/hospital-user-solid';
 import { icon as mailBulk } from './components/icons/mail-bulk-solid';
+import { icon as mapMarked } from './components/icons/map-marked-alt-solid';
 import { icon as mapMarker } from './components/icons/map-marker-alt-solid';
+import { icon as mapPin } from './components/icons/map-pin-solid';
 import { icon as medical } from './components/icons/medical';
 import { icon as medikit } from './components/icons/medkit-solid';
 import { icon as moneyBill } from './components/icons/money-bill-alt-solid';
@@ -57,6 +61,7 @@ import { icon as userNurse } from './components/icons/user-nurse-solid';
 import { icon as userAdd } from './components/icons/user-plus-solid';
 import { icon as userRemove } from './components/icons/user-times-solid';
 
+export const AtIcon = (props: any) => <Icon component={at} {...props}></Icon>;
 export const BongIcon = (props: any) => <Icon component={bong} {...props}></Icon>;
 export const OpenBoxIcon = (props: any) => <Icon component={openBox} {...props}></Icon>;
 export const MedicalBriefcaseIcon = (props: any) => <Icon component={medicalBriefcase} {...props}></Icon>;
@@ -83,9 +88,12 @@ export const PrescriptionFileIcon = (props: any) => <Icon component={filePrescri
 export const VideoFileIcon = (props: any) => <Icon component={fileVideo} {...props}></Icon>;
 export const FilterIcon = (props: any) => <Icon component={filter} {...props}></Icon>;
 export const HeartBeatIcon = (props: any) => <Icon component={heartBeat} {...props}></Icon>;
+export const HomeIcon = (props: any) => <Icon component={home} {...props}></Icon>;
 export const MedicalUserIcon = (props: any) => <Icon component={userMedical} {...props}></Icon>;
 export const BulkMailIcon = (props: any) => <Icon component={mailBulk} {...props}></Icon>;
+export const MapMarkedIcon = (props: any) => <Icon component={mapMarked} {...props}></Icon>;
 export const MapMarkerIcon = (props: any) => <Icon component={mapMarker} {...props}></Icon>;
+export const MapPinIcon = (props: any) => <Icon component={mapPin} {...props}></Icon>;
 export const MedicalIcon = (props: any) => <Icon component={medical} {...props}></Icon>;
 export const MedikitIcon = (props: any) => <Icon component={medikit} {...props}></Icon>;
 export const MoneyBillIcon = (props: any) => <Icon component={moneyBill} {...props}></Icon>;

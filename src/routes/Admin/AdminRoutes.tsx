@@ -16,7 +16,6 @@ let AdminRoutes = (props: any) => {
   const [collapsedWidth, setCollpasedWidth] = useState(0);
 
   let getcurrentPathIndex = () => {
-    debugger;
     let currentPath = document.location.pathname.toLowerCase();
     if (currentPath === AdminPath) {
       return ['1', '1'];
@@ -48,6 +47,21 @@ let AdminRoutes = (props: any) => {
   let onBreakPointHit = (breakPoint: boolean) => {
     setCollpasedWidth(breakPoint ? 0 : 80);
   };
+
+  let routes: any[] = [];
+
+  AdminMenuItems.forEach((item) => {
+    if (item.component) {
+      routes.push(item);
+    }
+    if (item.subMenu && item.subMenu.length) {
+      item.subMenu.forEach((subMenu) => {
+        if (subMenu.component) {
+          routes.push(subMenu);
+        }
+      });
+    }
+  });
 
   useEffect(() => {
     if (!userContext.id && !sessionStorage.getItem('userSession')) {
@@ -110,24 +124,11 @@ let AdminRoutes = (props: any) => {
             <Route exact path={`${path}`}>
               <AdminDashboard />
             </Route>
-            {AdminMenuItems.map((item) => {
+            {routes.map((item) => {
               return (
                 <Route exact path={`${path}/${item.path}`} key={`routes-${item.index}`}>
                   {item.component}
                 </Route>
-              );
-            })}
-            {AdminMenuItems.map((item) => {
-              return item.subMenu ? (
-                item.subMenu.map((submenu) => {
-                  return (
-                    <Route exact path={`${path}/${submenu.path}`} key={`routes-${item.index}-${submenu.index}`}>
-                      {submenu.component}
-                    </Route>
-                  );
-                })
-              ) : (
-                <></>
               );
             })}
           </Switch>

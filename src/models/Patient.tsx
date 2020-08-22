@@ -12,6 +12,7 @@ export interface Patient {
   Gender: Gender;
   AddressLine1: string;
   AddressLine2?: string;
+  Town?: string;
   City: string;
   Country: string;
   ZipCode: string;

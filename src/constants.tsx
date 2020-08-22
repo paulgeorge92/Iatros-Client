@@ -2,6 +2,7 @@ import React, { ReactNode } from 'react';
 import { DesktopIcon, HeartBeatIcon, CalendarIcon, RecieptIcon, PrescriptionFileIcon, StoreIcon, MoneyBillIcon, RupeeIcon, DoctorIcon, SettingsIcon, UserIcon, FileIcon } from './CustomIcons';
 import AdminDashboard from './Pages/Admin/Dashboard';
 import Patients from './Pages/Admin/Patients/Patients';
+import NewPatient from './Pages/Admin/Patients/NewPatient';
 
 interface MenuItem {
   name: string;
@@ -40,6 +41,7 @@ export const AdminMenuItems: Array<MenuItem> = [
         path: 'patients/new',
         showInMenu: true,
         index: 1,
+        component: <NewPatient />,
       },
     ],
   },
@@ -216,3 +218,16 @@ export const AdminMenuItems: Array<MenuItem> = [
     ],
   },
 ];
+
+export enum BloodGroup {
+  APositive = 'A+ve',
+  ANegative = 'A-ve',
+  BPositive = 'B+ve',
+  BNegative = 'B-ve',
+  OPositive = 'O+ve',
+  ONegative = 'O-ve',
+  ABPositive = 'AB+ve',
+  ABNegative = 'AB-ve',
+}
+
+export const BloodGroups = [BloodGroup.APositive, BloodGroup.ANegative, BloodGroup.BPositive, BloodGroup.BNegative, BloodGroup.OPositive, BloodGroup.ONegative, BloodGroup.ABPositive, BloodGroup.ABNegative];
