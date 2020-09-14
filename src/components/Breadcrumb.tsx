@@ -18,7 +18,7 @@ const Breadcrumb = (props: BreadcrumbProps) => {
         return (
           <AntdBreadcrumb.Item key={index}>
             {item.link ? (
-              <Link to={item.link}>
+              <Link to={`${item.link}`}>
                 {item.icon || <></>}
                 {item.title ? <span>{item.title}</span> : <></>}
               </Link>

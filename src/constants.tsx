@@ -18,7 +18,15 @@ interface MenuItem {
 export const AdminPath = '/admin';
 export const LogoImage = require('./assets/images/Logo.png') as string;
 export const LogoWhiteImage = require('./assets/images/logo_white.png') as string;
-export const AdminMenuItems: Array<MenuItem> = [
+let _AdminMenuItems: {
+  menu: Array<MenuItem>;
+  getMenu: Function;
+} = {
+  menu: [],
+  getMenu: function () {},
+};
+
+_AdminMenuItems.menu = [
   {
     name: 'Dashboard',
     path: 'dashboard',
@@ -218,6 +226,20 @@ export const AdminMenuItems: Array<MenuItem> = [
     ],
   },
 ];
+
+_AdminMenuItems.getMenu = function (name: string): MenuItem {
+  let _menu = this.menu;
+  function findId(name: string, arr: Array<MenuItem>): any {
+    return arr.reduce((a, item) => {
+      if (a) return a;
+      if (item.name === name) return item;
+      if (item.subMenu) return findId(name, item.subMenu);
+    }, null);
+  }
+  return findId(name, _menu);
+};
+
+export const AdminMenuItems = _AdminMenuItems;
 
 export enum BloodGroup {
   APositive = 'A+ve',

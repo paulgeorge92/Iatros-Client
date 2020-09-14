@@ -3,7 +3,7 @@ import { Row, Col, Tabs, Card, Input, Form, DatePicker, Select, Checkbox, Button
 import Breadcrumb, { BreadcrumbItem } from '../../../components/Breadcrumb';
 import { HomeFilled, UserOutlined, PhoneOutlined, PlusOutlined } from '@ant-design/icons';
 import { HeartBeatIcon, AtIcon, HomeIcon, MapMarkerIcon, MapMarkedIcon, MapPinIcon } from '../../../CustomIcons';
-import { AdminPath, BloodGroups } from '../../../constants';
+import { AdminPath, BloodGroups, AdminMenuItems } from '../../../constants';
 import Title from 'antd/lib/typography/Title';
 
 const { TabPane } = Tabs;
@@ -18,6 +18,7 @@ const NewPatient = (props: any) => {
     {
       icon: <HeartBeatIcon />,
       title: 'Patients',
+      link: AdminPath + '/' + AdminMenuItems.getMenu('Patients')?.path,
     },
     {
       title: 'New Patient',

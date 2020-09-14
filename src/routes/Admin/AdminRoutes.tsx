@@ -2,11 +2,11 @@ import React, { useState, useContext, useEffect } from 'react';
 import { Layout, Menu } from 'antd';
 import { AdminContext } from '../../contexts/AdminContext';
 import { useHistory, useRouteMatch, Switch, Route, Link } from 'react-router-dom';
-import { LogoWhiteImage, AdminMenuItems, AdminPath } from '../../constants';
+import { LogoWhiteImage, AdminMenuItems as AdminMenuObj, AdminPath } from '../../constants';
 import AdminDashboard from '../../Pages/Admin/Dashboard';
 
 const { Header, Content, Sider } = Layout;
-
+let AdminMenuItems = AdminMenuObj.menu;
 let AdminRoutes = (props: any) => {
   let { path } = useRouteMatch();
   const history = useHistory();
@@ -78,12 +78,9 @@ let AdminRoutes = (props: any) => {
         });
       }
     }
-  });
-  useEffect(() => {
-    return () => {
-      console.log('cleaned up');
-    };
+    return () => {};
   }, []);
+
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Header className="site-layout-background" style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
@@ -93,7 +90,7 @@ let AdminRoutes = (props: any) => {
       </Header>
       <Layout style={{ marginTop: '64px' }}>
         <Sider breakpoint="lg" collapsedWidth={collapsedWidth} theme="light" collapsible collapsed={collapsed} onCollapse={toggleSideMenu} onBreakpoint={onBreakPointHit}>
-          <Menu theme="light" defaultSelectedKeys={[getcurrentPathIndex()[1]]} defaultOpenKeys={[getcurrentPathIndex()[0]]} mode="inline" title="Dashboard">
+          <Menu theme="light" selectedKeys={getcurrentPathIndex()} mode="inline" title="Dashboard">
             {AdminMenuItems.map((item) => {
               return item.showInMenu ? (
                 !item.subMenu || item.subMenu.length === 0 || !item.showSubMenu ? (

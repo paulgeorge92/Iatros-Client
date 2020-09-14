@@ -1,5 +1,5 @@
 import { createContext } from 'react';
 import { User } from '../models/User';
-let user: User = {};
+let adminContext: User = {};
 
-export const AdminContext = createContext(user);
+export const AdminContext = createContext(adminContext);
