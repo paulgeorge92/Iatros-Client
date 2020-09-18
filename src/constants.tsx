@@ -5,6 +5,7 @@ import Patients from './Pages/Admin/Patients/Patients';
 import NewPatient from './Pages/Admin/Patients/NewPatient';
 import MedicineCategories from './Pages/Admin/Pharmacy/MedicineCategory';
 import Taxes from './Pages/Admin/Settings/Taxes';
+import PaymentMethods from './Pages/Admin/Settings/PaymentMethods';
 
 interface MenuItem {
   name: string;
@@ -226,6 +227,13 @@ _AdminMenuItems.menu = [
         path: 'settings/suppliers',
         index: 5,
         showInMenu: true,
+      },
+      {
+        name: 'Payement Methods',
+        path: 'settings/payement-methods',
+        index: 6,
+        showInMenu: true,
+        component: <PaymentMethods />,
       },
     ],
   },

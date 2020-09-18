@@ -386,3 +386,11 @@ export const Taxes = [
     Rate: 10,
   },
 ];
+
+export const PaymentMethods = [
+  {
+    ID: 1,
+    Method: 'Cash',
+    Status: 'Active',
+  },
+];
