@@ -68,7 +68,7 @@ const MedicineCategories = () => {
   };
 
   let deleteCategory = (category: MedicineCategory) => {
-    let index = categories.findIndex((x: MedicineCategory) => x.ID == category.ID);
+    let index = categories.findIndex((x: MedicineCategory) => x.ID === category.ID);
     let newcat = Categories;
     newcat.splice(index, 1);
     setCategories(newcat);
@@ -116,7 +116,7 @@ const MedicineCategories = () => {
           <Table className="iatros-table" columns={tableColumns} dataSource={categories} rowKey={(record: MedicineCategory) => record.ID}></Table>
         </Col>
       </Row>
-      <Modal title="Add Category" visible={showAddModal} onOk={addCategory} onCancel={handleCancel} afterClose={onModalClose} okText="Add">
+      <Modal title="Add Category" visible={showAddModal} onOk={addCategory} onCancel={handleCancel} destroyOnClose={true} afterClose={onModalClose} okText="Add">
         <Form layout="vertical">
           <FormItem name="CategoryName" label="Name" required={true}>
             <Input size="large" placeholder="Category Name"></Input>
@@ -124,7 +124,7 @@ const MedicineCategories = () => {
         </Form>
       </Modal>
 
-      <Modal title="Edit Category" visible={showEditModal} onOk={updateCategory} onCancel={handleCancel} afterClose={onModalClose} okText="Update">
+      <Modal title="Edit Category" visible={showEditModal} onOk={updateCategory} destroyOnClose={true} onCancel={handleCancel} afterClose={onModalClose} okText="Update">
         <Form layout="vertical">
           <FormItem name="CategoryName" label="Name" required={true}>
             <Input size="large" placeholder="Category Name" defaultValue={selectedCategory.Name}></Input>

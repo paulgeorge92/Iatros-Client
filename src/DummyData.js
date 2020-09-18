@@ -373,3 +373,16 @@ export const Categories = [
     Name: 'Category 7',
   },
 ];
+
+export const Taxes = [
+  {
+    ID: 1,
+    Name: 'GST',
+    Rate: 18,
+  },
+  {
+    ID: 2,
+    Name: 'VAT',
+    Rate: 10,
+  },
+];

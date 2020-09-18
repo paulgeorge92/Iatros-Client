@@ -4,6 +4,7 @@ import AdminDashboard from './Pages/Admin/Dashboard';
 import Patients from './Pages/Admin/Patients/Patients';
 import NewPatient from './Pages/Admin/Patients/NewPatient';
 import MedicineCategories from './Pages/Admin/Pharmacy/MedicineCategory';
+import Taxes from './Pages/Admin/Settings/Taxes';
 
 interface MenuItem {
   name: string;
@@ -212,6 +213,7 @@ _AdminMenuItems.menu = [
         path: 'settings/taxes',
         index: 3,
         showInMenu: true,
+        component: <Taxes />,
       },
       {
         name: 'Expense Types',
