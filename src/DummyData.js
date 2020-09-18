@@ -342,3 +342,34 @@ export const Patients = [
     },
   },
 ];
+
+export const Categories = [
+  {
+    ID: 1,
+    Name: 'Category 1',
+  },
+  {
+    ID: 2,
+    Name: 'Category 2',
+  },
+  {
+    ID: 3,
+    Name: 'Category 3',
+  },
+  {
+    ID: 4,
+    Name: 'Category 4',
+  },
+  {
+    ID: 5,
+    Name: 'Category 5',
+  },
+  {
+    ID: 6,
+    Name: 'Category 6',
+  },
+  {
+    ID: 7,
+    Name: 'Category 7',
+  },
+];

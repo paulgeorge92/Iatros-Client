@@ -3,6 +3,7 @@ import { DesktopIcon, HeartBeatIcon, CalendarIcon, RecieptIcon, PrescriptionFile
 import AdminDashboard from './Pages/Admin/Dashboard';
 import Patients from './Pages/Admin/Patients/Patients';
 import NewPatient from './Pages/Admin/Patients/NewPatient';
+import MedicineCategories from './Pages/Admin/Pharmacy/MedicineCategory';
 
 interface MenuItem {
   name: string;
@@ -111,6 +112,7 @@ _AdminMenuItems.menu = [
         path: 'pharmacy/medicine-categories',
         index: 5,
         showInMenu: true,
+        component: <MedicineCategories />,
       },
     ],
   },
