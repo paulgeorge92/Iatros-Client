@@ -6,6 +6,7 @@ import NewPatient from './Pages/Admin/Patients/NewPatient';
 import MedicineCategories from './Pages/Admin/Pharmacy/MedicineCategory';
 import Taxes from './Pages/Admin/Settings/Taxes';
 import PaymentMethods from './Pages/Admin/Settings/PaymentMethods';
+import ExpenseTypes from './Pages/Admin/Settings/ExpenseTypes';
 
 interface MenuItem {
   name: string;
@@ -221,6 +222,7 @@ _AdminMenuItems.menu = [
         path: 'settings/expense-types',
         index: 4,
         showInMenu: true,
+        component: <ExpenseTypes />,
       },
       {
         name: 'Suppliers',

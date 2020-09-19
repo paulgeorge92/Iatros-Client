@@ -135,10 +135,23 @@ const Taxes = () => {
       <Modal title="Add Tax" visible={showAddModal} onOk={addTax} onCancel={handleCancel} destroyOnClose={true} afterClose={onModalClose} okText="Add">
         <Form layout="vertical">
           <FormItem name="TaxName" label="Name" required={true}>
-            <Input size="large" placeholder="Tax Name"></Input>
+            <Input
+              size="large"
+              placeholder="Tax Name"
+              onChange={(e) => {
+                setSelectedTax({ ...selectedTax, Name: e.target.value });
+              }}
+            ></Input>
           </FormItem>
           <FormItem name="TaxRate" label="Name" required={true}>
-            <Input size="large" type="number" placeholder="Tax Rate in %"></Input>
+            <Input
+              size="large"
+              type="number"
+              placeholder="Tax Rate in %"
+              onChange={(e) => {
+                setSelectedTax({ ...selectedTax, Rate: parseFloat(e.target.value) });
+              }}
+            ></Input>
           </FormItem>
         </Form>
       </Modal>
@@ -146,10 +159,25 @@ const Taxes = () => {
       <Modal title="Edit Tax" visible={showEditModal} onOk={updateTax} onCancel={handleCancel} destroyOnClose={true} afterClose={onModalClose} okText="Update">
         <Form layout="vertical">
           <FormItem name="TaxName" label="Name" required={true}>
-            <Input size="large" placeholder="Tax Name" defaultValue={selectedTax.Name}></Input>
+            <Input
+              size="large"
+              placeholder="Tax Name"
+              defaultValue={selectedTax.Name}
+              onChange={(e) => {
+                setSelectedTax({ ...selectedTax, Name: e.target.value });
+              }}
+            ></Input>
           </FormItem>
           <FormItem name="TaxRate" label="Name" required={true}>
-            <Input size="large" type="number" placeholder="Tax Rate in %" defaultValue={selectedTax.Rate}></Input>
+            <Input
+              size="large"
+              type="number"
+              placeholder="Tax Rate in %"
+              defaultValue={selectedTax.Rate}
+              onChange={(e) => {
+                setSelectedTax({ ...selectedTax, Rate: parseFloat(e.target.value) });
+              }}
+            ></Input>
           </FormItem>
         </Form>
       </Modal>

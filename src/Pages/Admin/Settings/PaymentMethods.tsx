@@ -130,10 +130,22 @@ const PaymentMethods = () => {
       <Modal title="Add Method" visible={showAddModal} onOk={addMethod} onCancel={handleCancel} destroyOnClose={true} afterClose={onModalClose} okText="Add">
         <Form layout="vertical">
           <FormItem name="Name" label="Name" required={true}>
-            <Input size="large" placeholder="Payement Method Name"></Input>
+            <Input
+              size="large"
+              placeholder="Payement Method Name"
+              onChange={(e) => {
+                setSelectedMethod({ ...selectedMethod, Method: e.target.value });
+              }}
+            ></Input>
           </FormItem>
           <FormItem name="Status" label="Name" required={true}>
-            <Select size="large" defaultValue={'Active'}>
+            <Select
+              size="large"
+              defaultValue={'Active'}
+              onSelect={(value) => {
+                setSelectedMethod({ ...selectedMethod, Status: value.toString() });
+              }}
+            >
               <Option value="Active">Active</Option>
               <Option value="Inactive">Inactive</Option>
             </Select>
@@ -144,10 +156,23 @@ const PaymentMethods = () => {
       <Modal title="Edit Method" visible={showEditModal} onOk={updateMethod} onCancel={handleCancel} destroyOnClose={true} afterClose={onModalClose} okText="Update">
         <Form layout="vertical">
           <FormItem name="Name" label="Name" required={true}>
-            <Input size="large" placeholder="Payement Method Name" defaultValue={selectedMethod.Method}></Input>
+            <Input
+              size="large"
+              placeholder="Payement Method Name"
+              defaultValue={selectedMethod.Method}
+              onChange={(e) => {
+                setSelectedMethod({ ...selectedMethod, Method: e.target.value });
+              }}
+            ></Input>
           </FormItem>
           <FormItem name="Status" label="Name" required={true}>
-            <Select size="large" defaultValue={selectedMethod.Status}>
+            <Select
+              size="large"
+              defaultValue={selectedMethod.Status}
+              onSelect={(value) => {
+                setSelectedMethod({ ...selectedMethod, Status: value.toString() });
+              }}
+            >
               <Option value="Active">Active</Option>
               <Option value="Inactive">Inactive</Option>
             </Select>

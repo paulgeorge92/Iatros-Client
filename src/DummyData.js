@@ -394,3 +394,18 @@ export const PaymentMethods = [
     Status: 'Active',
   },
 ];
+
+export const ExpenseTypes = [
+  {
+    ID: 1,
+    Name: 'Type 1',
+    Description: 'Dummy Decription',
+    Status: 'Active',
+  },
+  {
+    ID: 2,
+    Name: 'Type 2',
+    Description: 'Dummy Decription',
+    Status: 'Inactive',
+  },
+];

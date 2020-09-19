@@ -14,6 +14,7 @@ let AdminRoutes = (props: any) => {
 
   const [collapsed, setCollapsed] = useState(false);
   const [collapsedWidth, setCollpasedWidth] = useState(0);
+  const [contentPadding, setContentPadding] = useState('24px');
 
   let getcurrentPathIndex = () => {
     let currentPath = document.location.pathname.toLowerCase();
@@ -46,6 +47,13 @@ let AdminRoutes = (props: any) => {
 
   let onBreakPointHit = (breakPoint: boolean) => {
     setCollpasedWidth(breakPoint ? 0 : 80);
+    setContentPadding('40px 24px 24px');
+  };
+
+  let onMenuClick = () => {
+    if (collapsedWidth === 0) {
+      setCollapsed(true);
+    }
   };
 
   let routes: any[] = [];
@@ -94,18 +102,20 @@ let AdminRoutes = (props: any) => {
             {AdminMenuItems.map((item) => {
               return item.showInMenu ? (
                 !item.subMenu || item.subMenu.length === 0 || !item.showSubMenu ? (
-                  <Menu.Item key={`${item.index}`} icon={item.icon}>
+                  <Menu.Item key={`${item.index}`} icon={item.icon} onClick={onMenuClick}>
                     {item.name}
                     <Link to={`${path}/${item.path}`}></Link>
                   </Menu.Item>
                 ) : (
                   <Menu.SubMenu key={`${item.index}`} icon={item.icon} title={item.name}>
                     {item.subMenu.map((submenu) => {
-                      return (
-                        <Menu.Item key={`${item.index}-${submenu.index}`}>
+                      return submenu.showInMenu ? (
+                        <Menu.Item key={`${item.index}-${submenu.index}`} onClick={onMenuClick}>
                           {submenu.name}
                           <Link to={`${path}/${submenu.path}`}></Link>
                         </Menu.Item>
+                      ) : (
+                        <></>
                       );
                     })}
                   </Menu.SubMenu>
@@ -116,7 +126,7 @@ let AdminRoutes = (props: any) => {
             })}
           </Menu>
         </Sider>
-        <Content className="site-layout-background" style={{ margin: '24px 16px', padding: 24, minHeight: 280 }}>
+        <Content className="site-layout-background" style={{ margin: '24px 16px', padding: contentPadding, minHeight: 280 }}>
           <Switch>
             <Route exact path={`${path}`}>
               <AdminDashboard />

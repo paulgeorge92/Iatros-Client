@@ -106,7 +106,7 @@ const Patients = () => {
       </Row>
       <Row gutter={[16, 24]}>
         <Col xs={24}>
-          <Table className="iatros-table" columns={columns} dataSource={patients}></Table>
+          <Table scroll={{ x: true, scrollToFirstRowOnChange: true }} sticky={true} className="iatros-table" columns={columns} dataSource={patients}></Table>
         </Col>
       </Row>
     </>

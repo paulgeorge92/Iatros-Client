@@ -119,7 +119,13 @@ const MedicineCategories = () => {
       <Modal title="Add Category" visible={showAddModal} onOk={addCategory} onCancel={handleCancel} destroyOnClose={true} afterClose={onModalClose} okText="Add">
         <Form layout="vertical">
           <FormItem name="CategoryName" label="Name" required={true}>
-            <Input size="large" placeholder="Category Name"></Input>
+            <Input
+              size="large"
+              placeholder="Category Name"
+              onChange={(e) => {
+                setSelectedCategory({ ...selectedCategory, Name: e.target.value });
+              }}
+            ></Input>
           </FormItem>
         </Form>
       </Modal>
@@ -127,7 +133,14 @@ const MedicineCategories = () => {
       <Modal title="Edit Category" visible={showEditModal} onOk={updateCategory} destroyOnClose={true} onCancel={handleCancel} afterClose={onModalClose} okText="Update">
         <Form layout="vertical">
           <FormItem name="CategoryName" label="Name" required={true}>
-            <Input size="large" placeholder="Category Name" defaultValue={selectedCategory.Name}></Input>
+            <Input
+              size="large"
+              placeholder="Category Name"
+              defaultValue={selectedCategory.Name}
+              onChange={(e) => {
+                setSelectedCategory({ ...selectedCategory, Name: e.target.value });
+              }}
+            ></Input>
           </FormItem>
         </Form>
       </Modal>
