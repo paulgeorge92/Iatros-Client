@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Breadcrumb, { BreadcrumbItem } from '../../../components/Breadcrumb';
 import Table, { ColumnsType } from 'antd/lib/table';
-import { Categories } from '../../../DummyData';
 import { HomeFilled, PlusOutlined } from '@ant-design/icons';
 import { EditIcon, TrashIcon } from '../../../CustomIcons';
 import { AdminPath } from '../../../constants';
@@ -11,6 +10,7 @@ import Title from 'antd/lib/typography/Title';
 import Modal from 'antd/lib/modal/Modal';
 import Form from 'antd/lib/form/Form';
 import FormItem from 'antd/lib/form/FormItem';
+import { MedicineCategoryRepository } from '../../../repository/MedicineCategoryRepository';
 
 const MedicineCategories = () => {
   let breadcrumbItems: Array<BreadcrumbItem> = [
@@ -40,7 +40,7 @@ const MedicineCategories = () => {
             title={`Edit Category`}
             className="row-edit"
             onClick={() => {
-              editCategory(row);
+              onEditCategoryClick(row);
             }}
           ></EditIcon>
           <Popconfirm
@@ -62,29 +62,56 @@ const MedicineCategories = () => {
   const [showEditModal, setShowEditModal] = useState<boolean>(false);
   const [selectedCategory, setSelectedCategory] = useState<MedicineCategory>({ ID: -1, Name: '' });
 
-  let editCategory = (catgeory: MedicineCategory) => {
+  const categoryDB = new MedicineCategoryRepository();
+
+  async function getCatgories() {
+    setCategories(await categoryDB.getAll());
+  }
+
+  async function getCatgory(id: number) {
+    let category = await categoryDB.get(id);
+    setSelectedCategory(category);
     setShowEditModal(true);
-    setSelectedCategory(catgeory);
+  }
+
+  async function addCategory() {
+    await categoryDB.add(selectedCategory);
+    getCatgories();
+    setShowAddModal(false);
+  }
+
+  async function updateCategory() {
+    await categoryDB.update(selectedCategory);
+    getCatgories();
+    setShowEditModal(false);
+  }
+
+  async function deleteCategory(category: MedicineCategory) {
+    await categoryDB.delete(category.ID);
+    getCatgories();
+  }
+
+  let onEditCategoryClick = (catgeory: MedicineCategory) => {
+    getCatgory(catgeory.ID);
   };
 
-  let deleteCategory = (category: MedicineCategory) => {
-    let index = categories.findIndex((x: MedicineCategory) => x.ID === category.ID);
-    let newcat = Categories;
-    newcat.splice(index, 1);
-    setCategories(newcat);
+  let onAddCategoryClick = () => {
+    addCategory();
   };
 
-  let addCategory = () => {};
-  let updateCategory = () => {};
-  let handleCancel = () => {
+  let onUpdateCategoryClick = () => {
+    updateCategory();
+  };
+
+  let onCancelClick = () => {
     setShowAddModal(false);
     setShowEditModal(false);
   };
+
   let onModalClose = () => {};
 
   useEffect(() => {
-    let categories: MedicineCategory[] = Categories.map((category: any) => category);
-    setCategories(categories);
+    getCatgories();
     return () => {};
   }, []);
 
@@ -116,7 +143,7 @@ const MedicineCategories = () => {
           <Table className="iatros-table" columns={tableColumns} dataSource={categories} rowKey={(record: MedicineCategory) => record.ID}></Table>
         </Col>
       </Row>
-      <Modal title="Add Category" visible={showAddModal} onOk={addCategory} onCancel={handleCancel} destroyOnClose={true} afterClose={onModalClose} okText="Add">
+      <Modal title="Add Category" visible={showAddModal} onOk={onAddCategoryClick} onCancel={onCancelClick} destroyOnClose={true} afterClose={onModalClose} okText="Add">
         <Form layout="vertical">
           <FormItem name="CategoryName" label="Name" required={true}>
             <Input
@@ -130,7 +157,7 @@ const MedicineCategories = () => {
         </Form>
       </Modal>
 
-      <Modal title="Edit Category" visible={showEditModal} onOk={updateCategory} destroyOnClose={true} onCancel={handleCancel} afterClose={onModalClose} okText="Update">
+      <Modal title="Edit Category" visible={showEditModal} onOk={onUpdateCategoryClick} destroyOnClose={true} onCancel={onCancelClick} afterClose={onModalClose} okText="Update">
         <Form layout="vertical">
           <FormItem name="CategoryName" label="Name" required={true}>
             <Input

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Row, Col, Button, Space, Table, Tag } from 'antd';
 import Title from 'antd/lib/typography/Title';
 import { AdminPath } from '../../../constants';
@@ -7,11 +7,13 @@ import { HeartBeatIcon, EditIcon, EyeIcon, TrashIcon } from '../../../CustomIcon
 import Breadcrumb, { BreadcrumbItem } from '../../../components/Breadcrumb';
 import DateRangePicker from '../../../components/DateRangePicker';
 import { Link } from 'react-router-dom';
-import { Patients as dummyPatients } from '../../../DummyData';
 import { ColumnsType } from 'antd/lib/table';
 import { Patient } from '../../../models/Patient';
-
+import { PatientRepository } from '../../../repository/PatientRepository';
+import moment from 'moment';
 const Patients = () => {
+  const [patients, setPatients] = useState<Patient[]>([]);
+
   let breadcrumbItems: Array<BreadcrumbItem> = [
     {
       icon: <HomeFilled />,
@@ -22,7 +24,6 @@ const Patients = () => {
       title: 'Patients',
     },
   ];
-  let patients: Patient[] = dummyPatients.map((patient: any) => patient);
   const columns: ColumnsType<Patient> = [
     {
       title: 'Patient ID',
@@ -30,6 +31,7 @@ const Patients = () => {
       key: 'ID',
       sorter: (a: Patient, b: Patient) => a.ID - b.ID,
       sortDirections: ['ascend', 'descend'],
+      width: '10%',
     },
     {
       title: 'Name',
@@ -47,6 +49,7 @@ const Patients = () => {
       key: 'Gender',
       sorter: (a: Patient, b: Patient) => (a.Gender < b.Gender ? -1 : 1),
       sortDirections: ['ascend', 'descend'],
+      width: '10%',
     },
     {
       title: 'Blood Group',
@@ -54,14 +57,16 @@ const Patients = () => {
       key: 'BloodGroup',
       sorter: (a: Patient, b: Patient) => (a.BloodGroup < b.BloodGroup ? -1 : 1),
       sortDirections: ['ascend', 'descend'],
+      width: '13%',
     },
     {
       title: 'Date Of Birth',
       dataIndex: 'DateOfBirth',
       key: 'DateOfBirth',
-
+      render: (text: Date, row: Patient) => <span>{moment(text).format('DD MMM YYYY')}</span>,
       sorter: (a: Patient, b: Patient) => new Date(a.DateOfBirth).getTime() - new Date(b.DateOfBirth).getTime(),
       sortDirections: ['ascend', 'descend'],
+      width: '13%',
     },
     {
       title: 'Status',
@@ -70,6 +75,7 @@ const Patients = () => {
       render: (status: string) => <Tag color={status === 'Inactive' ? 'volcano' : 'green'}>{status.toUpperCase()}</Tag>,
       sorter: (a: Patient, b: Patient) => (a.Status < b.Status ? -1 : 1),
       sortDirections: ['ascend', 'descend'],
+      width: '10%',
     },
     {
       title: 'Action',
@@ -81,8 +87,18 @@ const Patients = () => {
           <TrashIcon title={`Delete ${row.FirstName} ${row.LastName}`} className="row-delete"></TrashIcon>
         </Space>
       ),
+      width: '10%',
     },
   ];
+  let patientDB = new PatientRepository();
+
+  async function loadData() {
+    let data = await patientDB.getAllPatients();
+    setPatients(data);
+  }
+  useEffect(() => {
+    loadData();
+  });
 
   return (
     <>

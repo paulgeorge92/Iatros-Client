@@ -7,6 +7,9 @@ import MedicineCategories from './Pages/Admin/Pharmacy/MedicineCategory';
 import Taxes from './Pages/Admin/Settings/Taxes';
 import PaymentMethods from './Pages/Admin/Settings/PaymentMethods';
 import ExpenseTypes from './Pages/Admin/Settings/ExpenseTypes';
+import Suppliers from './Pages/Admin/Settings/Suppliers';
+import ClinicalNotes from './Pages/Admin/Settings/ClinicalNotes';
+import { BloodGroup } from './models/Enums';
 
 interface MenuItem {
   name: string;
@@ -51,7 +54,14 @@ _AdminMenuItems.menu = [
       {
         name: 'Add Patients',
         path: 'patients/new',
-        showInMenu: true,
+        showInMenu: false,
+        index: 1,
+        component: <NewPatient />,
+      },
+      {
+        name: 'Edit Patient',
+        path: 'patients/edit/:id',
+        showInMenu: false,
         index: 1,
         component: <NewPatient />,
       },
@@ -211,6 +221,13 @@ _AdminMenuItems.menu = [
         showInMenu: true,
       },
       {
+        name: 'Clinical Notes',
+        path: 'settings/clincal-notes',
+        index: 2,
+        showInMenu: true,
+        component: <ClinicalNotes />,
+      },
+      {
         name: 'Taxes',
         path: 'settings/taxes',
         index: 3,
@@ -229,6 +246,7 @@ _AdminMenuItems.menu = [
         path: 'settings/suppliers',
         index: 5,
         showInMenu: true,
+        component: <Suppliers />,
       },
       {
         name: 'Payement Methods',
@@ -255,15 +273,4 @@ _AdminMenuItems.getMenu = function (name: string): MenuItem {
 
 export const AdminMenuItems = _AdminMenuItems;
 
-export enum BloodGroup {
-  APositive = 'A+ve',
-  ANegative = 'A-ve',
-  BPositive = 'B+ve',
-  BNegative = 'B-ve',
-  OPositive = 'O+ve',
-  ONegative = 'O-ve',
-  ABPositive = 'AB+ve',
-  ABNegative = 'AB-ve',
-}
-
-export const BloodGroups = [BloodGroup.APositive, BloodGroup.ANegative, BloodGroup.BPositive, BloodGroup.BNegative, BloodGroup.OPositive, BloodGroup.ONegative, BloodGroup.ABPositive, BloodGroup.ABNegative];
+export const BloodGroups: BloodGroup[] = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];

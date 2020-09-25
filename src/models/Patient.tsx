@@ -1,12 +1,12 @@
-import { Gender, Status } from './Enums';
 import { MedicalHistory } from './MedicalHistory';
+import { BloodGroup, Gender } from './Enums';
 
 export interface Patient {
   ID: number;
   FirstName: string;
   LastName: string;
   MobileNumber: string;
-  BloodGroup: string;
+  BloodGroup: BloodGroup;
   Email?: string;
   DateOfBirth: Date;
   Gender: Gender;
@@ -18,5 +18,5 @@ export interface Patient {
   ZipCode: string;
   MedicalHistory?: MedicalHistory;
   CreatedDate: Date;
-  Status: Status;
+  Status: 'Active' | 'Disabled' | 'Inactive';
 }

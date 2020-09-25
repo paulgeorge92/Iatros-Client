@@ -11,7 +11,9 @@ let AdminRoutes = (props: any) => {
   let { path } = useRouteMatch();
   const history = useHistory();
   let userContext = useContext(AdminContext);
-
+  history.listen((e) => {
+    console.log(e);
+  });
   const [collapsed, setCollapsed] = useState(false);
   const [collapsedWidth, setCollpasedWidth] = useState(0);
   const [contentPadding, setContentPadding] = useState('24px');

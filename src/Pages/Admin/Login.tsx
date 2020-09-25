@@ -14,7 +14,7 @@ export interface AdminLoginProps {
 }
 
 export const AdminLogin = (props: AdminLoginProps) => {
-  let returnUrl = props.redirectUrl || props.location.state.redirectUrl;
+  let returnUrl = props.redirectUrl || props.location.state?.redirectUrl;
   const history = useHistory();
   console.log(returnUrl);
   if (sessionStorage.getItem('userSession')) {

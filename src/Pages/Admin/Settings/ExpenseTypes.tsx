@@ -81,10 +81,6 @@ const ExpenseTypes = () => {
   const [showEditModal, setShowEditModal] = useState<boolean>(false);
   const [selectedType, setSelectedType] = useState<ExpenseType>({ ID: -1, Name: '', Description: '', Status: 'Active' });
 
-  const setState = (ele: HTMLInputElement, setter: Function) => {
-    setter(ele.value);
-  };
-
   let editType = (type: ExpenseType) => {
     setSelectedType(type);
     setShowEditModal(true);

@@ -1,11 +1,7 @@
-export enum Gender {
-  Male = 'Male',
-  Female = 'Female',
-  Other = 'Other',
-}
+export type NoteType = 'Problem' | 'Observation' | 'Diagnosis' | 'Investigation';
 
-export enum Status {
-  Inactive = -1,
-  Disabled = 0,
-  Active = 1,
-}
+export type Gender = 'Male' | 'Female' | 'Other';
+
+export type Status = 'Active' | 'Inactive' | 'Disabled';
+
+export type BloodGroup = 'A+' | 'A-' | 'B+' | 'B-' | 'AB+' | 'AB-' | 'O+' | 'O-';
