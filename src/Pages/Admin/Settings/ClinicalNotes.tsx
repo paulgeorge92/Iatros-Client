@@ -1,23 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import Breadcrumb, { BreadcrumbItem } from '../../../components/Breadcrumb';
-import Table, { ColumnsType } from 'antd/lib/table';
-import { ClinicalNotes as DummyData } from '../../../DummyData';
+import { ColumnsType } from 'antd/lib/table';
 import { HomeFilled, PlusOutlined } from '@ant-design/icons';
 import { EditIcon, TrashIcon } from '../../../CustomIcons';
 import { AdminPath } from '../../../constants';
-import { Space, Row, Col, Button, Popconfirm, Select } from 'antd';
-import Title from 'antd/lib/typography/Title';
-import Modal from 'antd/lib/modal/Modal';
-import Form from 'antd/lib/form/Form';
-import FormItem from 'antd/lib/form/FormItem';
+import { Space, Row, Col, Button, Popconfirm, Select, Form, Modal, Table, Typography, Input } from 'antd';
 import { ClinicalNote } from '../../../models/ClinicalNote';
-import TextArea from 'antd/lib/input/TextArea';
-import { NoteType } from '../../../models/Enums';
+import { ClinicalNotesRepository } from '../../../repository/ClincalNotesRepository';
 
+const FormItem = Form.Item;
+const { Title } = Typography;
+const { TextArea } = Input;
 const { Option } = Select;
 
 const ClinicalNotes = () => {
-  let breadcrumbItems: Array<BreadcrumbItem> = [
+  const breadcrumbItems: Array<BreadcrumbItem> = [
     {
       icon: <HomeFilled />,
       link: AdminPath,
@@ -51,13 +48,13 @@ const ClinicalNotes = () => {
             title={`Edit Type`}
             className="row-edit"
             onClick={() => {
-              editNote(row);
+              onEditNoteClick(row.ID);
             }}
           ></EditIcon>
           <Popconfirm
             title="Are you sure you want to delete this type"
             onConfirm={() => {
-              deleteNote(row);
+              onDeleteNoteClick(row.ID);
             }}
             okText="Yes"
             cancelText="No"
@@ -69,36 +66,92 @@ const ClinicalNotes = () => {
     },
   ]);
 
+  const [form] = Form.useForm();
   const [clinicalNotes, setClinicalNotes] = useState<ClinicalNote[]>([]);
-  const [showAddModal, setShowAddModal] = useState<boolean>(false);
-  const [showEditModal, setShowEditModal] = useState<boolean>(false);
-  const [selectedNote, setSelectedNote] = useState<ClinicalNote>({ ID: -1, NoteType: 'Problem', Note: '' });
+  const [modalType, setModalType] = useState<'Add' | 'Update'>();
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [selectedNote, setSelectedNote] = useState<ClinicalNote>({ ID: -1, NoteType: '', Note: '' });
 
-  let editNote = (type: ClinicalNote) => {
-    setSelectedNote(type);
-    setShowEditModal(true);
+  const notesDB = new ClinicalNotesRepository(); // Clinical Notes Databse repository
 
-    //alert(JSON.stringify(tax));
+  /**
+   * Deletes the note from databse
+   * @param id ID of Note to delete
+   */
+  async function onDeleteNoteClick(id: number) {
+    await notesDB.delete(id);
+    getAllNotes();
+  }
+
+  /**
+   * Opens the modal popup with new form
+   */
+  function onAddNoteClick() {
+    setModalType('Add');
+    setSelectedNote({ ID: -1, NoteType: 'Problem', Note: '' });
+    form.setFieldsValue(selectedNote);
+    setShowModal(true);
+  }
+
+  /**
+   * Opens teh modal popup with edit form
+   * @param id ID of note to edit
+   */
+  async function onEditNoteClick(id: number) {
+    setModalType('Update');
+    const note: ClinicalNote = await notesDB.getById(id);
+    setSelectedNote({ ...note });
+
+    form.setFieldsValue({ ...note });
+    setShowModal(true);
+  }
+
+  /**
+   * Fetched all notes from databse
+   */
+  async function getAllNotes() {
+    console.log('dsad');
+    setClinicalNotes(await notesDB.getAll());
+  }
+
+  /**
+   * Add a note to databse
+   */
+  async function addNote() {
+    try {
+      await form.validateFields();
+      await notesDB.add(selectedNote);
+      getAllNotes();
+      setShowModal(false);
+    } catch (error) {}
+  }
+
+  /**
+   * Update a note in databse
+   */
+  async function updateNote() {
+    try {
+      await form.validateFields();
+      await notesDB.update(selectedNote);
+      getAllNotes();
+      setShowModal(false);
+    } catch (err) {}
+  }
+
+  /**
+   * Modal Cancel button click event
+   */
+  let onModalCancelClick = () => {
+    setShowModal(false);
   };
 
-  let deleteNote = (type: ClinicalNote) => {
-    let index = DummyData.findIndex((x: any) => x.ID === type.ID);
-    let _notes = DummyData.map((x: any) => x);
-    _notes.splice(index, 1);
-    setClinicalNotes(_notes);
-  };
-
-  let addNote = () => {};
-  let updateNote = () => {};
-  let handleCancel = () => {
-    setShowAddModal(false);
-    setShowEditModal(false);
-  };
+  /**
+   * Modal close event
+   */
   let onModalClose = () => {};
 
   useEffect(() => {
-    let _notes: ClinicalNote[] = DummyData.map((type: any) => type);
-    setClinicalNotes(_notes);
+    getAllNotes();
     return () => {};
   }, []);
 
@@ -113,13 +166,7 @@ const ClinicalNotes = () => {
         </Col>
         <Col xs={24} md={12} style={{ textAlign: 'right' }}>
           <Space>
-            <Button
-              type="primary"
-              icon={<PlusOutlined />}
-              onClick={() => {
-                setShowAddModal(true);
-              }}
-            >
+            <Button type="primary" icon={<PlusOutlined />} onClick={onAddNoteClick}>
               Add Clinical Note
             </Button>
           </Space>
@@ -130,41 +177,15 @@ const ClinicalNotes = () => {
           <Table scroll={{ x: true, scrollToFirstRowOnChange: true }} className="iatros-table" columns={tableColumns} dataSource={clinicalNotes} rowKey={(record: ClinicalNote) => record.ID}></Table>
         </Col>
       </Row>
-      <Modal title="Add Clinical Note" visible={showAddModal} onOk={addNote} onCancel={handleCancel} destroyOnClose={true} afterClose={onModalClose} okText="Add">
-        <Form layout="vertical">
+      <Modal title={`${modalType} Clinical Note`} visible={showModal} onOk={modalType == 'Add' ? addNote : updateNote} onCancel={onModalCancelClick} destroyOnClose={true} afterClose={onModalClose} okText={modalType}>
+        <Form layout="vertical" form={form}>
           <FormItem name="NoteType" label="Note Type" required={true}>
             <Select
               size="large"
               onSelect={(value) => {
-                setSelectedNote({ ...selectedNote, NoteType: value.toString() as NoteType });
+                setSelectedNote({ ...selectedNote, NoteType: value });
               }}
-            >
-              <Option value={'Problem'}>{'Problem'}</Option>
-              <Option value={'Observation'}>{'Observation'}</Option>
-              <Option value={'Diagnosis'}>{'Diagnosis'}</Option>
-              <Option value={'Investigation'}>{'Investigation'}</Option>
-            </Select>
-          </FormItem>
-          <FormItem name="Description" label="Description" required={false}>
-            <TextArea
-              rows={5}
-              onChange={(e) => {
-                setSelectedNote({ ...selectedNote, Note: e.target.value });
-              }}
-            ></TextArea>
-          </FormItem>
-        </Form>
-      </Modal>
-
-      <Modal title="Edit Clinical Note" visible={showEditModal} onOk={updateNote} onCancel={handleCancel} destroyOnClose={true} afterClose={onModalClose} okText="Update">
-        <Form layout="vertical">
-          <FormItem name="NoteType" label="Note Type" required={true}>
-            <Select
-              size="large"
               defaultValue={selectedNote.NoteType}
-              onSelect={(value) => {
-                setSelectedNote({ ...selectedNote, NoteType: value.toString() as NoteType });
-              }}
             >
               <Option value={'Problem'}>{'Problem'}</Option>
               <Option value={'Observation'}>{'Observation'}</Option>
@@ -172,7 +193,7 @@ const ClinicalNotes = () => {
               <Option value={'Investigation'}>{'Investigation'}</Option>
             </Select>
           </FormItem>
-          <FormItem name="Description" label="Description" required={false}>
+          <FormItem name="Note" label="Description" rules={[{ required: true, message: 'Please enter description' }]}>
             <TextArea
               rows={5}
               defaultValue={selectedNote.Note}

@@ -11,9 +11,7 @@ let AdminRoutes = (props: any) => {
   let { path } = useRouteMatch();
   const history = useHistory();
   let userContext = useContext(AdminContext);
-  history.listen((e) => {
-    console.log(e);
-  });
+  history.listen((e) => {});
   const [collapsed, setCollapsed] = useState(false);
   const [collapsedWidth, setCollpasedWidth] = useState(0);
   const [contentPadding, setContentPadding] = useState('24px');
@@ -31,10 +29,8 @@ let AdminRoutes = (props: any) => {
         for (let j = 0; j < subMenu.length; j++) {
           if (`${AdminPath}/${subMenu[j].path}` === currentPath) {
             if (AdminMenuItems[i].showSubMenu) {
-              console.log('selected indexs ', AdminMenuItems[i].index.toString(), `${AdminMenuItems[i].index.toString()}-${subMenu[j].index.toString()}`);
               return [AdminMenuItems[i].index.toString(), `${AdminMenuItems[i].index.toString()}-${subMenu[j].index.toString()}`];
             }
-            console.log('selected indexs ', AdminMenuItems[i].index.toString(), AdminMenuItems[i].index.toString());
             return [AdminMenuItems[i].index.toString(), AdminMenuItems[i].index.toString()];
           }
         }

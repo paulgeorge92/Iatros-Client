@@ -393,6 +393,11 @@ export const PaymentMethods = [
     Method: 'Cash',
     Status: 'Active',
   },
+  {
+    ID: 2,
+    Method: 'Card',
+    Status: 'Active',
+  },
 ];
 
 export const ExpenseTypes = [

@@ -1,18 +1,25 @@
 import { MedicineCategory } from '../models/MedicineCategory';
 import { Categories } from '../DummyData';
 import { rejects } from 'assert';
+import { ITEM_NOT_FOUND } from '../Messages';
 
 export class MedicineCategoryRepository {
   constructor() {}
 
   public getAll(): Promise<MedicineCategory[]> {
     return new Promise((resolve, reject) => {
-      resolve(Categories.map((category: any) => category));
+      resolve([...Categories] as MedicineCategory[]);
     });
   }
   public get(id: number): Promise<MedicineCategory> {
     return new Promise((resolve, reject) => {
       resolve(Categories.find((catrgory: any) => !!(catrgory.ID === id)) as MedicineCategory);
+    });
+  }
+
+  public search(query: string): Promise<MedicineCategory[]> {
+    return new Promise((resolve, reject) => {
+      resolve(Categories.filter((x: any) => !!(x.Name.indexof(query) > -1)) as MedicineCategory[]);
     });
   }
 
@@ -23,7 +30,7 @@ export class MedicineCategoryRepository {
         Categories.splice(index, 1);
         resolve();
       } else {
-        reject('Item not found');
+        reject(ITEM_NOT_FOUND);
       }
     });
   }
@@ -41,8 +48,12 @@ export class MedicineCategoryRepository {
   public update(item: MedicineCategory): Promise<void> {
     return new Promise((resolve, reject) => {
       let index = Categories.findIndex((x: any) => x.ID === item.ID);
-      Categories[index] = item;
-      resolve();
+      if (index > -1) {
+        Categories[index] = item;
+        resolve();
+      } else {
+        reject(ITEM_NOT_FOUND);
+      }
     });
   }
 }

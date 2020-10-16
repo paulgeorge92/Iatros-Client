@@ -1,7 +1,9 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, useHistory } from 'react-router-dom';
 
 let PublicRoutes = () => {
+  const history = useHistory();
+  history.push('/admin');
   return (
     <div>
       <Switch>

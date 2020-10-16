@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import Breadcrumb, { BreadcrumbItem } from '../../../components/Breadcrumb';
-import Table, { ColumnsType } from 'antd/lib/table';
+import { ColumnsType } from 'antd/lib/table';
 import { Suppliers as DummyData } from '../../../DummyData';
 import { HomeFilled, PlusOutlined, UserOutlined, PhoneOutlined } from '@ant-design/icons';
 import { EditIcon, TrashIcon, AtIcon } from '../../../CustomIcons';
 import { AdminPath } from '../../../constants';
-import { Space, Row, Col, Button, Input, Popconfirm } from 'antd';
+import { Space, Row, Col, Button, Input, Popconfirm, Form, Modal, Table } from 'antd';
 import Title from 'antd/lib/typography/Title';
-import Modal from 'antd/lib/modal/Modal';
-import Form from 'antd/lib/form/Form';
-import FormItem from 'antd/lib/form/FormItem';
 import { Supplier } from '../../../models/Supplier';
 import TextArea from 'antd/lib/input/TextArea';
+const FormItem = Form.Item;
 
 const Suppliers = () => {
   let breadcrumbItems: Array<BreadcrumbItem> = [

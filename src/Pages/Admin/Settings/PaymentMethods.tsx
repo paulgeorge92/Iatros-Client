@@ -1,21 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import Breadcrumb, { BreadcrumbItem } from '../../../components/Breadcrumb';
-import Table, { ColumnsType } from 'antd/lib/table';
+import { ColumnsType } from 'antd/lib/table';
 import { PaymentMethods as DummyData } from '../../../DummyData';
 import { HomeFilled, PlusOutlined } from '@ant-design/icons';
 import { EditIcon, TrashIcon } from '../../../CustomIcons';
 import { AdminPath } from '../../../constants';
-import { Space, Row, Col, Button, Input, Popconfirm, Select } from 'antd';
+import { Space, Row, Col, Button, Input, Popconfirm, Select, Form, Modal, Table } from 'antd';
 import Title from 'antd/lib/typography/Title';
-import Modal from 'antd/lib/modal/Modal';
-import Form from 'antd/lib/form/Form';
-import FormItem from 'antd/lib/form/FormItem';
 import PaymentMethod from '../../../models/PaymentMethod';
-
+import { PaymentMethodRepository } from '../../../repository/PaymentMethodRepository';
+const FormItem = Form.Item;
 const { Option } = Select;
 
 const PaymentMethods = () => {
-  let breadcrumbItems: Array<BreadcrumbItem> = [
+  const breadcrumbItems: Array<BreadcrumbItem> = [
     {
       icon: <HomeFilled />,
       link: AdminPath,
@@ -50,13 +48,13 @@ const PaymentMethods = () => {
             title={`Edit Method`}
             className="row-edit"
             onClick={() => {
-              editMethod(row);
+              onEditMethodClick(row);
             }}
           ></EditIcon>
           <Popconfirm
             title="Are you sure you want to delete the method"
             onConfirm={() => {
-              deleteMethod(row);
+              onDeleteMethodClick(row);
             }}
             okText="Yes"
             cancelText="No"
@@ -67,30 +65,91 @@ const PaymentMethods = () => {
       ),
     },
   ]);
-
+  const [form] = Form.useForm();
   const [methods, setMethods] = useState<PaymentMethod[]>([]);
-  const [showAddModal, setShowAddModal] = useState<boolean>(false);
-  const [showEditModal, setShowEditModal] = useState<boolean>(false);
+  const [showModal, setShowModal] = useState<boolean>(false);
   const [selectedMethod, setSelectedMethod] = useState<PaymentMethod>({ ID: -1, Method: '', Status: 'Active' });
+  const [modalType, setModalType] = useState<'Add' | 'Update'>('Add');
 
-  let editMethod = (method: PaymentMethod) => {
-    setSelectedMethod(method);
-    setShowEditModal(true);
+  const methodDB = new PaymentMethodRepository(); // Database repository
+
+  /**
+   * Edit the selected payment method
+   * @param method {PaymentMethod} method to edit
+   */
+  let onEditMethodClick = (method: PaymentMethod) => {
+    setSelectedMethod({ ...method });
+    form.setFieldsValue({ ...method });
+    setModalType('Update');
+    setShowModal(true);
   };
 
-  let deleteMethod = (method: PaymentMethod) => {
-    let index = DummyData.findIndex((x: any) => x.ID === method.ID);
-    let _methods = DummyData.map((x: any) => x);
-    _methods.splice(index, 1);
-    setMethods(_methods);
+  /**
+   * Opens the modal popup with form
+   */
+  let onAddMethodClick = () => {
+    setModalType('Add');
+    form.setFieldsValue({ ID: -1, Method: '', Status: 'Active' });
+    setSelectedMethod({ ID: -1, Method: '', Status: 'Active' });
+    setShowModal(true);
   };
 
-  let addMethod = () => {};
-  let updateMethod = () => {};
+  /**
+   * Deletes the selected payment method
+   * @param method {PaymentMethod} payment method to delete
+   */
+  async function onDeleteMethodClick(method: PaymentMethod) {
+    try {
+      await methodDB.delete(method.ID);
+      getMethods();
+    } catch (error) {}
+  }
+
+  /**
+   * Fetched all payemnt methods from database
+   */
+  async function getMethods() {
+    setMethods(await methodDB.getAll());
+  }
+
+  /**
+   * add the payment method to database
+   */
+  async function addMethod() {
+    try {
+      await form.validateFields();
+      await methodDB.add(selectedMethod);
+      getMethods();
+      setShowModal(false);
+    } catch (error) {}
+  }
+
+  /**
+   * update the payment method
+   */
+  async function updateMethod() {
+    try {
+      await form.validateFields();
+      try {
+        await methodDB.update(selectedMethod);
+        getMethods();
+        setShowModal(false);
+      } catch (error) {
+        alert(JSON.stringify(error));
+      }
+    } catch (error) {}
+  }
+
+  /**
+   * Event triggered on modal close button click
+   */
   let handleCancel = () => {
-    setShowAddModal(false);
-    setShowEditModal(false);
+    setShowModal(false);
   };
+
+  /**
+   * Event triggered after modal is closed
+   */
   let onModalClose = () => {};
 
   useEffect(() => {
@@ -110,13 +169,7 @@ const PaymentMethods = () => {
         </Col>
         <Col xs={24} md={12} style={{ textAlign: 'right' }}>
           <Space>
-            <Button
-              type="primary"
-              icon={<PlusOutlined />}
-              onClick={() => {
-                setShowAddModal(true);
-              }}
-            >
+            <Button type="primary" icon={<PlusOutlined />} onClick={onAddMethodClick}>
               Add Method
             </Button>
           </Space>
@@ -127,35 +180,10 @@ const PaymentMethods = () => {
           <Table className="iatros-table" columns={tableColumns} dataSource={methods} rowKey={(record: PaymentMethod) => record.ID}></Table>
         </Col>
       </Row>
-      <Modal title="Add Method" visible={showAddModal} onOk={addMethod} onCancel={handleCancel} destroyOnClose={true} afterClose={onModalClose} okText="Add">
-        <Form layout="vertical">
-          <FormItem name="Name" label="Name" required={true}>
-            <Input
-              size="large"
-              placeholder="Payement Method Name"
-              onChange={(e) => {
-                setSelectedMethod({ ...selectedMethod, Method: e.target.value });
-              }}
-            ></Input>
-          </FormItem>
-          <FormItem name="Status" label="Name" required={true}>
-            <Select
-              size="large"
-              defaultValue={'Active'}
-              onSelect={(value) => {
-                setSelectedMethod({ ...selectedMethod, Status: value.toString() });
-              }}
-            >
-              <Option value="Active">Active</Option>
-              <Option value="Inactive">Inactive</Option>
-            </Select>
-          </FormItem>
-        </Form>
-      </Modal>
 
-      <Modal title="Edit Method" visible={showEditModal} onOk={updateMethod} onCancel={handleCancel} destroyOnClose={true} afterClose={onModalClose} okText="Update">
-        <Form layout="vertical">
-          <FormItem name="Name" label="Name" required={true}>
+      <Modal title={`${modalType} Payment Method`} visible={showModal} onOk={modalType == 'Add' ? addMethod : updateMethod} onCancel={handleCancel} destroyOnClose={true} afterClose={onModalClose} okText={modalType}>
+        <Form form={form} layout="vertical">
+          <FormItem name="Method" label="Name" rules={[{ required: true, message: 'Please input a name for payment method' }]}>
             <Input
               size="large"
               placeholder="Payement Method Name"
@@ -165,7 +193,7 @@ const PaymentMethods = () => {
               }}
             ></Input>
           </FormItem>
-          <FormItem name="Status" label="Name" required={true}>
+          <FormItem name="Status" label="Status" rules={[{ required: true, message: 'Plese select the status' }]}>
             <Select
               size="large"
               defaultValue={selectedMethod.Status}

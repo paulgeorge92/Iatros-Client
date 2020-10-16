@@ -16,7 +16,6 @@ export interface AdminLoginProps {
 export const AdminLogin = (props: AdminLoginProps) => {
   let returnUrl = props.redirectUrl || props.location.state?.redirectUrl;
   const history = useHistory();
-  console.log(returnUrl);
   if (sessionStorage.getItem('userSession')) {
     var session = JSON.parse(sessionStorage.getItem('userSession') || '{}');
     if (session.mode === 'admin' && new Date(parseInt(session.expiry) || '0') > new Date()) {
@@ -25,9 +24,7 @@ export const AdminLogin = (props: AdminLoginProps) => {
   }
 
   useEffect(() => {
-    return () => {
-      console.log('cleaned up');
-    };
+    return () => {};
   }, []);
 
   return (

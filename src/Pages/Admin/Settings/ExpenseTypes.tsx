@@ -1,22 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import Breadcrumb, { BreadcrumbItem } from '../../../components/Breadcrumb';
-import Table, { ColumnsType } from 'antd/lib/table';
-import { ExpenseTypes as DummyData } from '../../../DummyData';
+import { ColumnsType } from 'antd/lib/table';
 import { HomeFilled, PlusOutlined } from '@ant-design/icons';
 import { EditIcon, TrashIcon } from '../../../CustomIcons';
 import { AdminPath } from '../../../constants';
-import { Space, Row, Col, Button, Input, Popconfirm, Select } from 'antd';
-import Title from 'antd/lib/typography/Title';
-import Modal from 'antd/lib/modal/Modal';
-import Form from 'antd/lib/form/Form';
-import FormItem from 'antd/lib/form/FormItem';
+import { Space, Row, Col, Button, Input, Popconfirm, Select, Form, Modal, Table, Typography } from 'antd';
 import { ExpenseType } from '../../../models/ExpenseTypes';
-import TextArea from 'antd/lib/input/TextArea';
-
+import { ExpenseTypeRepository } from '../../../repository/ExpenseTypeRepository';
+import { Status } from '../../../models/Enums';
+const { Title } = Typography;
+const FormItem = Form.Item;
+const { TextArea } = Input;
 const { Option } = Select;
 
 const ExpenseTypes = () => {
-  let breadcrumbItems: Array<BreadcrumbItem> = [
+  const breadcrumbItems: Array<BreadcrumbItem> = [
     {
       icon: <HomeFilled />,
       link: AdminPath,
@@ -58,13 +56,13 @@ const ExpenseTypes = () => {
             title={`Edit Type`}
             className="row-edit"
             onClick={() => {
-              editType(row);
+              onEditTypeClick(row);
             }}
           ></EditIcon>
           <Popconfirm
             title="Are you sure you want to delete this type"
             onConfirm={() => {
-              deleteType(row);
+              onDeleteTypeClick(row);
             }}
             okText="Yes"
             cancelText="No"
@@ -75,37 +73,93 @@ const ExpenseTypes = () => {
       ),
     },
   ]);
-
+  const [form] = Form.useForm();
   const [expenseTypes, setExpenseTyes] = useState<ExpenseType[]>([]);
-  const [showAddModal, setShowAddModal] = useState<boolean>(false);
-  const [showEditModal, setShowEditModal] = useState<boolean>(false);
+  const [showModal, setShowModal] = useState<boolean>(false);
   const [selectedType, setSelectedType] = useState<ExpenseType>({ ID: -1, Name: '', Description: '', Status: 'Active' });
+  const [modalType, setModalType] = useState<'Add' | 'Update'>('Add');
 
-  let editType = (type: ExpenseType) => {
+  const expenseTypeDB = new ExpenseTypeRepository(); //Expense Type databse repository
+
+  /**
+   * Open the modal popup with edit form
+   * @param type expense type to edit
+   */
+  let onEditTypeClick = (type: ExpenseType) => {
+    form.setFieldsValue(type);
     setSelectedType(type);
-    setShowEditModal(true);
-
-    //alert(JSON.stringify(tax));
+    setModalType('Update');
+    setShowModal(true);
   };
 
-  let deleteType = (type: ExpenseType) => {
-    let index = DummyData.findIndex((x: ExpenseType) => x.ID === type.ID);
-    let _types = DummyData.map((x: ExpenseType) => x);
-    _types.splice(index, 1);
-    setExpenseTyes(_types);
+  /**
+   * Open the modal popup with new form
+   */
+  let onAddTypeClick = () => {
+    setModalType('Add');
+    form.setFieldsValue({ Name: '', Description: '', Status: 'Active' });
+    setSelectedType({ ID: -1, Name: '', Description: '', Status: 'Active' });
+    setShowModal(true);
   };
 
-  let addType = () => {};
-  let updateType = () => {};
-  let handleCancel = () => {
-    setShowAddModal(false);
-    setShowEditModal(false);
+  /**
+   * Fetch all expense method from databse
+   */
+  async function getExpenseTypes() {
+    setExpenseTyes(await expenseTypeDB.getAll());
+  }
+
+  /**
+   * Delete selected expense type
+   * @param type Expense type to delete
+   */
+  async function onDeleteTypeClick(type: ExpenseType) {
+    await expenseTypeDB.delete(type.ID);
+    getExpenseTypes();
+  }
+
+  /**
+   * Add the expense type to database
+   */
+  async function addType() {
+    try {
+      let val = (await form.validateFields()) as ExpenseType;
+      if (val.Name && val.Description) {
+        await expenseTypeDB.add(selectedType);
+        getExpenseTypes();
+        setShowModal(false);
+      } else {
+      }
+    } catch (error) {}
+  }
+
+  /**
+   * Updates the expense type in database
+   */
+  async function updateType() {
+    try {
+      let val = await form.validateFields();
+      await expenseTypeDB.update(selectedType);
+      getExpenseTypes();
+      setShowModal(false);
+    } catch (error) {}
+  }
+
+  /**
+   * Modal Cancel click event
+   */
+  let onModalCancelClick = () => {
+    setShowModal(false);
+    setShowModal(false);
   };
+
+  /**
+   * Modal on close event
+   */
   let onModalClose = () => {};
 
   useEffect(() => {
-    let _types: ExpenseType[] = DummyData.map((type: any) => type);
-    setExpenseTyes(_types);
+    getExpenseTypes();
     return () => {};
   }, []);
 
@@ -120,13 +174,7 @@ const ExpenseTypes = () => {
         </Col>
         <Col xs={24} md={12} style={{ textAlign: 'right' }}>
           <Space>
-            <Button
-              type="primary"
-              icon={<PlusOutlined />}
-              onClick={() => {
-                setShowAddModal(true);
-              }}
-            >
+            <Button type="primary" icon={<PlusOutlined />} onClick={onAddTypeClick}>
               Add Expense Type
             </Button>
           </Space>
@@ -137,67 +185,36 @@ const ExpenseTypes = () => {
           <Table scroll={{ x: true, scrollToFirstRowOnChange: true }} className="iatros-table" columns={tableColumns} dataSource={expenseTypes} rowKey={(record: ExpenseType) => record.ID}></Table>
         </Col>
       </Row>
-      <Modal title="Add Expense type" visible={showAddModal} onOk={addType} onCancel={handleCancel} destroyOnClose={true} afterClose={onModalClose} okText="Add">
-        <Form layout="vertical">
-          <FormItem name="Name" label="Name" required={true}>
-            <Input
-              size="large"
-              placeholder="Type Name"
-              onChange={(e) => {
-                setSelectedType({ ...selectedType, Name: e.target.value });
-              }}
-            ></Input>
-          </FormItem>
-          <FormItem name="Description" label="Description" required={false}>
-            <TextArea
-              rows={5}
-              onChange={(e) => {
-                setSelectedType({ ...selectedType, Description: e.target.value });
-              }}
-            ></TextArea>
-          </FormItem>
-          <FormItem name="Status" label="Status" required={true}>
-            <Select
-              size="large"
-              onSelect={(value) => {
-                setSelectedType({ ...selectedType, Status: value.toString() });
-              }}
-            >
-              <Option value="Active">Active</Option>
-              <Option value="Inactive">Inactive</Option>
-            </Select>
-          </FormItem>
-        </Form>
-      </Modal>
-
-      <Modal title="Edit Expense Type" visible={showEditModal} onOk={updateType} onCancel={handleCancel} destroyOnClose={true} afterClose={onModalClose} okText="Update">
-        <Form layout="vertical">
-          <FormItem name="Name" label="Name" required={true}>
+      <Modal title={`${modalType} Expense type`} visible={showModal} onOk={modalType === 'Add' ? addType : updateType} onCancel={onModalCancelClick} destroyOnClose={true} afterClose={onModalClose} okText={`${modalType}`}>
+        <Form form={form} layout="vertical">
+          <FormItem name="Name" label="Name" rules={[{ required: true, message: 'Please input a name for expense type' }]}>
             <Input
               size="large"
               placeholder="Type Name"
               defaultValue={selectedType.Name}
+              value={selectedType.Name}
               onChange={(e) => {
                 setSelectedType({ ...selectedType, Name: e.target.value });
               }}
             ></Input>
           </FormItem>
-          <FormItem name="Description" label="Description" required={false}>
+          <FormItem name="Description" label="Description">
             <TextArea
-              defaultValue={selectedType.Description}
               rows={5}
+              defaultValue={selectedType.Description}
+              value={selectedType.Description}
               onChange={(e) => {
                 setSelectedType({ ...selectedType, Description: e.target.value });
               }}
             ></TextArea>
           </FormItem>
-          <FormItem name="Status" label="Status" required={true}>
+          <FormItem name="Status" label="Status">
             <Select
-              defaultActiveFirstOption={true}
-              defaultValue={selectedType.Status}
               size="large"
+              defaultValue={selectedType.Status}
+              value={selectedType.Status}
               onSelect={(value) => {
-                setSelectedType({ ...selectedType, Status: value.toString() });
+                setSelectedType({ ...selectedType, Status: value.toString() as Status });
               }}
             >
               <Option value="Active">Active</Option>

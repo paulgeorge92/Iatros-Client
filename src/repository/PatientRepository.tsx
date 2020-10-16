@@ -4,7 +4,7 @@ export class PatientRepository {
   constructor() {}
   public getAllPatients(): Promise<Patient[]> {
     return new Promise((resolve, reject) => {
-      resolve(Patients.map((patient: any) => patient));
+      resolve(Patients as Patient[]);
     });
   }
   public getPatient(id: number): Promise<Patient | null> {

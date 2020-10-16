@@ -1,7 +1,5 @@
-import { NoteType } from './Enums';
-
 export interface ClinicalNote {
   ID: number;
-  NoteType: NoteType;
+  NoteType: string;
   Note: string;
 }
