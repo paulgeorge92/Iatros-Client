@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import Breadcrumb, { BreadcrumbItem } from '../../../components/Breadcrumb';
-import Table, { ColumnsType } from 'antd/lib/table';
+import { ColumnsType } from 'antd/lib/table';
 import { Taxes as DummyTaxes } from '../../../DummyData';
 import { HomeFilled, PlusOutlined } from '@ant-design/icons';
 import { EditIcon, TrashIcon } from '../../../CustomIcons';
 import { AdminPath } from '../../../constants';
-import { Space, Row, Col, Button, Input, Popconfirm } from 'antd';
-import Title from 'antd/lib/typography/Title';
-import Modal from 'antd/lib/modal/Modal';
-import Form from 'antd/lib/form/Form';
-import FormItem from 'antd/lib/form/FormItem';
+import { Space, Row, Col, Button, Input, Popconfirm, Typography, Form, Modal, Table } from 'antd';
 import { Tax } from '../../../models/Tax';
+import { TaxRepository } from '../../../repository/TaxRepository';
+
+const FormItem = Form.Item;
+const { Title } = Typography;
 
 const Taxes = () => {
   let breadcrumbItems: Array<BreadcrumbItem> = [
@@ -48,13 +48,13 @@ const Taxes = () => {
             title={`Edit Tax`}
             className="row-edit"
             onClick={() => {
-              editTax(row);
+              onEditTaxClick(row);
             }}
           ></EditIcon>
           <Popconfirm
             title="Are you sure you want to delete the tax"
             onConfirm={() => {
-              deleteTax(row);
+              onDeleteTaxClick(row);
             }}
             okText="Yes"
             cancelText="No"
@@ -66,41 +66,63 @@ const Taxes = () => {
     },
   ]);
 
+  const taxDB = new TaxRepository();
+  const [form] = Form.useForm();
   const [taxes, setTaxes] = useState<Tax[]>([]);
-  const [showAddModal, setShowAddModal] = useState<boolean>(false);
-  const [showEditModal, setShowEditModal] = useState<boolean>(false);
+  const [modalType, setModalType] = useState<'Add' | 'Update'>();
+  const [showModal, setShowModal] = useState<boolean>(false);
   const [selectedTax, setSelectedTax] = useState<Tax>({ ID: -1, Name: '', Rate: 0 });
 
-  let editTax = (tax: Tax) => {
-    let _tax: Tax = {
-      ID: tax.ID,
-      Name: tax.Name,
-      Rate: tax.Rate,
-    };
-    setSelectedTax(_tax);
-    setShowEditModal(true);
+  function onAddTaxClick() {
+    setModalType('Add');
+    setSelectedTax({ ID: -1, Name: '', Rate: 0 });
+    form.setFieldsValue({ ID: -1, Name: '', Rate: 0 });
+    setShowModal(true);
+  }
 
-    //alert(JSON.stringify(tax));
-  };
+  function onEditTaxClick(tax: Tax) {
+    setModalType('Update');
+    setSelectedTax({ ...tax });
+    form.setFieldsValue({ ...tax });
+    setShowModal(true);
+  }
 
-  let deleteTax = (tax: Tax) => {
-    let index = DummyTaxes.findIndex((x: Tax) => x.ID === tax.ID);
-    let _taxes = DummyTaxes.map((x: Tax) => x);
-    _taxes.splice(index, 1);
-    setTaxes(_taxes);
-  };
+  function onDeleteTaxClick(tax: Tax) {
+    deleteTax(tax.ID);
+    getTaxes();
+  }
 
-  let addTax = () => {};
-  let updateTax = () => {};
+  async function onFormSubmit() {
+    try {
+      await form.validateFields();
+      if (modalType == 'Add') addTax(selectedTax);
+      else updateTax(selectedTax);
+      getTaxes();
+      setShowModal(false);
+    } catch (error) {}
+  }
+
+  async function addTax(tax: Tax) {
+    await taxDB.add(tax);
+  }
+  async function getTaxes() {
+    setTaxes(await taxDB.getAll());
+  }
+  async function updateTax(tax: Tax) {
+    await taxDB.update(tax);
+  }
+  async function deleteTax(id: number) {
+    await taxDB.delete(id);
+  }
+
   let handleCancel = () => {
-    setShowAddModal(false);
-    setShowEditModal(false);
+    setShowModal(false);
+    setShowModal(false);
   };
   let onModalClose = () => {};
 
   useEffect(() => {
-    let _taxes: Tax[] = DummyTaxes.map((tax: any) => tax);
-    setTaxes(_taxes);
+    getTaxes();
     return () => {};
   }, []);
 
@@ -115,13 +137,7 @@ const Taxes = () => {
         </Col>
         <Col xs={24} md={12} style={{ textAlign: 'right' }}>
           <Space>
-            <Button
-              type="primary"
-              icon={<PlusOutlined />}
-              onClick={() => {
-                setShowAddModal(true);
-              }}
-            >
+            <Button type="primary" icon={<PlusOutlined />} onClick={onAddTaxClick}>
               Add Tax
             </Button>
           </Space>
@@ -132,33 +148,9 @@ const Taxes = () => {
           <Table className="iatros-table" columns={tableColumns} dataSource={taxes} rowKey={(record: Tax) => record.ID}></Table>
         </Col>
       </Row>
-      <Modal title="Add Tax" visible={showAddModal} onOk={addTax} onCancel={handleCancel} destroyOnClose={true} afterClose={onModalClose} okText="Add">
-        <Form layout="vertical">
-          <FormItem name="TaxName" label="Name" required={true}>
-            <Input
-              size="large"
-              placeholder="Tax Name"
-              onChange={(e) => {
-                setSelectedTax({ ...selectedTax, Name: e.target.value });
-              }}
-            ></Input>
-          </FormItem>
-          <FormItem name="TaxRate" label="Name" required={true}>
-            <Input
-              size="large"
-              type="number"
-              placeholder="Tax Rate in %"
-              onChange={(e) => {
-                setSelectedTax({ ...selectedTax, Rate: parseFloat(e.target.value) });
-              }}
-            ></Input>
-          </FormItem>
-        </Form>
-      </Modal>
-
-      <Modal title="Edit Tax" visible={showEditModal} onOk={updateTax} onCancel={handleCancel} destroyOnClose={true} afterClose={onModalClose} okText="Update">
-        <Form layout="vertical">
-          <FormItem name="TaxName" label="Name" required={true}>
+      <Modal title={`${modalType} Tax`} visible={showModal} onOk={onFormSubmit} onCancel={handleCancel} destroyOnClose={true} afterClose={onModalClose} okText={modalType}>
+        <Form form={form} layout="vertical">
+          <FormItem name="Name" label="Name" rules={[{ required: true, message: 'Please enter name' }]}>
             <Input
               size="large"
               placeholder="Tax Name"
@@ -168,7 +160,7 @@ const Taxes = () => {
               }}
             ></Input>
           </FormItem>
-          <FormItem name="TaxRate" label="Name" required={true}>
+          <FormItem name="Rate" label="Tax Rate" rules={[{ required: true, message: 'Please enter rate' }]}>
             <Input
               size="large"
               type="number"
