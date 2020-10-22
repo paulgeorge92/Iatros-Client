@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react';
 import { DesktopIcon, HeartBeatIcon, CalendarIcon, RecieptIcon, PrescriptionFileIcon, StoreIcon, MoneyBillIcon, RupeeIcon, DoctorIcon, SettingsIcon, UserIcon, FileIcon } from './CustomIcons';
 import AdminDashboard from './Pages/Admin/Dashboard';
 import Patients from './Pages/Admin/Patients/Patients';
-import NewPatient from './Pages/Admin/Patients/NewPatient';
+import PatientForm from './Pages/Admin/Patients/PatientForm';
 import MedicineCategories from './Pages/Admin/Pharmacy/MedicineCategory';
 import Taxes from './Pages/Admin/Settings/Taxes';
 import PaymentMethods from './Pages/Admin/Settings/PaymentMethods';
@@ -10,8 +10,10 @@ import ExpenseTypes from './Pages/Admin/Settings/ExpenseTypes';
 import Suppliers from './Pages/Admin/Settings/Suppliers';
 import ClinicalNotes from './Pages/Admin/Settings/ClinicalNotes';
 import { BloodGroup } from './models/Enums';
+import ErrorPage500 from './Pages/Error/500';
+import ErrorPage404 from './Pages/Error/404';
 
-interface MenuItem {
+export interface MenuItem {
   name: string;
   path: string;
   index: number;
@@ -56,14 +58,14 @@ _AdminMenuItems.menu = [
         path: 'patients/new',
         showInMenu: false,
         index: 1,
-        component: <NewPatient />,
+        component: <PatientForm />,
       },
       {
         name: 'Edit Patient',
         path: 'patients/edit/:id',
         showInMenu: false,
-        index: 1,
-        component: <NewPatient />,
+        index: 2,
+        component: <PatientForm />,
       },
     ],
   },
@@ -73,6 +75,7 @@ _AdminMenuItems.menu = [
     index: 3,
     icon: <CalendarIcon />,
     showInMenu: true,
+    component: <ErrorPage404 homeUrl={AdminPath} />,
   },
   {
     name: 'Invoices',
@@ -80,6 +83,7 @@ _AdminMenuItems.menu = [
     index: 4,
     icon: <RecieptIcon />,
     showInMenu: true,
+    component: <ErrorPage404 homeUrl={AdminPath} />,
   },
   {
     name: 'Prescriptions',
@@ -87,6 +91,7 @@ _AdminMenuItems.menu = [
     index: 5,
     icon: <PrescriptionFileIcon />,
     showInMenu: true,
+    component: <ErrorPage404 homeUrl={AdminPath} />,
   },
   {
     name: 'Pharmacy',
@@ -101,18 +106,21 @@ _AdminMenuItems.menu = [
         path: 'pharmacy/billing',
         index: 1,
         showInMenu: true,
+        component: <ErrorPage404 homeUrl={AdminPath} />,
       },
       {
         name: 'Purchases',
         path: 'pharmacy/purchasing',
         index: 2,
         showInMenu: true,
+        component: <ErrorPage404 homeUrl={AdminPath} />,
       },
       {
         name: 'Stock adjustment',
         path: 'pharmacy/stock-adjustment',
         index: 3,
         showInMenu: true,
+        component: <ErrorPage404 homeUrl={AdminPath} />,
       },
       {
         name: 'Medicines',
@@ -135,6 +143,7 @@ _AdminMenuItems.menu = [
     index: 7,
     icon: <FileIcon />,
     showInMenu: true,
+    component: <ErrorPage404 homeUrl={AdminPath} />,
   },
   {
     name: 'Expenses',
@@ -142,6 +151,7 @@ _AdminMenuItems.menu = [
     index: 8,
     icon: <MoneyBillIcon />,
     showInMenu: true,
+    component: <ErrorPage404 homeUrl={AdminPath} />,
   },
   {
     name: 'Payroll',
@@ -156,18 +166,21 @@ _AdminMenuItems.menu = [
         path: 'payroll/salary-template',
         index: 1,
         showInMenu: true,
+        component: <ErrorPage404 homeUrl={AdminPath} />,
       },
       {
         name: 'Manage Salary',
         path: 'payroll/manage-salary',
         index: 2,
         showInMenu: true,
+        component: <ErrorPage404 homeUrl={AdminPath} />,
       },
       {
         name: 'Make Payement',
         path: 'payroll/payments',
         index: 3,
         showInMenu: true,
+        component: <ErrorPage404 homeUrl={AdminPath} />,
       },
     ],
   },
@@ -177,6 +190,7 @@ _AdminMenuItems.menu = [
     index: 10,
     icon: <DoctorIcon />,
     showInMenu: true,
+    component: <ErrorPage404 homeUrl={AdminPath} />,
   },
   {
     name: 'Users',
@@ -191,12 +205,14 @@ _AdminMenuItems.menu = [
         path: 'users',
         index: 1,
         showInMenu: true,
+        component: <ErrorPage404 homeUrl={AdminPath} />,
       },
       {
         name: 'User Roles',
         path: 'user-roles',
         index: 2,
         showInMenu: true,
+        component: <ErrorPage404 homeUrl={AdminPath} />,
       },
     ],
   },
@@ -213,12 +229,14 @@ _AdminMenuItems.menu = [
         path: 'settings/sysinfo',
         index: 1,
         showInMenu: true,
+        component: <ErrorPage404 homeUrl={AdminPath} />,
       },
       {
         name: 'Theme Customization',
         path: 'settings/customize',
         index: 2,
         showInMenu: true,
+        component: <ErrorPage404 homeUrl={AdminPath} />,
       },
       {
         name: 'Clinical Notes',

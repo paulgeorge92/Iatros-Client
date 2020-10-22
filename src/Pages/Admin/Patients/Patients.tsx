@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Button, Space, Table, Tag } from 'antd';
+import { Row, Col, Button, Space, Table, Tag, Popconfirm } from 'antd';
 import Title from 'antd/lib/typography/Title';
-import { AdminPath } from '../../../constants';
+import { AdminPath, AdminMenuItems } from '../../../constants';
 import { HomeFilled, PlusOutlined } from '@ant-design/icons';
 import { HeartBeatIcon, EditIcon, EyeIcon, TrashIcon } from '../../../CustomIcons';
 import Breadcrumb, { BreadcrumbItem } from '../../../components/Breadcrumb';
@@ -83,8 +83,19 @@ const Patients = () => {
       render: (text: any, row: Patient) => (
         <Space size="large">
           <EyeIcon title={`View ${row.FirstName} ${row.LastName}`} className="row-view"></EyeIcon>
-          <EditIcon title={`Edit ${row.FirstName} ${row.LastName}`} className="row-edit"></EditIcon>
-          <TrashIcon title={`Delete ${row.FirstName} ${row.LastName}`} className="row-delete"></TrashIcon>
+          <Link to={AdminPath + '/' + AdminMenuItems.getMenu('Edit Patient')?.path.replace(':id', row.ID)}>
+            <EditIcon title={`Edit ${row.FirstName} ${row.LastName}`} className="row-edit"></EditIcon>
+          </Link>
+          <Popconfirm
+            title="Are you sure you want to delete this patient?"
+            onConfirm={() => {
+              onDeletePatientClick(row.ID);
+            }}
+            okText="Yes"
+            cancelText="No"
+          >
+            <TrashIcon title={`Delete ${row.FirstName} ${row.LastName}`} className="row-delete"></TrashIcon>
+          </Popconfirm>
         </Space>
       ),
       width: '10%',
@@ -92,13 +103,28 @@ const Patients = () => {
   ];
   let patientDB = new PatientRepository();
 
-  async function loadData() {
-    let data = await patientDB.getAllPatients();
-    setPatients(data);
+  function onDeletePatientClick(id: number) {
+    deletePatient(id);
+    getPatients();
   }
+
+  async function getPatients() {
+    let data = await patientDB.getAll();
+    setPatients([...data]);
+  }
+
+  async function deletePatient(id: number) {
+    try {
+      await patientDB.delete(id);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   useEffect(() => {
-    loadData();
-  });
+    getPatients();
+    return () => {};
+  }, []);
 
   return (
     <>
