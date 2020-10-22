@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { IatrosRouter } from './routes/Admin/AdminRouter';
 import PublicRoutes from './routes/Public/PublicRoutes';
 import { AdminPath } from './constants';
+import ErrorPage404 from './Pages/Error/404';
 
 function App() {
   return (
@@ -17,6 +18,9 @@ function App() {
             </AdminContext.Provider>
           </Route>
           <Route path="/" component={PublicRoutes}></Route>
+          <Route>
+            <ErrorPage404 homeUrl="/" />
+          </Route>
         </Switch>
       </Router>
     </div>

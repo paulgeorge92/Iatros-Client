@@ -4,6 +4,7 @@ import { AdminContext } from '../../contexts/AdminContext';
 import { useHistory, useRouteMatch, Switch, Route, Link } from 'react-router-dom';
 import { LogoWhiteImage, AdminMenuItems as AdminMenuObj, AdminPath } from '../../constants';
 import AdminDashboard from '../../Pages/Admin/Dashboard';
+import ErrorPage404 from '../../Pages/Error/404';
 
 const { Header, Content, Sider } = Layout;
 let AdminMenuItems = AdminMenuObj.menu;
@@ -136,6 +137,9 @@ let AdminRoutes = (props: any) => {
                 </Route>
               );
             })}
+            <Route>
+              <ErrorPage404 homeUrl={AdminPath} />
+            </Route>
           </Switch>
         </Content>
       </Layout>
