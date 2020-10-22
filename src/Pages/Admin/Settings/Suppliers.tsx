@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import Breadcrumb, { BreadcrumbItem } from '../../../components/Breadcrumb';
 import { ColumnsType } from 'antd/lib/table';
-import { Suppliers as DummyData } from '../../../DummyData';
 import { HomeFilled, PlusOutlined, UserOutlined, PhoneOutlined } from '@ant-design/icons';
 import { EditIcon, TrashIcon, AtIcon } from '../../../CustomIcons';
 import { AdminPath } from '../../../constants';
-import { Space, Row, Col, Button, Input, Popconfirm, Form, Modal, Table } from 'antd';
-import Title from 'antd/lib/typography/Title';
+import { Space, Row, Col, Button, Input, Popconfirm, Form, Modal, Table, Typography } from 'antd';
 import { Supplier } from '../../../models/Supplier';
-import TextArea from 'antd/lib/input/TextArea';
+import { SuppliersRepository } from '../../../repository/SuppliersRepository';
+
 const FormItem = Form.Item;
+const { Title } = Typography;
+const { TextArea } = Input;
 
 const Suppliers = () => {
   let breadcrumbItems: Array<BreadcrumbItem> = [
@@ -48,13 +49,13 @@ const Suppliers = () => {
             title={`Edit Supplier`}
             className="row-edit"
             onClick={() => {
-              editType(row);
+              onEditSupplierClick(row);
             }}
           ></EditIcon>
           <Popconfirm
             title="Are you sure you want to delete this supplier"
             onConfirm={() => {
-              deleteType(row);
+              onDeleteSupplierClick(row);
             }}
             okText="Yes"
             cancelText="No"
@@ -66,36 +67,67 @@ const Suppliers = () => {
     },
   ]);
 
+  const [form] = Form.useForm();
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
-  const [showAddModal, setShowAddModal] = useState<boolean>(false);
-  const [showEditModal, setShowEditModal] = useState<boolean>(false);
+  const [modalType, setModalType] = useState<'Add' | 'Update'>();
+  const [showModal, setShowModal] = useState<boolean>(false);
   const [selectedSupplier, setSelectedSupplier] = useState<Supplier>({ ID: -1, Name: '', Email: '', Phone: '', Address: '' });
 
-  let editType = (type: Supplier) => {
-    setSelectedSupplier(type);
-    setShowEditModal(true);
+  const supplierDB = new SuppliersRepository();
 
-    //alert(JSON.stringify(tax));
-  };
+  function onAddSupplierClick() {
+    setModalType('Add');
+    setSelectedSupplier({ ID: -1, Name: '', Email: '', Phone: '', Address: '' });
+    form.setFieldsValue({ ID: -1, Name: '', Email: '', Phone: '', Address: '' });
+    setShowModal(true);
+  }
 
-  let deleteType = (type: Supplier) => {
-    let index = DummyData.findIndex((x: Supplier) => x.ID === type.ID);
-    let _types = DummyData.map((x: Supplier) => x);
-    _types.splice(index, 1);
-    setSuppliers(_types);
-  };
+  function onEditSupplierClick(supplier: Supplier) {
+    setModalType('Update');
+    setSelectedSupplier({ ...supplier });
+    form.setFieldsValue({ ...supplier });
+    setShowModal(true);
+  }
 
-  let addType = () => {};
-  let updateType = () => {};
+  function onDeleteSupplierClick(supplier: Supplier) {
+    deleteSupplier(supplier.ID);
+    getSuppliers();
+  }
+
+  async function onFormSubmit() {
+    try {
+      await form.validateFields();
+      if (modalType == 'Add') {
+        addSupplier(selectedSupplier);
+      } else {
+        updateSupplier(selectedSupplier);
+      }
+      getSuppliers();
+      setShowModal(false);
+    } catch (error) {}
+  }
+
+  async function addSupplier(supplier: Supplier) {
+    await supplierDB.add(supplier);
+  }
+  async function getSuppliers() {
+    setSuppliers(await supplierDB.getAll());
+  }
+  async function updateSupplier(supplier: Supplier) {
+    await supplierDB.update(supplier);
+  }
+  async function deleteSupplier(id: number) {
+    await supplierDB.delete(id);
+  }
+
   let handleCancel = () => {
-    setShowAddModal(false);
-    setShowEditModal(false);
+    setShowModal(false);
+    setShowModal(false);
   };
   let onModalClose = () => {};
 
   useEffect(() => {
-    let _types: Supplier[] = DummyData.map((type: any) => type);
-    setSuppliers(_types);
+    getSuppliers();
     return () => {};
   }, []);
 
@@ -110,14 +142,8 @@ const Suppliers = () => {
         </Col>
         <Col xs={24} md={12} style={{ textAlign: 'right' }}>
           <Space>
-            <Button
-              type="primary"
-              icon={<PlusOutlined />}
-              onClick={() => {
-                setShowAddModal(true);
-              }}
-            >
-              Add Expense Type
+            <Button type="primary" icon={<PlusOutlined />} onClick={onAddSupplierClick}>
+              Add Supplier
             </Button>
           </Space>
         </Col>
@@ -127,53 +153,9 @@ const Suppliers = () => {
           <Table scroll={{ x: true, scrollToFirstRowOnChange: true }} className="iatros-table" columns={tableColumns} dataSource={suppliers} rowKey={(record: Supplier) => record.ID}></Table>
         </Col>
       </Row>
-      <Modal title="Add Supplier" visible={showAddModal} onOk={addType} onCancel={handleCancel} destroyOnClose={true} afterClose={onModalClose} okText="Add">
-        <Form layout="vertical">
-          <FormItem name="Name" label="Name" required={true}>
-            <Input
-              size="large"
-              placeholder="Supplier Name"
-              prefix={<UserOutlined />}
-              onChange={(e) => {
-                setSelectedSupplier({ ...selectedSupplier, Name: e.target.value });
-              }}
-            ></Input>
-          </FormItem>
-          <FormItem name="Email" label="Email" required={false}>
-            <Input
-              size="large"
-              placeholder="Email"
-              prefix={<AtIcon />}
-              type="email"
-              onChange={(e) => {
-                setSelectedSupplier({ ...selectedSupplier, Email: e.target.value });
-              }}
-            ></Input>
-          </FormItem>
-          <FormItem name="Phone" label="Contact Number" required={false}>
-            <Input
-              size="large"
-              placeholder="ContactNumber"
-              prefix={<PhoneOutlined />}
-              onChange={(e) => {
-                setSelectedSupplier({ ...selectedSupplier, Phone: e.target.value });
-              }}
-            ></Input>
-          </FormItem>
-          <FormItem name="Address" label="Address" required={false}>
-            <TextArea
-              rows={5}
-              onChange={(e) => {
-                setSelectedSupplier({ ...selectedSupplier, Address: e.target.value });
-              }}
-            ></TextArea>
-          </FormItem>
-        </Form>
-      </Modal>
-
-      <Modal title="Edit Expense Type" visible={showEditModal} onOk={updateType} onCancel={handleCancel} destroyOnClose={true} afterClose={onModalClose} okText="Update">
-        <Form layout="vertical">
-          <FormItem name="Name" label="Name" required={true}>
+      <Modal title={`${modalType} Supplier`} visible={showModal} onOk={onFormSubmit} onCancel={handleCancel} destroyOnClose={true} afterClose={onModalClose} okText={modalType}>
+        <Form form={form} layout="vertical">
+          <FormItem name="Name" label="Name" rules={[{ required: true, message: 'Please enter name' }]}>
             <Input
               placeholder="Supplier Name"
               prefix={<UserOutlined />}
@@ -193,7 +175,7 @@ const Suppliers = () => {
               }}
             ></Input>
           </FormItem>
-          <FormItem name="Phone" label="Contact Number" required={false}>
+          <FormItem name="Phone" label="Contact Number" rules={[{ required: true, message: 'Please enter contact number' }]}>
             <Input
               placeholder="ContactNumber"
               prefix={<PhoneOutlined />}
@@ -203,7 +185,7 @@ const Suppliers = () => {
               }}
             ></Input>
           </FormItem>
-          <FormItem name="Address" label="Address" required={false}>
+          <FormItem name="Address" label="Address" rules={[{ required: true, message: 'Please enter address' }]}>
             <TextArea
               defaultValue={selectedSupplier.Address}
               rows={5}
