@@ -6,17 +6,17 @@ export interface Patient {
   FirstName: string;
   LastName: string;
   MobileNumber: string;
-  BloodGroup: BloodGroup;
-  Email?: string;
+  BloodGroup: string;
+  Email: string;
   DateOfBirth: Date;
-  Gender: Gender;
+  Gender: string;
   AddressLine1: string;
-  AddressLine2?: string;
-  Town?: string;
+  AddressLine2: string;
+  Town: string;
   City: string;
   Country: string;
   ZipCode: string;
-  MedicalHistory?: MedicalHistory;
+  MedicalHistory: MedicalHistory;
   CreatedDate: Date;
   Status: 'Active' | 'Disabled' | 'Inactive';
 }
