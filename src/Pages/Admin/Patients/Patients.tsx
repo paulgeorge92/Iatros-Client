@@ -124,7 +124,7 @@ const Patients = () => {
   useEffect(() => {
     getPatients();
     return () => {};
-  }, []);
+  });
 
   return (
     <>

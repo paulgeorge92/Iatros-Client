@@ -1,9 +1,9 @@
 import { MedicineCategory } from '../models/MedicineCategory';
 import { Categories } from '../DummyData';
-import { rejects } from 'assert';
 import { ITEM_NOT_FOUND } from '../Messages';
 
 export class MedicineCategoryRepository {
+  // eslint-disable-next-line
   constructor() {}
 
   public getAll(): Promise<MedicineCategory[]> {

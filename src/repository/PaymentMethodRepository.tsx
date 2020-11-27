@@ -3,6 +3,7 @@ import PaymentMethod from '../models/PaymentMethod';
 import { PaymentMethods } from '../DummyData';
 
 export class PaymentMethodRepository {
+  // eslint-disable-next-line
   constructor() {}
 
   public getAll(): Promise<PaymentMethod[]> {

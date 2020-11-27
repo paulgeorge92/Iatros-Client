@@ -3,6 +3,7 @@ import { Taxes } from '../DummyData';
 import { Tax } from '../models/Tax';
 
 export class TaxRepository {
+  // eslint-disable-next-line
   constructor() {}
 
   public getAll(): Promise<Tax[]> {

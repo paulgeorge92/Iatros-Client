@@ -153,7 +153,7 @@ const MedicineCategories = () => {
   useEffect(() => {
     getCatgories();
     return () => {};
-  }, []);
+  });
 
   return (
     <>
@@ -178,7 +178,7 @@ const MedicineCategories = () => {
         </Col>
       </Row>
 
-      <Modal title={`${modalType} Category`} visible={showModal} onOk={modalType == 'Add' ? addCategory : updateCategory} destroyOnClose={true} onCancel={onCancelClick} afterClose={onModalClose} okText={modalType}>
+      <Modal title={`${modalType} Category`} visible={showModal} onOk={modalType === 'Add' ? addCategory : updateCategory} destroyOnClose={true} onCancel={onCancelClick} afterClose={onModalClose} okText={modalType}>
         <Form layout="vertical" form={form}>
           <FormItem name="Name" label="Name" rules={[{ required: true, message: 'Please input a name for category' }]}>
             <Input

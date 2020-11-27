@@ -3,6 +3,7 @@ import { ExpenseTypes } from '../DummyData';
 import { ITEM_NOT_FOUND } from '../Messages';
 
 export class ExpenseTypeRepository {
+  // eslint-disable-next-line
   constructor() {}
 
   public getAll(): Promise<ExpenseType[]> {

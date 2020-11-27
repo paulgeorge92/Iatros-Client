@@ -97,7 +97,7 @@ const Suppliers = () => {
   async function onFormSubmit() {
     try {
       await form.validateFields();
-      if (modalType == 'Add') {
+      if (modalType === 'Add') {
         addSupplier(selectedSupplier);
       } else {
         updateSupplier(selectedSupplier);
@@ -129,7 +129,7 @@ const Suppliers = () => {
   useEffect(() => {
     getSuppliers();
     return () => {};
-  }, []);
+  });
 
   return (
     <>

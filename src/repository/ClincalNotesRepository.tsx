@@ -2,6 +2,7 @@ import { ClinicalNote } from '../models/ClinicalNote';
 import { ClinicalNotes } from '../DummyData';
 import { ITEM_NOT_FOUND } from '../Messages';
 export class ClinicalNotesRepository {
+  // eslint-disable-next-line
   constructor() {}
 
   public getAll(): Promise<ClinicalNote[]> {

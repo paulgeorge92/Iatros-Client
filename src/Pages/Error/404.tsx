@@ -1,11 +1,10 @@
 import React from 'react';
-import { Layout, Row, Col, Typography, Button } from 'antd';
+import { Layout, Row, Col, Button } from 'antd';
 import { HomeFilled } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 const bg = require('../../assets/images/login_bg.svg') as string;
 
 const { Content } = Layout;
-const { Title } = Typography;
 interface props {
   homeUrl: string;
 }

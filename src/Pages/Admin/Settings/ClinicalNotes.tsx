@@ -153,6 +153,7 @@ const ClinicalNotes = () => {
   useEffect(() => {
     getAllNotes();
     return () => {};
+    // eslint-disable-next-line
   }, []);
 
   return (
@@ -177,7 +178,7 @@ const ClinicalNotes = () => {
           <Table scroll={{ x: true, scrollToFirstRowOnChange: true }} className="iatros-table" columns={tableColumns} dataSource={clinicalNotes} rowKey={(record: ClinicalNote) => record.ID}></Table>
         </Col>
       </Row>
-      <Modal title={`${modalType} Clinical Note`} visible={showModal} onOk={modalType == 'Add' ? addNote : updateNote} onCancel={onModalCancelClick} destroyOnClose={true} afterClose={onModalClose} okText={modalType}>
+      <Modal title={`${modalType} Clinical Note`} visible={showModal} onOk={modalType === 'Add' ? addNote : updateNote} onCancel={onModalCancelClick} destroyOnClose={true} afterClose={onModalClose} okText={modalType}>
         <Form layout="vertical" form={form}>
           <FormItem name="NoteType" label="Note Type" required={true}>
             <Select

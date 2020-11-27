@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Layout, Menu } from 'antd';
 import { AdminContext } from '../../contexts/AdminContext';
-import { useHistory, useRouteMatch, Switch, Route, Link, useLocation, matchPath } from 'react-router-dom';
+import { useHistory, useRouteMatch, Switch, Route, Link } from 'react-router-dom';
 import { LogoWhiteImage, AdminMenuItems as AdminMenuObj, AdminPath, MenuItem } from '../../constants';
 import AdminDashboard from '../../Pages/Admin/Dashboard';
 import ErrorPage404 from '../../Pages/Error/404';
@@ -11,7 +11,6 @@ let AdminMenuItems = AdminMenuObj.menu;
 let AdminRoutes = (props: any) => {
   let { path } = useRouteMatch();
   const history = useHistory();
-  const location = useLocation();
   let userContext = useContext(AdminContext);
   history.listen((e) => {});
   const [collapsed, setCollapsed] = useState(false);
@@ -23,7 +22,7 @@ let AdminRoutes = (props: any) => {
     let matchPath = function (path: string): boolean {
       let routepath = path.split('/');
       let currentRoute = currentPath.split('/');
-      if (routepath.length == currentRoute.length) {
+      if (routepath.length === currentRoute.length) {
         let match = true;
         for (let k = 0; k < routepath.length; k++) {
           let _path = routepath[k];
@@ -59,36 +58,11 @@ let AdminRoutes = (props: any) => {
   }
 
   let getcurrentPathIndex = () => {
-    debugger;
     let currentPath = document.location.pathname.toLowerCase();
 
     if (currentPath === AdminPath) {
       return ['1', '1'];
     }
-
-    /* for (let i = 0; i < AdminMenuItems.length; i++) {
-      if (AdminMenuItems[i].path && `${AdminPath}/${AdminMenuItems[i].path}` === currentPath) {
-        return [AdminMenuItems[i].index.toString(), AdminMenuItems[i].index.toString()];
-      } else if(mathPath(`${AdminPath}/${AdminMenuItems[i].path}`)){
-        return [AdminMenuItems[i].index.toString(), AdminMenuItems[i].index.toString()];
-      }
-      else if (AdminMenuItems[i].subMenu?.length) {
-        let subMenu: any = AdminMenuItems[i].subMenu || [];
-        for (let j = 0; j < subMenu.length; j++) {
-          if (`${AdminPath}/${subMenu[j].path}` === currentPath) {
-            if (AdminMenuItems[i].showSubMenu) {
-              return [AdminMenuItems[i].index.toString(), `${AdminMenuItems[i].index.toString()}-${subMenu[j].index.toString()}`];
-            }
-            return [AdminMenuItems[i].index.toString(), AdminMenuItems[i].index.toString()];
-          } else if(mathPath(`${AdminPath}/${subMenu[j].path}`)) {
-            if (AdminMenuItems[i].showSubMenu) {
-              return [AdminMenuItems[i].index.toString(), `${AdminMenuItems[i].index.toString()}-${subMenu[j].index.toString()}`];
-            }
-            return [AdminMenuItems[i].index.toString(), AdminMenuItems[i].index.toString()];
-          }
-        }
-      }
-    } */
 
     let indexes = getMenuIndex(AdminMenuItems, '');
     if (indexes) {
@@ -144,6 +118,7 @@ let AdminRoutes = (props: any) => {
       }
     }
     return () => {};
+    // eslint-disable-next-line
   }, []);
 
   return (

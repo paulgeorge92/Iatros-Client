@@ -181,7 +181,7 @@ const PaymentMethods = () => {
         </Col>
       </Row>
 
-      <Modal title={`${modalType} Payment Method`} visible={showModal} onOk={modalType == 'Add' ? addMethod : updateMethod} onCancel={handleCancel} destroyOnClose={true} afterClose={onModalClose} okText={modalType}>
+      <Modal title={`${modalType} Payment Method`} visible={showModal} onOk={modalType === 'Add' ? addMethod : updateMethod} onCancel={handleCancel} destroyOnClose={true} afterClose={onModalClose} okText={modalType}>
         <Form form={form} layout="vertical">
           <FormItem name="Method" label="Name" rules={[{ required: true, message: 'Please input a name for payment method' }]}>
             <Input

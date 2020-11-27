@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Breadcrumb, { BreadcrumbItem } from '../../../components/Breadcrumb';
 import { ColumnsType } from 'antd/lib/table';
-import { Taxes as DummyTaxes } from '../../../DummyData';
 import { HomeFilled, PlusOutlined } from '@ant-design/icons';
 import { EditIcon, TrashIcon } from '../../../CustomIcons';
 import { AdminPath } from '../../../constants';
@@ -95,7 +94,7 @@ const Taxes = () => {
   async function onFormSubmit() {
     try {
       await form.validateFields();
-      if (modalType == 'Add') addTax(selectedTax);
+      if (modalType === 'Add') addTax(selectedTax);
       else updateTax(selectedTax);
       getTaxes();
       setShowModal(false);
@@ -124,6 +123,7 @@ const Taxes = () => {
   useEffect(() => {
     getTaxes();
     return () => {};
+    // eslint-disable-next-line
   }, []);
 
   return (

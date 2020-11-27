@@ -17,6 +17,7 @@ export interface LineChartProps {
 export const LineChart = (props: LineChartProps) => {
   const [chartData, setChartData] = useState<ChartProps>({});
   const [chartWidth, setChartWidth] = useState<any>('');
+
   useEffect(() => {
     let data: ChartProps = {};
     data.options = {
@@ -57,7 +58,9 @@ export const LineChart = (props: LineChartProps) => {
         setChartWidth(document.getElementById(`linechart-${props.id}`)?.offsetWidth);
       }, 10);
     }
+
     return () => {};
+    // eslint-disable-next-line
   }, []);
 
   return <div id={`linechart-${props.id}`}>{chartData.series ? <Chart {...chartData}></Chart> : ''}</div>;

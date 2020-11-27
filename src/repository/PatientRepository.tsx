@@ -2,7 +2,9 @@ import { Patient } from '../models/Patient';
 import { Patients } from '../DummyData';
 import { ITEM_NOT_FOUND } from '../Messages';
 export class PatientRepository {
+  // eslint-disable-next-line
   constructor() {}
+
   public getAll(): Promise<Patient[]> {
     return new Promise((resolve, reject) => {
       resolve(Patients as Patient[]);

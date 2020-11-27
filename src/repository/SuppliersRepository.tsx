@@ -3,6 +3,7 @@ import { Suppliers } from '../DummyData';
 import { Supplier } from '../models/Supplier';
 
 export class SuppliersRepository {
+  // eslint-disable-next-line
   constructor() {}
 
   public getAll(): Promise<Supplier[]> {

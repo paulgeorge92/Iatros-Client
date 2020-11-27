@@ -138,7 +138,7 @@ const ExpenseTypes = () => {
    */
   async function updateType() {
     try {
-      let val = await form.validateFields();
+      await form.validateFields();
       await expenseTypeDB.update(selectedType);
       getExpenseTypes();
       setShowModal(false);
@@ -161,6 +161,7 @@ const ExpenseTypes = () => {
   useEffect(() => {
     getExpenseTypes();
     return () => {};
+    // eslint-disable-next-line
   }, []);
 
   return (

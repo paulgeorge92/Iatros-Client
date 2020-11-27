@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Tabs, Card, Input, Form, DatePicker, Select, Checkbox, Button, Space, Modal } from 'antd';
+import { Row, Col, Card, Input, Form, DatePicker, Select, Checkbox, Button, Space, Modal } from 'antd';
 import Breadcrumb, { BreadcrumbItem } from '../../../components/Breadcrumb';
-import { HomeFilled, UserOutlined, PhoneOutlined, PlusOutlined } from '@ant-design/icons';
+import { HomeFilled, UserOutlined, PhoneOutlined } from '@ant-design/icons';
 import { HeartBeatIcon, AtIcon, HomeIcon, MapMarkerIcon, MapMarkedIcon, MapPinIcon } from '../../../CustomIcons';
 import { AdminPath, BloodGroups, AdminMenuItems } from '../../../constants';
 import Title from 'antd/lib/typography/Title';
@@ -10,7 +10,6 @@ import { useParams, useHistory } from 'react-router-dom';
 import moment from 'moment';
 import { Patient } from '../../../models/Patient';
 
-const { TabPane } = Tabs;
 const FormItem = Form.Item;
 const { Option } = Select;
 
@@ -99,13 +98,16 @@ const PatientForm = (props: props) => {
     }
   }
 
-  function onFormSubmit() {
+  async function onFormSubmit() {
     try {
-      form.validateFields();
-      if (formType == 'Add') addPatient();
+      await form.validateFields();
+      if (formType === 'Add') addPatient();
       else updatePatient();
     } catch (ex) {
-      //validation failed
+      Modal.error({
+        title: 'Error',
+        content: 'Please fill all mandatory fields',
+      });
     }
   }
 
@@ -144,6 +146,7 @@ const PatientForm = (props: props) => {
       setFormType('Add');
     }
     return () => {};
+    // eslint-disable-next-line
   }, [id]);
   return (
     <>
@@ -526,11 +529,17 @@ const PatientForm = (props: props) => {
                   </Col>
                   <Col xs={24}>
                     <FormItem name="OtherHistory" label="Other History:">
-                      <Input.TextArea rows={6} placeholder="Other History"></Input.TextArea>
+                      <Input.TextArea
+                        rows={6}
+                        placeholder="Other History"
+                        onChange={(e) => {
+                          setPatient({ ...patient, MedicalHistory: { ...patient.MedicalHistory, OtherHistory: e.target.value } });
+                        }}
+                      ></Input.TextArea>
                     </FormItem>
                   </Col>
                 </Row>
-                <Button type="primary" htmlType="submit" onClick={onFormSubmit}>
+                <Button type="primary" onClick={onFormSubmit}>
                   {formType} Patient
                 </Button>
               </Space>

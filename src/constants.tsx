@@ -10,7 +10,6 @@ import ExpenseTypes from './Pages/Admin/Settings/ExpenseTypes';
 import Suppliers from './Pages/Admin/Settings/Suppliers';
 import ClinicalNotes from './Pages/Admin/Settings/ClinicalNotes';
 import { BloodGroup } from './models/Enums';
-import ErrorPage500 from './Pages/Error/500';
 import ErrorPage404 from './Pages/Error/404';
 
 export interface MenuItem {
@@ -280,6 +279,7 @@ _AdminMenuItems.menu = [
 _AdminMenuItems.getMenu = function (name: string): MenuItem {
   let _menu = this.menu;
   function findId(name: string, arr: Array<MenuItem>): any {
+    // eslint-disable-next-line
     return arr.reduce((a, item) => {
       if (a) return a;
       if (item.name === name) return item;
