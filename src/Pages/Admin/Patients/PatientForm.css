@@ -1,0 +1,16 @@
+.remove-avatar {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    color: #c21107;
+    background-color: #ffffff;
+    border-radius: 50%;
+    width: 14px;
+    height: 14px;
+    ;
+}
+
+.remove-avatar span.anticon {
+    position: relative;
+    top: -5px;
+}

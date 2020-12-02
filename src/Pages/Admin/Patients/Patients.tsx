@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Button, Space, Table, Tag, Popconfirm } from 'antd';
-import Title from 'antd/lib/typography/Title';
+import { Row, Col, Button, Space, Table, Tag, Popconfirm, Typography } from 'antd';
 import { AdminPath, AdminMenuItems } from '../../../constants';
 import { HomeFilled, PlusOutlined } from '@ant-design/icons';
 import { HeartBeatIcon, EditIcon, EyeIcon, TrashIcon } from '../../../CustomIcons';
@@ -11,6 +10,7 @@ import { ColumnsType } from 'antd/lib/table';
 import { Patient } from '../../../models/Patient';
 import { PatientRepository } from '../../../repository/PatientRepository';
 import moment from 'moment';
+const { Title } = Typography;
 const Patients = () => {
   const [patients, setPatients] = useState<Patient[]>([]);
 
@@ -138,7 +138,7 @@ const Patients = () => {
         <Col xs={24} md={12} style={{ textAlign: 'right' }}>
           <Space>
             <DateRangePicker></DateRangePicker>
-            <Link to={`${AdminPath}/patients/new`}>
+            <Link to={`${AdminPath}/${AdminMenuItems.getMenu('Add Patient')?.path}`}>
               <Button type="primary" icon={<PlusOutlined />}>
                 New Patient
               </Button>

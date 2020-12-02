@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Card, Input, Form, DatePicker, Select, Checkbox, Button, Space, Modal } from 'antd';
+import { Row, Col, Card, Input, Form, DatePicker, Select, Checkbox, Button, Space, Modal, Typography, Upload, message } from 'antd';
+import ImgCrop from 'antd-img-crop';
 import Breadcrumb, { BreadcrumbItem } from '../../../components/Breadcrumb';
-import { HomeFilled, UserOutlined, PhoneOutlined } from '@ant-design/icons';
+import { HomeFilled, UserOutlined, PhoneOutlined, PlusOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import { HeartBeatIcon, AtIcon, HomeIcon, MapMarkerIcon, MapMarkedIcon, MapPinIcon } from '../../../CustomIcons';
 import { AdminPath, BloodGroups, AdminMenuItems } from '../../../constants';
-import Title from 'antd/lib/typography/Title';
 import { PatientRepository } from '../../../repository/PatientRepository';
 import { useParams, useHistory } from 'react-router-dom';
 import moment from 'moment';
 import { Patient } from '../../../models/Patient';
 
+import './PatientForm.css';
+
+const { Title } = Typography;
 const FormItem = Form.Item;
 const { Option } = Select;
 
@@ -61,6 +64,7 @@ const PatientForm = (props: props) => {
 
   const [patient, setPatient] = useState<Patient>(_patient);
   const [formType, setFormType] = useState<'Add' | 'Update'>('Add');
+
   let breadcrumbItems: Array<BreadcrumbItem> = [
     {
       icon: <HomeFilled />,
@@ -75,6 +79,41 @@ const PatientForm = (props: props) => {
       title: 'New Patient',
     },
   ];
+
+  const uploadButton = (
+    <div>
+      {<PlusOutlined />}
+      <div style={{ marginTop: 8 }}>Upload Photo</div>
+    </div>
+  );
+
+  function getBase64(img: File, callback: Function) {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => callback(reader.result));
+    reader.readAsDataURL(img);
+  }
+
+  function beforeUpload(file: File) {
+    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+    if (!isJpgOrPng) {
+      message.error('You can only upload JPG/PNG file!');
+    }
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+      message.error('Image must smaller than 2MB!');
+    }
+    return isJpgOrPng && isLt2M;
+  }
+
+  const handleChange = (info: any) => {
+    getBase64(info.file.originFileObj, (imageUrl: string) => setPatient({ ...patient, PhotoUrl: imageUrl }));
+  };
+
+  const removePhoto = (e: any) => {
+    e.stopPropagation();
+    setPatient({ ...patient, PhotoUrl: '' });
+  };
+
   async function fillUserData(id: number) {
     try {
       let _patient = await patientDB.getByID(id);
@@ -164,6 +203,22 @@ const PatientForm = (props: props) => {
             <Form layout="vertical" scrollToFirstError={true} form={form}>
               <Space size="large" direction="vertical">
                 <Row gutter={[24, 0]}>
+                  <Col xs={24}>
+                    <ImgCrop rotate>
+                      <Upload name="avatar" listType="picture-card" className="avatar-uploader" showUploadList={false} beforeUpload={beforeUpload} onChange={handleChange}>
+                        {patient.PhotoUrl ? (
+                          <div className="relative">
+                            <img className="avatar-img" src={patient.PhotoUrl} alt="avatar" style={{ width: '100%' }} />
+                            <div className="remove-avatar" onClick={removePhoto}>
+                              <CloseCircleOutlined />
+                            </div>
+                          </div>
+                        ) : (
+                          uploadButton
+                        )}
+                      </Upload>
+                    </ImgCrop>
+                  </Col>
                   <Col xs={24} md={12}>
                     <Row gutter={[24, 0]}>
                       <Col xs={24} md={12}>

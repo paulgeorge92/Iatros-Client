@@ -19,4 +19,5 @@ export interface Patient {
   MedicalHistory: MedicalHistory;
   CreatedDate: Date;
   Status: 'Active' | 'Disabled' | 'Inactive';
+  PhotoUrl?: string;
 }
