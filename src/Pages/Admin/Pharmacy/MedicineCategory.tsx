@@ -153,7 +153,8 @@ const MedicineCategories = () => {
   useEffect(() => {
     getCatgories();
     return () => {};
-  });
+    //eslint-disable-next-line
+  }, []);
 
   return (
     <>

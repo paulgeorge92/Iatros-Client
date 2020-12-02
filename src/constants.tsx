@@ -11,6 +11,8 @@ import Suppliers from './Pages/Admin/Settings/Suppliers';
 import ClinicalNotes from './Pages/Admin/Settings/ClinicalNotes';
 import { BloodGroup } from './models/Enums';
 import ErrorPage404 from './Pages/Error/404';
+import Medicines from './Pages/Admin/Pharmacy/Medicines/Medicines';
+import MedicineForm from './Pages/Admin/Pharmacy/Medicines/MedicineForm';
 
 export interface MenuItem {
   name: string;
@@ -53,7 +55,7 @@ _AdminMenuItems.menu = [
     showSubMenu: false,
     subMenu: [
       {
-        name: 'Add Patients',
+        name: 'Add Patient',
         path: 'patients/new',
         showInMenu: false,
         index: 1,
@@ -123,9 +125,27 @@ _AdminMenuItems.menu = [
       },
       {
         name: 'Medicines',
-        path: 'pharmacy/medicine',
+        path: 'pharmacy/medicines',
         index: 4,
         showInMenu: true,
+        component: <Medicines />,
+        showSubMenu: false,
+        subMenu: [
+          {
+            name: 'New Medicine',
+            path: 'pharmacy/medicines/new',
+            index: 1,
+            showInMenu: false,
+            component: <MedicineForm />,
+          },
+          {
+            name: 'Edit Medicine',
+            path: 'pharmacy/medicines/edit/:id',
+            index: 2,
+            showInMenu: false,
+            component: <MedicineForm />,
+          },
+        ],
       },
       {
         name: 'Medicine Categories',
