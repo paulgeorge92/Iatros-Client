@@ -13,6 +13,8 @@ import { BloodGroup } from './models/Enums';
 import ErrorPage404 from './Pages/Error/404';
 import Medicines from './Pages/Admin/Pharmacy/Medicines/Medicines';
 import MedicineForm from './Pages/Admin/Pharmacy/Medicines/MedicineForm';
+import PurchaseForm from './Pages/Admin/Pharmacy/Purchase/PurchaseForm';
+import Purchases from './Pages/Admin/Pharmacy/Purchase/Purchases';
 
 export interface MenuItem {
   name: string;
@@ -114,7 +116,24 @@ _AdminMenuItems.menu = [
         path: 'pharmacy/purchasing',
         index: 2,
         showInMenu: true,
-        component: <ErrorPage404 homeUrl={AdminPath} />,
+        component: <Purchases />,
+        showSubMenu: false,
+        subMenu: [
+          {
+            name: 'New Purchase',
+            path: 'pharmacy/purchasing/new',
+            index: 1,
+            showInMenu: false,
+            component: <PurchaseForm />,
+          },
+          {
+            name: 'Edit Purchase',
+            path: 'pharmacy/purchasing/edit/:id',
+            index: 2,
+            showInMenu: false,
+            component: <PurchaseForm />,
+          },
+        ],
       },
       {
         name: 'Stock adjustment',

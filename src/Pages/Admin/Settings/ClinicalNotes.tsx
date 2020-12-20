@@ -143,6 +143,7 @@ const ClinicalNotes = () => {
    */
   let onModalCancelClick = () => {
     setShowModal(false);
+    setSelectedNote({ ID: -1, NoteType: 'Problem', Note: '' });
   };
 
   /**

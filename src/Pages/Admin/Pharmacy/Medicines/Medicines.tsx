@@ -47,7 +47,7 @@ const Medicines = () => {
       dataIndex: 'Category',
       key: 'Category',
       render: (category: number) => <span>{categories.find((item) => item.ID === category)?.Name || ''}</span>,
-      sorter: (a: Medicine, b: Medicine) => (a.Category < b.Category ? -1 : 1),
+      sorter: (a: Medicine, b: Medicine) => (a.CategoryID < b.CategoryID ? -1 : 1),
       sortDirections: ['ascend', 'descend'],
       width: '20%',
     },

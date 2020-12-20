@@ -1,7 +1,8 @@
 export interface Medicine {
   ID: number;
   Name: string;
-  Category: number;
+  CategoryID: number;
+  CategoryName?: string;
   Company: string;
   Genreic: string;
   Group: string;

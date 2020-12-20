@@ -378,7 +378,8 @@ export const Medicines = [
   {
     ID: 1,
     Name: 'Athletes Foot',
-    Category: 4,
+    CategoryID: 4,
+    CategoryName: 'Category 4',
     Company: 'Target Corporation',
     Genreic: 'Terbinafine Hydrochloride',
     Group: '11673-080',
@@ -392,7 +393,8 @@ export const Medicines = [
   {
     ID: 2,
     Name: 'Gabapentin',
-    Category: 4,
+    CategoryID: 4,
+    CategoryName: 'Category 4',
     Company: 'Rebel Distributors Corp.',
     Genreic: 'Gabapentin',
     Group: '21695-055',
@@ -406,7 +408,8 @@ export const Medicines = [
   {
     ID: 3,
     Name: 'Heparin Lock Flush',
-    Category: 2,
+    CategoryID: 2,
+    CategoryName: 'Category 2',
     Company: 'APP Pharmaceuticals, LLC',
     Genreic: 'HEPARIN SODIUM',
     Group: '63323-557',
@@ -420,7 +423,8 @@ export const Medicines = [
   {
     ID: 4,
     Name: 'Skin Rash Complex',
-    Category: 4,
+    CategoryID: 4,
+    CategoryName: 'Category 4',
     Company: 'Nova Homeopathic Therapeutics, Inc.',
     Genreic: 'Apis mellifica, Arnica montana, Belladonna, Calendula officinalis, Chelidonium majus, Echinacea angustifolia, Hepar sulphuris calcareum, Ipecacuanha, Ledum palustre, Rhus toxicodendron, Staphisagria, Urtica urens',
     Group: '52731-7023',
@@ -434,7 +438,8 @@ export const Medicines = [
   {
     ID: 5,
     Name: 'SPF 15',
-    Category: 4,
+    CategoryID: 4,
+    CategoryName: 'Category 4',
     Company: 'Whish Body Holdings Inc',
     Genreic: 'OCTINOXATE,OXYBENZONE',
     Group: '76224-101',
@@ -448,7 +453,8 @@ export const Medicines = [
   {
     ID: 6,
     Name: 'Doxepin Hydrochloride',
-    Category: 5,
+    CategoryID: 5,
+    CategoryName: 'Category 5',
     Company: 'Lake Erie Medical & Surgical Supply DBA Quality Care Products LLC',
     Genreic: 'doxepin hydrochloride',
     Group: '49999-190',
@@ -462,7 +468,8 @@ export const Medicines = [
   {
     ID: 7,
     Name: 'magiX',
-    Category: 4,
+    CategoryID: 4,
+    CategoryName: 'Category 4',
     Company: 'Avon Products, Inc.',
     Genreic: 'Octisalate, Titanium Dioxide',
     Group: '10096-0265',
@@ -476,7 +483,8 @@ export const Medicines = [
   {
     ID: 8,
     Name: 'triple antibiotic',
-    Category: 2,
+    CategoryID: 2,
+    CategoryName: 'Category 2',
     Company: 'Lake Erie Medical DBA Quality Care Products LLC',
     Genreic: 'bacitracin, neomycin, polymyxin B',
     Group: '49999-154',
@@ -490,7 +498,8 @@ export const Medicines = [
   {
     ID: 9,
     Name: 'Mucus Relief',
-    Category: 4,
+    CategoryID: 4,
+    CategoryName: 'Category 4',
     Company: 'HyVee Inc',
     Genreic: 'Acetaminophen, Dextromethorphan HBr, Guaifenesin, Phenylephrine HCl',
     Group: '42507-381',
@@ -504,7 +513,8 @@ export const Medicines = [
   {
     ID: 10,
     Name: 'Orchard Grass, Standardized',
-    Category: 2,
+    CategoryID: 2,
+    CategoryName: 'Category 2',
     Company: 'ALK-Abello, Inc.',
     Genreic: 'Orchard Grass, Standardized',
     Group: '0268-3055',
@@ -580,3 +590,5 @@ export const ClinicalNotes = [
     Note: 'Fever',
   },
 ];
+
+export const Purchases = [];

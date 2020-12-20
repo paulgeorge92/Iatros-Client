@@ -38,9 +38,10 @@ export class MedicineRepository {
   public add(item: Medicine): Promise<Medicine> {
     return new Promise((resolve, reject) => {
       //var indexes =
-      let index = Math.max(...Medicines.map((catgory: any) => catgory.ID)) + 1;
+      let index = Math.max(...Medicines.map((medicine: any) => medicine.ID)) + 1;
       item.ID = index;
-      Medicines.push(item);
+      item.CategoryName = item.CategoryName || '';
+      Medicines.push({ ...item, CategoryName: item.CategoryName || '' });
       resolve(item);
     });
   }
@@ -49,7 +50,7 @@ export class MedicineRepository {
     return new Promise((resolve, reject) => {
       let index = Medicines.findIndex((x: any) => x.ID === item.ID);
       if (index > -1) {
-        Medicines[index] = item;
+        Medicines[index] = { ...item, CategoryName: item.CategoryName || '' };
         resolve();
       } else {
         reject(ITEM_NOT_FOUND);

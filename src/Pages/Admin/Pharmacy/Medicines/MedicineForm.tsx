@@ -25,7 +25,7 @@ const MedicineForm = (props: props) => {
   const history = useHistory();
 
   const _dummyMedicine: Medicine = {
-    Category: 1,
+    CategoryID: 1,
     Company: '',
     Genreic: '',
     Group: '',
@@ -151,7 +151,7 @@ const MedicineForm = (props: props) => {
       <Row gutter={[16, 24]}>
         <Col xs={24}>
           <Title level={4} className="page-title">
-            Medicine
+            {formType} Medicine
           </Title>
           <Breadcrumb items={breadcrumbItems} className="breadcrumb"></Breadcrumb>
         </Col>
@@ -180,7 +180,7 @@ const MedicineForm = (props: props) => {
                         placeholder="Medicine Category"
                         size="large"
                         onChange={(e) => {
-                          setMedicine({ ...medicine, Category: parseInt(e.toString()) });
+                          setMedicine({ ...medicine, CategoryID: parseInt(e.toString()) });
                         }}
                       >
                         {categories.map((category) => (

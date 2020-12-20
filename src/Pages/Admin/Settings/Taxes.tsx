@@ -160,7 +160,7 @@ const Taxes = () => {
               }}
             ></Input>
           </FormItem>
-          <FormItem name="Rate" label="Tax Rate" rules={[{ required: true, message: 'Please enter rate' }]}>
+          <FormItem name="Rate" label="Tax Rate (%)" rules={[{ required: true, message: 'Please enter rate' }]}>
             <Input
               size="large"
               type="number"
