@@ -2,16 +2,17 @@ import React, { useState, useContext, useEffect } from 'react';
 import { Layout, Menu } from 'antd';
 import { AdminContext } from '../../contexts/AdminContext';
 import { useHistory, useRouteMatch, Switch, Route, Link } from 'react-router-dom';
-import { LogoWhiteImage, AdminMenuItems as AdminMenuObj, AdminPath, MenuItem } from '../../constants';
+import { LogoWhiteImage, AdminMenuItems as AdminMenuObj, AdminPath } from '../../constants';
 import AdminDashboard from '../../Pages/Admin/Dashboard';
 import ErrorPage404 from '../../Pages/Error/404';
+import { MenuItem } from '../../models/MenuItem';
 
 const { Header, Content, Sider } = Layout;
 let AdminMenuItems = AdminMenuObj.menu;
 let AdminRoutes = (props: any) => {
   let { path } = useRouteMatch();
   const history = useHistory();
-  let userContext = useContext(AdminContext);
+  let appContext = useContext(AdminContext);
   history.listen((e) => {});
   const [collapsed, setCollapsed] = useState(false);
   const [collapsedWidth, setCollpasedWidth] = useState(0);
@@ -144,7 +145,7 @@ let AdminRoutes = (props: any) => {
   };
 
   useEffect(() => {
-    if (!userContext.id && !sessionStorage.getItem('userSession')) {
+    if (!appContext.context.currentUser.id && !sessionStorage.getItem('userSession')) {
       history.push({
         pathname: `${path}/login`,
         state: { redirectUrl: document.location.pathname.toLowerCase() },

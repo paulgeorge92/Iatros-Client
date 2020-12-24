@@ -7,9 +7,15 @@ export class BatchRepository {
   //eslint-disable-next-line
   constructor() {}
 
-  public getBatches(purchaseId: number): Promise<MedicineBatch[]> {
+  public getBatchesByPurchase(purchaseId: number): Promise<MedicineBatch[]> {
     return new Promise((resolve, reject) => {
       resolve([...Batches.filter((batch) => !!(batch.PurchaseID === purchaseId))]);
+    });
+  }
+
+  public getBatchesByMedicine(medicineId: number): Promise<MedicineBatch[]> {
+    return new Promise((resolve, reject) => {
+      resolve([...Batches.filter((batch) => !!(batch.MedicineID === medicineId))]);
     });
   }
 

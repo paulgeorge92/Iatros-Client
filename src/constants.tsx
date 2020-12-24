@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
 import { DesktopIcon, HeartBeatIcon, CalendarIcon, RecieptIcon, PrescriptionFileIcon, StoreIcon, MoneyBillIcon, RupeeIcon, DoctorIcon, SettingsIcon, UserIcon, FileIcon } from './CustomIcons';
 import AdminDashboard from './Pages/Admin/Dashboard';
 import Patients from './Pages/Admin/Patients/Patients';
@@ -15,17 +15,8 @@ import Medicines from './Pages/Admin/Pharmacy/Medicines/Medicines';
 import MedicineForm from './Pages/Admin/Pharmacy/Medicines/MedicineForm';
 import PurchaseForm from './Pages/Admin/Pharmacy/Purchase/PurchaseForm';
 import Purchases from './Pages/Admin/Pharmacy/Purchase/Purchases';
-
-export interface MenuItem {
-  name: string;
-  path: string;
-  index: number;
-  subMenu?: Array<MenuItem>;
-  icon?: React.ReactElement;
-  showInMenu?: boolean;
-  component?: ReactNode;
-  showSubMenu?: Boolean;
-}
+import ViewMedicine from './Pages/Admin/Pharmacy/Medicines/ViewMedicine';
+import { MenuItem } from './models/MenuItem';
 
 export const AdminPath = '/admin';
 export const LogoImage = require('./assets/images/Logo.png') as string;
@@ -163,6 +154,13 @@ _AdminMenuItems.menu = [
             index: 2,
             showInMenu: false,
             component: <MedicineForm />,
+          },
+          {
+            name: 'View Medicine',
+            path: 'pharmacy/medicines/view/:id',
+            index: 3,
+            showInMenu: false,
+            component: <ViewMedicine />,
           },
         ],
       },
@@ -329,5 +327,11 @@ _AdminMenuItems.getMenu = function (name: string): MenuItem {
 };
 
 export const AdminMenuItems = _AdminMenuItems;
+
+export enum ContextActions {
+  LOGOUT_USER = -1,
+  LOGIN_USER = 1,
+  SETTINGS_UPDATE = 2,
+}
 
 export const BloodGroups: BloodGroup[] = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];

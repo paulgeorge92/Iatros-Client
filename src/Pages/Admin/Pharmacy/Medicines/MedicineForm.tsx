@@ -130,7 +130,7 @@ const MedicineForm = (props: props) => {
       loadMedicine(props.id);
     } else if (props && props.location?.state?.id) {
       setFormType('Update');
-      loadMedicine(parseInt(props.location?.this.state?.id));
+      loadMedicine(parseInt(props.location?.state?.id));
     } else if (id) {
       setFormType('Update');
       loadMedicine(parseInt(id));
@@ -175,7 +175,7 @@ const MedicineForm = (props: props) => {
                     </FormItem>
                   </Col>
                   <Col xs={24} md={12}>
-                    <FormItem name="Category" label="Medicine Category" rules={[{ required: true, message: 'Please select a Category' }]}>
+                    <FormItem name="CategoryID" label="Medicine Category" rules={[{ required: true, message: 'Please select a Category' }]}>
                       <Select
                         placeholder="Medicine Category"
                         size="large"

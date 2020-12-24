@@ -13,7 +13,7 @@ import { MedicineCategory } from '../../../../models/MedicineCategory';
 const { Title } = Typography;
 
 const Medicines = () => {
-  const [patients, setPatients] = useState<Medicine[]>([]);
+  const [medicines, setMedicines] = useState<Medicine[]>([]);
   const [categories, setCategories] = useState<MedicineCategory[]>([]);
 
   const breadcrumbItems: Array<BreadcrumbItem> = [
@@ -44,8 +44,8 @@ const Medicines = () => {
     },
     {
       title: 'Category',
-      dataIndex: 'Category',
-      key: 'Category',
+      dataIndex: 'CategoryID',
+      key: 'CategoryID',
       render: (category: number) => <span>{categories.find((item) => item.ID === category)?.Name || ''}</span>,
       sorter: (a: Medicine, b: Medicine) => (a.CategoryID < b.CategoryID ? -1 : 1),
       sortDirections: ['ascend', 'descend'],
@@ -81,7 +81,9 @@ const Medicines = () => {
       key: 'Action',
       render: (text: any, row: Medicine) => (
         <Space size="large">
-          <EyeIcon title={`View ${row.Name}`} className="row-view"></EyeIcon>
+          <Link to={AdminPath + '/' + AdminMenuItems.getMenu('View Medicine')?.path.replace(':id', row.ID)}>
+            <EyeIcon title={`View ${row.Name}`} className="row-view"></EyeIcon>
+          </Link>
           <Link to={AdminPath + '/' + AdminMenuItems.getMenu('Edit Medicine')?.path.replace(':id', row.ID)}>
             <EditIcon title={`Edit ${row.Name}`} className="row-edit"></EditIcon>
           </Link>
@@ -101,7 +103,7 @@ const Medicines = () => {
     },
   ];
 
-  const patientDB = new MedicineRepository();
+  const medicineDB = new MedicineRepository();
   const categoryDB = new MedicineCategoryRepository();
 
   function onDeleteMedicineClick(id: number) {
@@ -110,15 +112,15 @@ const Medicines = () => {
   }
 
   async function getMedicines() {
-    let data = await patientDB.getAll();
+    let data = await medicineDB.getAll();
     let categories = await categoryDB.getAll();
     setCategories([...categories]);
-    setPatients([...data]);
+    setMedicines([...data]);
   }
 
   async function deleteMedicine(id: number) {
     try {
-      await patientDB.delete(id);
+      await medicineDB.delete(id);
     } catch (error) {
       console.log(error);
     }
@@ -151,7 +153,7 @@ const Medicines = () => {
       </Row>
       <Row gutter={[16, 24]}>
         <Col xs={24}>
-          <Table scroll={{ x: true, scrollToFirstRowOnChange: true }} sticky={true} className="iatros-table" columns={columns} dataSource={patients}></Table>
+          <Table scroll={{ x: true, scrollToFirstRowOnChange: true }} sticky={true} className="iatros-table" columns={columns} dataSource={medicines}></Table>
         </Col>
       </Row>
     </>

@@ -4,18 +4,19 @@ import { useHistory } from 'react-router-dom';
 import { Form, Input, Checkbox, Button } from 'antd';
 import { UserOutlined, EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
-import { User } from '../models/User';
 import moment from 'moment';
+import { ContextProvider } from '../models/Context';
+import { ContextActions } from '../constants';
 
 export interface LoginFormProps {
   returnUrl?: string;
   defaultUrl: string;
-  context: React.Context<User>;
+  context: React.Context<ContextProvider>;
   mode: string;
 }
 
 export const LoginForm = (props: LoginFormProps) => {
-  const userContext = useContext(props.context);
+  const appContext = useContext(props.context);
   const history = useHistory();
 
   const layout = {
@@ -39,7 +40,7 @@ export const LoginForm = (props: LoginFormProps) => {
   };
 
   const onFinish = () => {
-    userContext.id = 1;
+    appContext.dispatch({ type: ContextActions.LOGIN_USER, value: { id: 1 } });
     sessionStorage.setItem(
       'userSession',
       JSON.stringify({

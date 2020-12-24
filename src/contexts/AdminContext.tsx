@@ -1,5 +1,6 @@
 import { createContext } from 'react';
-import { User } from '../models/User';
-let adminContext: User = {};
+import { AppContext, ContextProvider } from '../models/Context';
+let adminContext: AppContext = { currentUser: {}, settings: {} };
+let contextProviderValue: ContextProvider = { context: adminContext, dispatch: null };
 
-export const AdminContext = createContext(adminContext);
+export const AdminContext = createContext(contextProviderValue);

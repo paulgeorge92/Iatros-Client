@@ -21,7 +21,7 @@ export class PurchaseRepository {
       let purchaseIndex = Purchases.findIndex((purchase: any) => !!(purchase.ID === id));
       if (purchaseIndex > -1) {
         let purchase = Purchases.find((purchase: any) => !!(purchase.ID === id));
-        let batches = await this.batchDB.getBatches(id);
+        let batches = await this.batchDB.getBatchesByPurchase(id);
         purchase.Batch = batches || [];
         resolve(purchase);
       } else {
@@ -61,7 +61,7 @@ export class PurchaseRepository {
       if (index > -1) {
         Purchases[index] = { ...item };
         try {
-          let batches = await this.batchDB.getBatches(item.ID);
+          let batches = await this.batchDB.getBatchesByPurchase(item.ID);
           if (batches.length) {
             batches.forEach(async (batch: MedicineBatch) => {
               var index = item.Batch?.findIndex((x) => x.ID === batch.ID);
