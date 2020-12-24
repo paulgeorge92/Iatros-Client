@@ -1,6 +1,6 @@
 import { Col, Modal, Row, Typography, Tabs, Table, Button, Descriptions, Card, Space } from 'antd';
 import { HomeFilled } from '@ant-design/icons';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Breadcrumb, { BreadcrumbItem } from '../../../../components/Breadcrumb';
 import { AdminPath, AdminMenuItems } from '../../../../constants';
 import { MedicineBatch } from '../../../../models/Batch';
@@ -11,8 +11,9 @@ import { Link, useParams } from 'react-router-dom';
 import { EditIcon } from '../../../../CustomIcons';
 import { ColumnsType } from 'antd/lib/table';
 import moment from 'moment';
+import { AdminContext } from '../../../../contexts/AdminContext';
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
 const { TabPane } = Tabs;
 
 interface props {
@@ -25,9 +26,9 @@ const ViewMedicine = (props: props) => {
   const medicineDB = new MedicineRepository();
   const batchDB = new BatchRepository();
   const [medicine, setMedicine] = useState<Medicine | null>(null);
-  const [batches, setBatches] = useState<MedicineBatch[]>([]);
   const [badBatches, setBadBatches] = useState<MedicineBatch[]>([]);
   const [goodBatches, setGoodBatches] = useState<MedicineBatch[]>([]);
+  const settings = useContext(AdminContext).context.settings;
   let breadcrumbItems: Array<BreadcrumbItem> = [
     {
       icon: <HomeFilled />,
@@ -57,7 +58,6 @@ const ViewMedicine = (props: props) => {
       });
 
       setMedicine({ ...medicine });
-      setBatches([...batches]);
       setBadBatches([...badBatches]);
       setGoodBatches([...goodBatches]);
     } catch (error) {
@@ -68,13 +68,14 @@ const ViewMedicine = (props: props) => {
     }
   }
 
-  let goodBatchColumns: ColumnsType<MedicineBatch> = [
+  let batchColumns: ColumnsType<MedicineBatch> = [
     {
       title: 'ID',
       dataIndex: 'ID',
       key: 'ID',
       sorter: (a: MedicineBatch, b: MedicineBatch) => (a.ID < b.ID ? -1 : 1),
       sortDirections: ['ascend', 'descend'],
+      width: '10%',
     },
     {
       title: 'Batch',
@@ -87,7 +88,7 @@ const ViewMedicine = (props: props) => {
       title: 'Expiry',
       dataIndex: 'Expiry',
       key: 'Expiry',
-      render: (date: Date) => <>{date ? moment(date).format('MMM YYYY') : ''}</>,
+      render: (date: Date) => <>{date ? moment(date).format(settings.MonthFormat) : ''}</>,
       sorter: (a: MedicineBatch, b: MedicineBatch) => ((a.Expiry || '') < (b.Expiry || '') ? -1 : 1),
       sortDirections: ['ascend', 'descend'],
     },
@@ -95,7 +96,30 @@ const ViewMedicine = (props: props) => {
       title: 'Purchase Price',
       dataIndex: 'PurchasePrice',
       key: 'PurchasePrice',
+      render: (price: number) => <>{settings.Currency + price?.toFixed(2) || '0.00'}</>,
       sorter: (a: MedicineBatch, b: MedicineBatch) => ((a.PurchasePrice || 0) < (b.PurchasePrice || 0) ? -1 : 1),
+      sortDirections: ['ascend', 'descend'],
+    },
+    {
+      title: 'Sale Price',
+      dataIndex: 'SalePrice',
+      key: 'SalePrice',
+      render: (price: number) => <>{settings.Currency + price?.toFixed(2) || '0.00'}</>,
+      sorter: (a: MedicineBatch, b: MedicineBatch) => ((a.SalePrice || 0) < (b.SalePrice || 0) ? -1 : 1),
+      sortDirections: ['ascend', 'descend'],
+    },
+    {
+      title: 'Quantity',
+      dataIndex: 'Quantity',
+      key: 'Quantity',
+      sorter: (a: MedicineBatch, b: MedicineBatch) => ((a.Quantity || 0) < (b.Quantity || 0) ? -1 : 1),
+      sortDirections: ['ascend', 'descend'],
+    },
+    {
+      title: 'Sold',
+      dataIndex: 'Sold',
+      key: 'Sold',
+      sorter: (a: MedicineBatch, b: MedicineBatch) => ((a.Sold || 0) < (b.Sold || 0) ? -1 : 1),
       sortDirections: ['ascend', 'descend'],
     },
   ];
@@ -152,8 +176,90 @@ const ViewMedicine = (props: props) => {
                   <Descriptions.Item label="Re-Order Level">{medicine.ReOrderLevel}</Descriptions.Item>
                 </Descriptions>
               </TabPane>
-              <TabPane tab="Stock" key="2"></TabPane>
-              <TabPane tab="Expired Stock" key="3"></TabPane>
+              <TabPane tab="Stock" key="2">
+                <Table
+                  scroll={{ x: true, scrollToFirstRowOnChange: true }}
+                  sticky={true}
+                  className="iatros-table"
+                  columns={batchColumns}
+                  dataSource={goodBatches}
+                  summary={(pageData: MedicineBatch[]) => {
+                    let totalPurchasePrice = 0,
+                      totalSold = 0,
+                      totalSalePrice = 0,
+                      totalQuantity = 0;
+                    pageData.forEach(({ PurchasePrice, SalePrice, Quantity, Sold }) => {
+                      totalPurchasePrice += PurchasePrice || 0;
+                      totalSalePrice += SalePrice || 0;
+                      totalQuantity += Quantity || 0;
+                      totalSold += Sold || 0;
+                    });
+                    return (
+                      <>
+                        <Table.Summary.Row>
+                          <Table.Summary.Cell index={0}></Table.Summary.Cell>
+                          <Table.Summary.Cell index={1}></Table.Summary.Cell>
+                          <Table.Summary.Cell index={2}></Table.Summary.Cell>
+                          <Table.Summary.Cell index={3}>
+                            <Text type="danger">{totalPurchasePrice}</Text>
+                          </Table.Summary.Cell>
+                          <Table.Summary.Cell index={4}>
+                            <Text type="danger">{totalSalePrice}</Text>
+                          </Table.Summary.Cell>
+                          <Table.Summary.Cell index={5}>
+                            <Text type="danger">{totalQuantity}</Text>
+                          </Table.Summary.Cell>
+                          <Table.Summary.Cell index={6}>
+                            <Text type="danger">{totalQuantity}</Text>
+                          </Table.Summary.Cell>
+                        </Table.Summary.Row>
+                      </>
+                    );
+                  }}
+                ></Table>
+              </TabPane>
+              <TabPane tab="Expired Stock" key="3">
+                <Table
+                  scroll={{ x: true, scrollToFirstRowOnChange: true }}
+                  sticky={true}
+                  className="iatros-table"
+                  columns={batchColumns}
+                  dataSource={badBatches}
+                  summary={(pageData: MedicineBatch[]) => {
+                    let totalPurchasePrice = 0,
+                      totalSold = 0,
+                      totalSalePrice = 0,
+                      totalQuantity = 0;
+                    pageData.forEach(({ PurchasePrice, SalePrice, Quantity, Sold }) => {
+                      totalPurchasePrice += PurchasePrice || 0;
+                      totalSalePrice += SalePrice || 0;
+                      totalQuantity += Quantity || 0;
+                      totalSold += Sold || 0;
+                    });
+                    return (
+                      <>
+                        <Table.Summary.Row>
+                          <Table.Summary.Cell index={0}></Table.Summary.Cell>
+                          <Table.Summary.Cell index={1}></Table.Summary.Cell>
+                          <Table.Summary.Cell index={2}></Table.Summary.Cell>
+                          <Table.Summary.Cell index={3}>
+                            <Text type="danger">{totalPurchasePrice}</Text>
+                          </Table.Summary.Cell>
+                          <Table.Summary.Cell index={4}>
+                            <Text type="danger">{totalSalePrice}</Text>
+                          </Table.Summary.Cell>
+                          <Table.Summary.Cell index={5}>
+                            <Text type="danger">{totalQuantity}</Text>
+                          </Table.Summary.Cell>
+                          <Table.Summary.Cell index={6}>
+                            <Text type="danger">{totalQuantity}</Text>
+                          </Table.Summary.Cell>
+                        </Table.Summary.Row>
+                      </>
+                    );
+                  }}
+                ></Table>
+              </TabPane>
             </Tabs>
           </Card>
         </Col>
