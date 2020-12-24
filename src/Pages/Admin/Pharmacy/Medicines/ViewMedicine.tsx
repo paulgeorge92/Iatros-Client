@@ -210,7 +210,7 @@ const ViewMedicine = (props: props) => {
                             <Text type="danger">{totalQuantity}</Text>
                           </Table.Summary.Cell>
                           <Table.Summary.Cell index={6}>
-                            <Text type="danger">{totalQuantity}</Text>
+                            <Text type="danger">{totalSold}</Text>
                           </Table.Summary.Cell>
                         </Table.Summary.Row>
                       </>
@@ -252,7 +252,7 @@ const ViewMedicine = (props: props) => {
                             <Text type="danger">{totalQuantity}</Text>
                           </Table.Summary.Cell>
                           <Table.Summary.Cell index={6}>
-                            <Text type="danger">{totalQuantity}</Text>
+                            <Text type="danger">{totalSold}</Text>
                           </Table.Summary.Cell>
                         </Table.Summary.Row>
                       </>
