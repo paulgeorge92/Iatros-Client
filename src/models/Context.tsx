@@ -1,9 +1,10 @@
 import { ContextActions } from '../constants';
+import { AppSettings } from './AppSettings';
 import { User } from './User';
 
 export interface AppContext {
   currentUser: User;
-  settings: any;
+  settings: AppSettings;
 }
 
 export interface ContextProvider {

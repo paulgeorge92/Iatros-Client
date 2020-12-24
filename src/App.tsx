@@ -8,6 +8,7 @@ import { AdminPath, ContextActions } from './constants';
 import ErrorPage404 from './Pages/Error/404';
 import { AppContext, ContextDispatch } from './models/Context';
 import { UserContext } from './contexts/UserContext';
+import { APP_SETTINGS } from './constants/AppSettings';
 
 function reducer(state: AppContext, action: ContextDispatch): AppContext {
   switch (action.type) {
@@ -21,7 +22,7 @@ function reducer(state: AppContext, action: ContextDispatch): AppContext {
       return { ...state };
   }
 }
-const initialContext: AppContext = { currentUser: {}, settings: {} };
+const initialContext: AppContext = { currentUser: {}, settings: APP_SETTINGS };
 const App = () => {
   const [adminContext, dispatchAdmin] = useReducer(reducer, initialContext);
   const [userContext, dispatchUser] = useReducer(reducer, initialContext);
