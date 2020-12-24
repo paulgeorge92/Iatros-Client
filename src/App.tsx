@@ -8,7 +8,7 @@ import { AdminPath, ContextActions } from './constants';
 import ErrorPage404 from './Pages/Error/404';
 import { AppContext, ContextDispatch } from './models/Context';
 import { UserContext } from './contexts/UserContext';
-import { APP_SETTINGS } from './constants/AppSettings';
+import { APP_SETTINGS } from './Defaults/AppSettings';
 
 function reducer(state: AppContext, action: ContextDispatch): AppContext {
   switch (action.type) {
