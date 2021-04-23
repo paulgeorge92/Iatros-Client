@@ -17,6 +17,8 @@ import PurchaseForm from './Pages/Admin/Pharmacy/Purchase/PurchaseForm';
 import Purchases from './Pages/Admin/Pharmacy/Purchase/Purchases';
 import ViewMedicine from './Pages/Admin/Pharmacy/Medicines/ViewMedicine';
 import { MenuItem } from './models/MenuItem';
+import ViewPurchase from './Pages/Admin/Pharmacy/Purchase/ViewPurchase';
+import Doctors from './Pages/Admin/Doctors/Doctors';
 
 export const AdminPath = '/admin';
 export const LogoImage = require('./assets/images/Logo.png') as string;
@@ -60,6 +62,13 @@ _AdminMenuItems.menu = [
         showInMenu: false,
         index: 2,
         component: <PatientForm />,
+      },
+      {
+        name: 'View Patient',
+        path: 'patients/view/:id',
+        showInMenu: false,
+        index: 3,
+        component: <ErrorPage404 homeUrl={AdminPath} />,
       },
     ],
   },
@@ -123,6 +132,13 @@ _AdminMenuItems.menu = [
             index: 2,
             showInMenu: false,
             component: <PurchaseForm />,
+          },
+          {
+            name: 'View Purchase',
+            path: 'pharmacy/purchasing/view/:id',
+            index: 2,
+            showInMenu: false,
+            component: <ViewPurchase />,
           },
         ],
       },
@@ -194,8 +210,8 @@ _AdminMenuItems.menu = [
     path: '',
     index: 9,
     icon: <RupeeIcon />,
-    showInMenu: true,
-    showSubMenu: true,
+    showInMenu: false,
+    showSubMenu: false,
     subMenu: [
       {
         name: 'Salary Template',
@@ -226,7 +242,7 @@ _AdminMenuItems.menu = [
     index: 10,
     icon: <DoctorIcon />,
     showInMenu: true,
-    component: <ErrorPage404 homeUrl={AdminPath} />,
+    component: <Doctors />,
   },
   {
     name: 'Users',

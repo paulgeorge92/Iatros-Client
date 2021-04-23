@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Button, Space, Table, Tag, Popconfirm, Typography } from 'antd';
+import { Row, Col, Button, Space, Table, Tag, Popconfirm, PageHeader } from 'antd';
 import { AdminPath, AdminMenuItems } from '../../../constants';
 import { HomeFilled, PlusOutlined } from '@ant-design/icons';
 import { HeartBeatIcon, EditIcon, EyeIcon, TrashIcon } from '../../../CustomIcons';
 import Breadcrumb, { BreadcrumbItem } from '../../../components/Breadcrumb';
-import DateRangePicker from '../../../components/DateRangePicker';
 import { Link } from 'react-router-dom';
 import { ColumnsType } from 'antd/lib/table';
 import { Patient } from '../../../models/Patient';
 import { PatientRepository } from '../../../repository/PatientRepository';
 import moment from 'moment';
-const { Title } = Typography;
 const Patients = () => {
   const [patients, setPatients] = useState<Patient[]>([]);
 
@@ -128,24 +126,19 @@ const Patients = () => {
 
   return (
     <>
-      <Row gutter={[16, 24]}>
-        <Col xs={24} md={12}>
-          <Title level={4} className="page-title">
-            Patients
-          </Title>
-          <Breadcrumb items={breadcrumbItems} className="breadcrumb"></Breadcrumb>
-        </Col>
-        <Col xs={24} md={12} style={{ textAlign: 'right' }}>
-          <Space>
-            <DateRangePicker></DateRangePicker>
-            <Link to={`${AdminPath}/${AdminMenuItems.getMenu('Add Patient')?.path}`}>
-              <Button type="primary" icon={<PlusOutlined />}>
-                New Patient
-              </Button>
-            </Link>
-          </Space>
-        </Col>
-      </Row>
+      <PageHeader
+        className="page-title no-print"
+        title="Patients"
+        subTitle={<Breadcrumb items={breadcrumbItems} className="breadcrumb"></Breadcrumb>}
+        extra={[
+          <Link to={`${AdminPath}/${AdminMenuItems.getMenu('Add Patient')?.path}`}>
+            <Button type="primary" icon={<PlusOutlined />}>
+              New Patient
+            </Button>
+          </Link>,
+        ]}
+      ></PageHeader>
+
       <Row gutter={[16, 24]}>
         <Col xs={24}>
           <Table scroll={{ x: true, scrollToFirstRowOnChange: true }} sticky={true} className="iatros-table" columns={columns} dataSource={patients}></Table>

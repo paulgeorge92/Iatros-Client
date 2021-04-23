@@ -4,12 +4,11 @@ import { ColumnsType } from 'antd/lib/table';
 import { HomeFilled, PlusOutlined } from '@ant-design/icons';
 import { EditIcon, TrashIcon } from '../../../CustomIcons';
 import { AdminPath } from '../../../constants';
-import { Space, Row, Col, Button, Input, Popconfirm, Typography, Form, Modal, Table } from 'antd';
+import { Space, Row, Col, Button, Input, Popconfirm, Form, Modal, Table, PageHeader } from 'antd';
 import { Tax } from '../../../models/Tax';
 import { TaxRepository } from '../../../repository/TaxRepository';
 
 const FormItem = Form.Item;
-const { Title } = Typography;
 
 const Taxes = () => {
   let breadcrumbItems: Array<BreadcrumbItem> = [
@@ -128,21 +127,16 @@ const Taxes = () => {
 
   return (
     <>
-      <Row gutter={[16, 24]}>
-        <Col xs={24} md={12}>
-          <Title level={4} className="page-title">
-            Taxes
-          </Title>
-          <Breadcrumb items={breadcrumbItems} className="breadcrumb"></Breadcrumb>
-        </Col>
-        <Col xs={24} md={12} style={{ textAlign: 'right' }}>
-          <Space>
-            <Button type="primary" icon={<PlusOutlined />} onClick={onAddTaxClick}>
-              Add Tax
-            </Button>
-          </Space>
-        </Col>
-      </Row>
+      <PageHeader
+        className="page-title no-print"
+        title={`Taxes`}
+        subTitle={<Breadcrumb items={breadcrumbItems} className="breadcrumb"></Breadcrumb>}
+        extra={[
+          <Button type="primary" icon={<PlusOutlined />} onClick={onAddTaxClick}>
+            Add Tax
+          </Button>,
+        ]}
+      ></PageHeader>
       <Row gutter={[16, 24]}>
         <Col xs={24}>
           <Table className="iatros-table" columns={tableColumns} dataSource={taxes} rowKey={(record: Tax) => record.ID}></Table>

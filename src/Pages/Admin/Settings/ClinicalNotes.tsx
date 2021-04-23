@@ -4,12 +4,11 @@ import { ColumnsType } from 'antd/lib/table';
 import { HomeFilled, PlusOutlined } from '@ant-design/icons';
 import { EditIcon, TrashIcon } from '../../../CustomIcons';
 import { AdminPath } from '../../../constants';
-import { Space, Row, Col, Button, Popconfirm, Select, Form, Modal, Table, Typography, Input } from 'antd';
+import { Space, Row, Col, Button, Popconfirm, Select, Form, Modal, Table, Input, PageHeader } from 'antd';
 import { ClinicalNote } from '../../../models/ClinicalNote';
 import { ClinicalNotesRepository } from '../../../repository/ClincalNotesRepository';
 
 const FormItem = Form.Item;
-const { Title } = Typography;
 const { TextArea } = Input;
 const { Option } = Select;
 
@@ -159,21 +158,16 @@ const ClinicalNotes = () => {
 
   return (
     <>
-      <Row gutter={[16, 24]}>
-        <Col xs={24} md={12}>
-          <Title level={4} className="page-title">
-            Clinical Notes
-          </Title>
-          <Breadcrumb items={breadcrumbItems} className="breadcrumb"></Breadcrumb>
-        </Col>
-        <Col xs={24} md={12} style={{ textAlign: 'right' }}>
-          <Space>
-            <Button type="primary" icon={<PlusOutlined />} onClick={onAddNoteClick}>
-              Add Clinical Note
-            </Button>
-          </Space>
-        </Col>
-      </Row>
+      <PageHeader
+        className="page-title no-print"
+        title={`Clinical Notes`}
+        subTitle={<Breadcrumb items={breadcrumbItems} className="breadcrumb"></Breadcrumb>}
+        extra={[
+          <Button type="primary" icon={<PlusOutlined />} onClick={onAddNoteClick}>
+            Add Clinical Note
+          </Button>,
+        ]}
+      ></PageHeader>
       <Row gutter={[16, 24]}>
         <Col xs={24}>
           <Table scroll={{ x: true, scrollToFirstRowOnChange: true }} className="iatros-table" columns={tableColumns} dataSource={clinicalNotes} rowKey={(record: ClinicalNote) => record.ID}></Table>

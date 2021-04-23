@@ -5,8 +5,7 @@ import { PaymentMethods as DummyData } from '../../../DummyData';
 import { HomeFilled, PlusOutlined } from '@ant-design/icons';
 import { EditIcon, TrashIcon } from '../../../CustomIcons';
 import { AdminPath } from '../../../constants';
-import { Space, Row, Col, Button, Input, Popconfirm, Select, Form, Modal, Table } from 'antd';
-import Title from 'antd/lib/typography/Title';
+import { Space, Row, Col, Button, Input, Popconfirm, Select, Form, Modal, Table, PageHeader } from 'antd';
 import PaymentMethod from '../../../models/PaymentMethod';
 import { PaymentMethodRepository } from '../../../repository/PaymentMethodRepository';
 const FormItem = Form.Item;
@@ -160,21 +159,17 @@ const PaymentMethods = () => {
 
   return (
     <>
-      <Row gutter={[16, 24]}>
-        <Col xs={24} md={12}>
-          <Title level={4} className="page-title">
-            Payment Methods
-          </Title>
-          <Breadcrumb items={breadcrumbItems} className="breadcrumb"></Breadcrumb>
-        </Col>
-        <Col xs={24} md={12} style={{ textAlign: 'right' }}>
-          <Space>
-            <Button type="primary" icon={<PlusOutlined />} onClick={onAddMethodClick}>
-              Add Method
-            </Button>
-          </Space>
-        </Col>
-      </Row>
+      <PageHeader
+        className="page-title no-print"
+        title={`Payment Methods`}
+        subTitle={<Breadcrumb items={breadcrumbItems} className="breadcrumb"></Breadcrumb>}
+        extra={[
+          <Button type="primary" icon={<PlusOutlined />} onClick={onAddMethodClick}>
+            Add Method
+          </Button>,
+        ]}
+      ></PageHeader>
+
       <Row gutter={[16, 24]}>
         <Col xs={24}>
           <Table className="iatros-table" columns={tableColumns} dataSource={methods} rowKey={(record: PaymentMethod) => record.ID}></Table>

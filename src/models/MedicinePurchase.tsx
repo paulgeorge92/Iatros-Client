@@ -3,8 +3,12 @@ import { Supplier } from './Supplier';
 
 export interface MedicinePurchase {
   ID: number;
+  ReferenceID?: string;
   Supplier?: number;
   SupplierName?: string;
+  SupplierAddress?: string;
+  SupplierEmail?: string;
+  SupplierPhone?: string;
   PurchaseDate?: Date;
   Total: number;
   TaxAmount: number;

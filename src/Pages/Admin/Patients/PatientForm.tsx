@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Card, Input, Form, DatePicker, Select, Checkbox, Button, Space, Modal, Typography, Upload, message } from 'antd';
+import { Row, Col, Card, Input, Form, DatePicker, Select, Checkbox, Button, Space, Modal, Upload, message, PageHeader } from 'antd';
 import ImgCrop from 'antd-img-crop';
 import Breadcrumb, { BreadcrumbItem } from '../../../components/Breadcrumb';
 import { HomeFilled, UserOutlined, PhoneOutlined, PlusOutlined, CloseCircleOutlined } from '@ant-design/icons';
@@ -12,7 +12,6 @@ import { Patient } from '../../../models/Patient';
 
 import './PatientForm.css';
 
-const { Title } = Typography;
 const FormItem = Form.Item;
 const { Option } = Select;
 
@@ -189,14 +188,7 @@ const PatientForm = (props: props) => {
   }, [id]);
   return (
     <>
-      <Row gutter={[16, 24]}>
-        <Col xs={24}>
-          <Title level={4} className="page-title">
-            Patients
-          </Title>
-          <Breadcrumb items={breadcrumbItems} className="breadcrumb"></Breadcrumb>
-        </Col>
-      </Row>
+      <PageHeader className="page-title no-print" title="Patients" subTitle={<Breadcrumb items={breadcrumbItems} className="breadcrumb"></Breadcrumb>}></PageHeader>
       <Row gutter={[16, 24]}>
         <Col xs={24}>
           <Card className="card-container">

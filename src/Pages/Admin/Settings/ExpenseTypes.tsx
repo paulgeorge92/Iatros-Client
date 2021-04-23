@@ -4,11 +4,10 @@ import { ColumnsType } from 'antd/lib/table';
 import { HomeFilled, PlusOutlined } from '@ant-design/icons';
 import { EditIcon, TrashIcon } from '../../../CustomIcons';
 import { AdminPath } from '../../../constants';
-import { Space, Row, Col, Button, Input, Popconfirm, Select, Form, Modal, Table, Typography } from 'antd';
+import { Space, Row, Col, Button, Input, Popconfirm, Select, Form, Modal, Table, PageHeader } from 'antd';
 import { ExpenseType } from '../../../models/ExpenseTypes';
 import { ExpenseTypeRepository } from '../../../repository/ExpenseTypeRepository';
 import { Status } from '../../../models/Enums';
-const { Title } = Typography;
 const FormItem = Form.Item;
 const { TextArea } = Input;
 const { Option } = Select;
@@ -166,21 +165,17 @@ const ExpenseTypes = () => {
 
   return (
     <>
-      <Row gutter={[16, 24]}>
-        <Col xs={24} md={12}>
-          <Title level={4} className="page-title">
-            Expense types
-          </Title>
-          <Breadcrumb items={breadcrumbItems} className="breadcrumb"></Breadcrumb>
-        </Col>
-        <Col xs={24} md={12} style={{ textAlign: 'right' }}>
-          <Space>
-            <Button type="primary" icon={<PlusOutlined />} onClick={onAddTypeClick}>
-              Add Expense Type
-            </Button>
-          </Space>
-        </Col>
-      </Row>
+      <PageHeader
+        className="page-title no-print"
+        title={`Expense types`}
+        subTitle={<Breadcrumb items={breadcrumbItems} className="breadcrumb"></Breadcrumb>}
+        extra={[
+          <Button type="primary" icon={<PlusOutlined />} onClick={onAddTypeClick}>
+            Add Expense Type
+          </Button>,
+        ]}
+      ></PageHeader>
+
       <Row gutter={[16, 24]}>
         <Col xs={24}>
           <Table scroll={{ x: true, scrollToFirstRowOnChange: true }} className="iatros-table" columns={tableColumns} dataSource={expenseTypes} rowKey={(record: ExpenseType) => record.ID}></Table>

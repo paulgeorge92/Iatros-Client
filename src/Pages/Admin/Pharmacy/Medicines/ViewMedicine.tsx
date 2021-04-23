@@ -1,4 +1,4 @@
-import { Col, Modal, Row, Typography, Tabs, Table, Button, Descriptions, Card, Space } from 'antd';
+import { Col, Modal, Row, Typography, Tabs, Table, Button, Descriptions, Card, PageHeader } from 'antd';
 import { HomeFilled } from '@ant-design/icons';
 import React, { useState, useEffect, useContext } from 'react';
 import Breadcrumb, { BreadcrumbItem } from '../../../../components/Breadcrumb';
@@ -13,7 +13,7 @@ import { ColumnsType } from 'antd/lib/table';
 import moment from 'moment';
 import { AdminContext } from '../../../../contexts/AdminContext';
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 const { TabPane } = Tabs;
 
 interface props {
@@ -142,23 +142,19 @@ const ViewMedicine = (props: props) => {
     <Button></Button>
   ) : (
     <>
-      <Row gutter={[16, 24]}>
-        <Col xs={24} md={12}>
-          <Title level={4} className="page-title">
-            View Medicine
-          </Title>
-          <Breadcrumb items={breadcrumbItems} className="breadcrumb"></Breadcrumb>
-        </Col>
-        <Col xs={24} md={12} style={{ textAlign: 'right' }}>
-          <Space>
-            <Link to={`${AdminPath}/${(AdminMenuItems.getMenu('Edit Medicine')?.path || '').replace(':id', medicine.ID)}`}>
-              <Button type="primary" icon={<EditIcon />}>
-                Edit Medicine
-              </Button>
-            </Link>
-          </Space>
-        </Col>
-      </Row>
+      <PageHeader
+        className="page-title no-print"
+        title={`Medicines`}
+        subTitle={<Breadcrumb items={breadcrumbItems} className="breadcrumb"></Breadcrumb>}
+        extra={[
+          <Link to={`${AdminPath}/${(AdminMenuItems.getMenu('Edit Medicine')?.path || '').replace(':id', medicine.ID)}`}>
+            <Button type="primary" icon={<EditIcon />}>
+              Edit Medicine
+            </Button>
+          </Link>,
+        ]}
+      ></PageHeader>
+
       <Row gutter={[16, 24]}>
         <Col xs={24} className="card-container">
           <Card className="card-conatiner">

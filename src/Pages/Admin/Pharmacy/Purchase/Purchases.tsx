@@ -4,12 +4,12 @@ import { HomeFilled, PlusOutlined } from '@ant-design/icons';
 import { EditIcon, EyeIcon, TrashIcon } from '../../../../CustomIcons';
 import { AdminMenuItems, AdminPath } from '../../../../constants';
 import { ColumnsType } from 'antd/lib/table';
-import { Button, Col, Row, Space, Typography, Table, Popconfirm } from 'antd';
+import { Button, Col, Row, Space, Typography, Table, Popconfirm, PageHeader } from 'antd';
 import { Link } from 'react-router-dom';
 import { MedicinePurchase } from '../../../../models/MedicinePurchase';
 import { PurchaseRepository } from '../../../../repository/PurchaseRepository';
 import moment from 'moment';
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
 const Purchases = () => {
   const [purchases, setPurchases] = useState<MedicinePurchase[]>([]);
@@ -80,7 +80,9 @@ const Purchases = () => {
       key: 'Action',
       render: (text: any, row: MedicinePurchase) => (
         <Space size="large">
-          <EyeIcon title={`View`} className="row-view"></EyeIcon>
+          <Link to={AdminPath + '/' + AdminMenuItems.getMenu('View Purchase')?.path.replace(':id', row.ID)}>
+            <EyeIcon title={`View`} className="row-view"></EyeIcon>
+          </Link>
           <Link to={AdminPath + '/' + AdminMenuItems.getMenu('Edit Purchase')?.path.replace(':id', row.ID)}>
             <EditIcon title={`Edit Purchase`} className="row-edit"></EditIcon>
           </Link>
@@ -128,23 +130,19 @@ const Purchases = () => {
 
   return (
     <>
-      <Row gutter={[16, 24]}>
-        <Col xs={24} md={12}>
-          <Title level={4} className="page-title">
-            Purchases
-          </Title>
-          <Breadcrumb items={breadcrumbItems} className="breadcrumb"></Breadcrumb>
-        </Col>
-        <Col xs={24} md={12} style={{ textAlign: 'right' }}>
-          <Space>
-            <Link to={`${AdminPath}/${AdminMenuItems.getMenu('New Purchase')?.path}`}>
-              <Button type="primary" icon={<PlusOutlined />}>
-                New Purchase
-              </Button>
-            </Link>
-          </Space>
-        </Col>
-      </Row>
+      <PageHeader
+        className="page-title no-print"
+        title={`Purchases`}
+        subTitle={<Breadcrumb items={breadcrumbItems} className="breadcrumb"></Breadcrumb>}
+        extra={[
+          <Link to={`${AdminPath}/${AdminMenuItems.getMenu('New Purchase')?.path}`}>
+            <Button type="primary" icon={<PlusOutlined />}>
+              New Purchase
+            </Button>
+          </Link>,
+        ]}
+      ></PageHeader>
+
       <Row gutter={[16, 24]}>
         <Col xs={24}>
           <Table

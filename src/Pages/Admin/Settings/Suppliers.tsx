@@ -4,12 +4,11 @@ import { ColumnsType } from 'antd/lib/table';
 import { HomeFilled, PlusOutlined, UserOutlined, PhoneOutlined } from '@ant-design/icons';
 import { EditIcon, TrashIcon, AtIcon } from '../../../CustomIcons';
 import { AdminPath } from '../../../constants';
-import { Space, Row, Col, Button, Input, Popconfirm, Form, Modal, Table, Typography } from 'antd';
+import { Space, Row, Col, Button, Input, Popconfirm, Form, Modal, Table, PageHeader } from 'antd';
 import { Supplier } from '../../../models/Supplier';
 import { SuppliersRepository } from '../../../repository/SuppliersRepository';
 
 const FormItem = Form.Item;
-const { Title } = Typography;
 const { TextArea } = Input;
 
 const Suppliers = () => {
@@ -133,21 +132,16 @@ const Suppliers = () => {
 
   return (
     <>
-      <Row gutter={[16, 24]}>
-        <Col xs={24} md={12}>
-          <Title level={4} className="page-title">
-            Suppliers
-          </Title>
-          <Breadcrumb items={breadcrumbItems} className="breadcrumb"></Breadcrumb>
-        </Col>
-        <Col xs={24} md={12} style={{ textAlign: 'right' }}>
-          <Space>
-            <Button type="primary" icon={<PlusOutlined />} onClick={onAddSupplierClick}>
-              Add Supplier
-            </Button>
-          </Space>
-        </Col>
-      </Row>
+      <PageHeader
+        className="page-title no-print"
+        title={`Suppliers`}
+        subTitle={<Breadcrumb items={breadcrumbItems} className="breadcrumb"></Breadcrumb>}
+        extra={[
+          <Button type="primary" icon={<PlusOutlined />} onClick={onAddSupplierClick}>
+            Add Supplier
+          </Button>,
+        ]}
+      ></PageHeader>
       <Row gutter={[16, 24]}>
         <Col xs={24}>
           <Table scroll={{ x: true, scrollToFirstRowOnChange: true }} className="iatros-table" columns={tableColumns} dataSource={suppliers} rowKey={(record: Supplier) => record.ID}></Table>

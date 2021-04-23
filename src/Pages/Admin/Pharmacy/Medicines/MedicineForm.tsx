@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Card, Input, Form, Select, Typography, Modal, Button, Space } from 'antd';
+import { Row, Col, Card, Input, Form, Select, Modal, Button, Space, PageHeader } from 'antd';
 import { HomeFilled } from '@ant-design/icons';
 import Breadcrumb, { BreadcrumbItem } from '../../../../components/Breadcrumb';
 import { useParams, useHistory } from 'react-router-dom';
@@ -11,7 +11,6 @@ import { AdminMenuItems, AdminPath } from '../../../../constants';
 import { BuildingIcon, CapsulesIcon } from '../../../../CustomIcons';
 import TextArea from 'antd/lib/input/TextArea';
 
-const { Title } = Typography;
 const FormItem = Form.Item;
 const { Option } = Select;
 
@@ -148,14 +147,7 @@ const MedicineForm = (props: props) => {
 
   return (
     <>
-      <Row gutter={[16, 24]}>
-        <Col xs={24}>
-          <Title level={4} className="page-title">
-            {formType} Medicine
-          </Title>
-          <Breadcrumb items={breadcrumbItems} className="breadcrumb"></Breadcrumb>
-        </Col>
-      </Row>
+      <PageHeader className="page-title no-print" title={`${formType} Medicine`} subTitle={<Breadcrumb items={breadcrumbItems} className="breadcrumb"></Breadcrumb>}></PageHeader>
       <Row gutter={[16, 24]}>
         <Col xs={24}>
           <Card className="card-container">

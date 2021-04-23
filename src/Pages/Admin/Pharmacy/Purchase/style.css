@@ -1,0 +1,21 @@
+.purchase-summary {
+    margin: 0 !important;
+}
+
+.purchase-summary div {
+    border: 1px solid #ddd;
+}
+
+.purchase-summary div+div {
+    border-left: none;
+}
+
+.purchase-summary+.purchase-summary div {
+    border-top: none;
+}
+
+.purchase-summary .ant-input-affix-wrapper {
+    border-top: none !important;
+    border-left: none !important;
+    border-right: none !important;
+}

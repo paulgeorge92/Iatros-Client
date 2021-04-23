@@ -1,6 +1,6 @@
 export interface AppSettings {
   Theme: {
-    AdminPanelLogo: string;
+    Logo: string;
     FavIcon: string;
     HeaderBackground: string;
   };

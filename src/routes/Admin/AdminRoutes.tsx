@@ -1,12 +1,13 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Layout, Menu } from 'antd';
+import { Layout, Menu, Typography } from 'antd';
+import Icon from '@ant-design/icons';
 import { AdminContext } from '../../contexts/AdminContext';
 import { useHistory, useRouteMatch, Switch, Route, Link } from 'react-router-dom';
-import { LogoWhiteImage, AdminMenuItems as AdminMenuObj, AdminPath } from '../../constants';
+import { AdminMenuItems as AdminMenuObj, AdminPath } from '../../constants';
 import AdminDashboard from '../../Pages/Admin/Dashboard';
 import ErrorPage404 from '../../Pages/Error/404';
 import { MenuItem } from '../../models/MenuItem';
-
+const { Text } = Typography;
 const { Header, Content, Sider } = Layout;
 let AdminMenuItems = AdminMenuObj.menu;
 let AdminRoutes = (props: any) => {
@@ -128,12 +129,12 @@ let AdminRoutes = (props: any) => {
     let menu = items.map((item) => {
       return item.showInMenu ? (
         !item.subMenu || item.subMenu.length === 0 || !item.showSubMenu ? (
-          <Menu.Item key={`${(index ? index + '-' : '') + item.index}`} icon={item.icon} onClick={onMenuClick}>
+          <Menu.Item key={`${(index ? index + '-' : '') + item.index}`} icon={item.name === 'Payroll' ? <Icon component={() => <Text style={{ fontSize: '18px', fontWeight: 900 }}>{appContext.context.settings.Currency}</Text>}></Icon> : item.icon} onClick={onMenuClick}>
             {item.name}
             <Link to={`${path}/${item.path}`}></Link>
           </Menu.Item>
         ) : (
-          <Menu.SubMenu key={`${(index ? index + '-' : '') + item.index}`} icon={item.icon} title={item.name}>
+          <Menu.SubMenu key={`${(index ? index + '-' : '') + item.index}`} icon={item.name === 'Payroll' ? <Icon component={() => <Text style={{ fontSize: '18px', fontWeight: 900 }}>{appContext.context.settings.Currency}</Text>}></Icon> : item.icon} title={item.name}>
             {createMenu(item.subMenu, (index ? index + '-' : '') + item.index)}
           </Menu.SubMenu>
         )
@@ -164,43 +165,16 @@ let AdminRoutes = (props: any) => {
   }, []);
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
-      <Header className="site-layout-background" style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
+    <Layout style={{ minHeight: '100vh' }} className="app-layout">
+      <Header className="site-layout-background no-print" style={{ position: 'fixed', zIndex: 1, width: '100%', background: appContext.context.settings.Theme.HeaderBackground }}>
         <div className="logo">
-          <img src={LogoWhiteImage} style={{ height: '50px' }} alt="logo" />
+          <img src={appContext.context.settings.Theme.Logo} style={{ height: '50px' }} alt="logo" />
         </div>
       </Header>
-      <Layout style={{ marginTop: '64px' }}>
-        <Sider breakpoint="lg" collapsedWidth={collapsedWidth} theme="light" collapsible collapsed={collapsed} onCollapse={toggleSideMenu} onBreakpoint={onBreakPointHit}>
+      <Layout className="body-layout">
+        <Sider breakpoint="lg" collapsedWidth={collapsedWidth} theme="light" collapsible collapsed={collapsed} onCollapse={toggleSideMenu} onBreakpoint={onBreakPointHit} className="no-print">
           <Menu theme="light" selectedKeys={getcurrentPathIndex()} mode="inline" title="Dashboard">
-            {
-              createMenu(AdminMenuItems)
-              /* AdminMenuItems.map((item) => {
-                return item.showInMenu ? (
-                  !item.subMenu || item.subMenu.length === 0 || !item.showSubMenu ? (
-                    <Menu.Item key={`${item.index}`} icon={item.icon} onClick={onMenuClick}>
-                      {item.name}
-                      <Link to={`${path}/${item.path}`}></Link>
-                    </Menu.Item>
-                  ) : (
-                    <Menu.SubMenu key={`${item.index}`} icon={item.icon} title={item.name}>
-                      {item.subMenu.map((submenu) => {
-                        return submenu.showInMenu ? (
-                          <Menu.Item key={`${item.index}-${submenu.index}`} onClick={onMenuClick}>
-                            {submenu.name}
-                            <Link to={`${path}/${submenu.path}`}></Link>
-                          </Menu.Item>
-                        ) : (
-                          <></>
-                        );
-                      })}
-                    </Menu.SubMenu>
-                  )
-                ) : (
-                  <></>
-                );
-              }) */
-            }
+            {createMenu(AdminMenuItems)}
           </Menu>
         </Sider>
         <Content className="site-layout-background" style={{ margin: '24px 16px', padding: contentPadding, minHeight: 280 }}>

@@ -7,137 +7,40 @@
   top: 0;
   left: 0;
 }
-
+.body-layout {
+  margin-top: 64px;
+}
 .always-top {
   z-index: 999999;
+}
+
+.only-print {
+  display: none;
+}
+
+.p-0 {
+  padding: 0 !important;
+}
+
+.px-0 {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
 }
 
 .w-100 {
   width: 100%;
 }
 
-.relative {
-  position: relative;
-}
-
-.ant-menu-submenu-popup li.ant-menu-item:last-child {
-  margin-bottom: 0;
-}
-
-.ant-menu-submenu-popup li.ant-menu-item:first-child {
-  margin-top: 0;
-}
-
-li.ant-menu-item {
-  font-family: 'Dosis', 'Poppins', sans-serif;
+.mb-5 {
+  margin-bottom: 15px;
 }
 
 .responsive-img {
   max-width: 100%;
 }
 
-.mb-5 {
-  margin-bottom: 15px;
-}
-
-.ant-layout-header {
-  background: #c21107;
-  z-index: 100 !important;
-  padding: 0 20px;
-}
-
-main.ant-layout-content {
-  margin: 0 !important;
-}
-
-svg[data-prefix='fas'] {
-  min-width: 1em;
-}
-
-h4.page-title {
-  display: inline-block;
-}
-
-.breadcrumb.ant-breadcrumb {
-  display: inline-block;
-  margin-left: 10px;
-}
-
-.ant-breadcrumb .anticon svg {
-  height: 13px;
-}
-
-.ant-layout-sider-zero-width-trigger {
-  top: 0;
-}
-
-.ant-menu-item .anticon svg,
-.ant-menu-submenu-title .anticon svg {
-  width: 18px !important;
-  height: 18px !important;
-}
-
-.loading-center {
-  display: inline-block;
-  position: absolute;
-  width: 100%;
-  top: calc(50% - 40px);
-}
-
-.loading-center svg {
-  width: 40px !important;
-  height: 40px !important;
-}
-
-.iatros-table .row-view {
-  width: 13px;
-  cursor: pointer;
-}
-
-.iatros-table .row-edit {
-  width: 13px;
-  cursor: pointer;
-}
-
-.iatros-table .row-delete {
-  width: 10px;
-  cursor: pointer;
-}
-
-.ant-tabs-top > .ant-tabs-nav {
-  margin: 0;
-}
-
-.delete-item-icon {
-  position: absolute;
-  right: -10px;
-  top: -10px;
-  width: 20px;
-  height: 20px;
-  cursor: pointer;
-  border-radius: 50%;
-  background: #c21107;
-}
-
-.delete-item-icon svg {
-  width: 20px;
-  height: 20px;
-  fill: #fff;
-}
-
-.ant-tabs-content-holder {
-  border: 1px solid rgb(240, 240, 240);
-  border-top: none;
-  padding: 15px;
-}
-
-.ant-input-affix-wrapper-lg .anticon svg {
-  width: 16px;
-  height: 16px;
-}
-
-.ant-picker {
-  width: 100%;
+.relative {
+  position: relative;
 }
 
 .text-left {
@@ -158,4 +61,178 @@ h4.page-title {
 
 .pull-right {
   float: right;
+}
+
+table.print-table {
+  table-layout: fixed;
+  width: 100%;
+  border: 1px solid #ddd;
+}
+
+table.print-table thead th {
+  background: #fafafa;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+table.print-table th {
+  padding: 5px 10px;
+}
+table.print-table th + th {
+  border-left: 1px solid #ddd;
+}
+
+table.print-table td {
+  padding: 10px;
+}
+
+table.print-table td + td {
+  border-left: 1px solid #ddd;
+}
+
+.ant-menu-submenu-popup li.ant-menu-item {
+  :last-child {
+    margin-bottom: 0;
+  }
+  :first-child {
+    margin-top: 0;
+  }
+}
+
+li.ant-menu-item {
+  font-family: 'Dosis', 'Poppins', sans-serif;
+}
+
+.ant-layout-header {
+  background: #c21107;
+  z-index: 100 !important;
+  padding: 0 20px;
+}
+
+main.ant-layout-content {
+  margin: 0 !important;
+}
+
+svg[data-prefix='fas'] {
+  min-width: 1em;
+}
+
+.page-title {
+  padding-left: 0;
+}
+
+.breadcrumb.ant-breadcrumb {
+  display: inline-block;
+  margin-left: 10px;
+
+  .anticon svg {
+    height: 13px;
+  }
+}
+
+/* .ant-breadcrumb .anticon svg {
+  height: 13px;
+} */
+
+.ant-layout-sider-zero-width-trigger {
+  top: 0;
+}
+
+.ant-menu-item .anticon svg,
+.ant-menu-submenu-title .anticon svg {
+  width: 18px !important;
+  height: 18px !important;
+}
+
+.loading-center {
+  display: inline-block;
+  position: absolute;
+  width: 100%;
+  top: calc(50% - 40px);
+
+  svg {
+    width: 40px !important;
+    height: 40px !important;
+  }
+}
+
+.iatros-table {
+  .row-view {
+    width: 13px;
+    cursor: pointer;
+  }
+  .row-edit {
+    width: 13px;
+    cursor: pointer;
+  }
+
+  .row-delete {
+    width: 10px;
+    cursor: pointer;
+  }
+}
+
+.ant-tabs-top > .ant-tabs-nav {
+  margin: 0;
+}
+
+.delete-item-icon {
+  position: absolute;
+  right: -10px;
+  top: -10px;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  border-radius: 50%;
+  background: #c21107;
+
+  svg {
+    width: 20px;
+    height: 20px;
+    fill: #fff;
+  }
+}
+
+.ant-tabs-content-holder {
+  border: 1px solid rgb(240, 240, 240);
+  border-top: none;
+  padding: 15px;
+}
+
+.ant-input-affix-wrapper-lg .anticon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.ant-picker {
+  width: 100%;
+}
+
+.ant-picker-cell-disabled::before {
+  background: transparent;
+}
+
+@page {
+  size: auto;
+  margin: 0;
+}
+
+@media print {
+  .ant-layout {
+    background: #ffffff !important;
+  }
+  .body-layout {
+    margin: 0 !important;
+  }
+  .no-print {
+    display: none;
+  }
+  .only-print {
+    display: block;
+  }
+  .print-no-padding.ant-card-bordered {
+    border: none !important;
+  }
+  .print-no-padding .ant-card-body {
+    padding: 0 !important;
+  }
 }

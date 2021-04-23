@@ -12,6 +12,7 @@ export interface MedicineBatch {
   Price?: number;
   Sold?: number;
   MedicineID?: number;
+  MedicineName?: string;
   PurchaseID?: number;
   Status?: boolean;
   CreatedBy?: number;

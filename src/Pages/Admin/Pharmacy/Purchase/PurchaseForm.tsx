@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Button, Card, Col, DatePicker, Form, Input, Modal, Row, Select, Space, Typography } from 'antd';
+import React, { useState, useEffect, useContext } from 'react';
+import { Button, Card, Col, DatePicker, Form, Input, Modal, PageHeader, Row, Select, Space, Typography } from 'antd';
 import { HomeFilled, CloseCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { useHistory, useParams } from 'react-router-dom';
 import Breadcrumb, { BreadcrumbItem } from '../../../../components/Breadcrumb';
@@ -15,9 +15,11 @@ import { TaxRepository } from '../../../../repository/TaxRepository';
 import TextArea from 'antd/lib/input/TextArea';
 import { MedicineBatch } from '../../../../models/Batch';
 import moment from 'moment';
+import { AdminContext } from '../../../../contexts/AdminContext';
+import './style.css';
 
 const FormItem = Form.Item;
-const { Title } = Typography;
+const { Title, Text } = Typography;
 const { Option } = Select;
 
 interface props {
@@ -67,6 +69,8 @@ const PurchaseForm = (props: props) => {
   const taxDB = new TaxRepository();
   const medicineDB = new MedicineRepository();
   const purchaseDB = new PurchaseRepository();
+
+  const appSettings = useContext(AdminContext).context.settings;
 
   async function loadDependencies() {
     try {
@@ -179,22 +183,29 @@ const PurchaseForm = (props: props) => {
       await form.validateFields();
       try {
         let formData = form.getFieldsValue();
-        var batches: MedicineBatch[] = [...formData.Batch];
-        let supplierName = suppliers.find((x) => x.ID === formData.Supplier)?.Name;
-        batches.forEach((batch: any) => {
-          batch.Expiry = batch.Expiry.toDate();
-          batch.PackageQuantity = parseFloat(batch.PackageQuantity);
-          batch.Quantity = parseFloat(batch.Quantity);
-          batch.PurchasePrice = parseFloat(batch.PurchasePrice);
-          batch.SalePrice = parseFloat(batch.SalePrice);
-        });
-        let purchaseData: MedicinePurchase = { ...formData, DiscountAmount: parseFloat(formData.DiscountAmount), Amount: finalAmount, TaxAmount: totalTax, Batch: batches, PurchaseDate: formData.PurchaseDate.toDate(), SupplierName: supplierName };
-        if (formType === 'Add') {
-          await purchaseDB.add(purchaseData);
+        if (!formData.Batch || formData.Batch.length === 0) {
+          Modal.error({
+            title: 'Error',
+            content: 'Please enter medicine details',
+          });
         } else {
-          await purchaseDB.update(purchaseData);
+          var batches: MedicineBatch[] = [...formData.Batch];
+          let supplierName = suppliers.find((x) => x.ID === formData.Supplier)?.Name;
+          batches.forEach((batch: any) => {
+            batch.Expiry = batch.Expiry.toDate();
+            batch.PackageQuantity = parseFloat(batch.PackageQuantity);
+            batch.Quantity = parseFloat(batch.Quantity);
+            batch.PurchasePrice = parseFloat(batch.PurchasePrice);
+            batch.SalePrice = parseFloat(batch.SalePrice);
+          });
+          let purchaseData: MedicinePurchase = { ...formData, DiscountAmount: parseFloat(formData.DiscountAmount), Amount: finalAmount, TaxAmount: totalTax, Batch: batches, PurchaseDate: formData.PurchaseDate.toDate(), SupplierName: supplierName, Total: subTotal };
+          if (formType === 'Add') {
+            await purchaseDB.add(purchaseData);
+          } else {
+            await purchaseDB.update(purchaseData, purchase.ID);
+          }
+          goBack();
         }
-        goBack();
       } catch (err) {
         Modal.error({
           title: 'Error',
@@ -236,14 +247,8 @@ const PurchaseForm = (props: props) => {
 
   return (
     <>
-      <Row gutter={[16, 24]}>
-        <Col xs={24}>
-          <Title level={4} className="page-title">
-            {formType} Purchase
-          </Title>
-          <Breadcrumb items={breadcrumbItems} className="breadcrumb"></Breadcrumb>
-        </Col>
-      </Row>
+      <PageHeader className="page-title no-print" title={`${formType} Purchase`} subTitle={<Breadcrumb items={breadcrumbItems} className="breadcrumb"></Breadcrumb>}></PageHeader>
+
       <Row gutter={[16, 24]}>
         <Col xs={24}>
           <Card className="card-container">
@@ -320,7 +325,14 @@ const PurchaseForm = (props: props) => {
                                   </Col>
                                   <Col xs={24} md={12}>
                                     <FormItem label="Expiry Date" name={[batch.name, 'Expiry']} fieldKey={[batch.fieldKey, 'Expiry']} rules={[{ required: true, message: 'Please select an expiry date' }]}>
-                                      <DatePicker size="large" picker="month" format="MMMM YYYY"></DatePicker>
+                                      <DatePicker
+                                        size="large"
+                                        picker="month"
+                                        format="MMMM YYYY"
+                                        disabledDate={(currentDate) => {
+                                          return moment().month() > currentDate.month() && moment().year() >= currentDate.year();
+                                        }}
+                                      ></DatePicker>
                                     </FormItem>
                                   </Col>
                                 </Row>
@@ -352,6 +364,7 @@ const PurchaseForm = (props: props) => {
                                         size="large"
                                         placeholder="Buying Price"
                                         min={0}
+                                        prefix={<Text>{appSettings.Currency}</Text>}
                                         onChange={() => {
                                           computeTaxAndPrice(batch.key);
                                         }}
@@ -360,7 +373,7 @@ const PurchaseForm = (props: props) => {
                                   </Col>
                                   <Col xs={24} md={12} lg={6}>
                                     <FormItem label="Sale Price" name={[batch.name, 'SalePrice']} fieldKey={[batch.fieldKey, 'SalePrice']} rules={[{ required: true, message: 'Please enter the selling price' }]}>
-                                      <Input type="number" size="large" placeholder="Sale Price" min={0}></Input>
+                                      <Input type="number" size="large" placeholder="Sale Price" min={0} prefix={<Text>{appSettings.Currency}</Text>}></Input>
                                     </FormItem>
                                   </Col>
                                 </Row>
@@ -384,12 +397,12 @@ const PurchaseForm = (props: props) => {
                                   </Col>
                                   <Col xs={24} md={6}>
                                     <FormItem label="Tax Amount" name={[batch.name, 'TaxPrice']} fieldKey={[batch.fieldKey, 'TaxPrice']}>
-                                      <Input type="number" size="large" placeholder="0" disabled={true} min={0}></Input>
+                                      <Input type="number" size="large" placeholder="0" disabled={true} min={0} prefix={<Text>{appSettings.Currency}</Text>}></Input>
                                     </FormItem>
                                   </Col>
                                   <Col xs={24} md={6}>
                                     <FormItem label="Price" name={[batch.name, 'Price']} fieldKey={[batch.fieldKey, 'Price']}>
-                                      <Input type="number" size="large" placeholder="0" disabled={true} min={0}></Input>
+                                      <Input type="number" size="large" placeholder="0" disabled={true} min={0} prefix={<Text>{appSettings.Currency}</Text>}></Input>
                                     </FormItem>
                                   </Col>
                                 </Row>
@@ -404,62 +417,69 @@ const PurchaseForm = (props: props) => {
                     )}
                   </Form.List>
                 </Row>
-                <Row gutter={[24, 0]} align="middle" justify="end">
-                  <Col xs={12} md={6}>
-                    Sub Total
-                  </Col>
-                  <Col xs={12} md={6}>
-                    {subTotal}
-                  </Col>
-                </Row>
-                <Row gutter={[24, 0]} align="middle" justify="end">
-                  <Col xs={12} md={6}>
-                    Total Tax
-                  </Col>
-                  <Col xs={12} md={6}>
-                    {totalTax}
-                  </Col>
-                </Row>
-                <Row gutter={[24, 0]} align="middle" justify="end">
-                  <Col xs={12} md={6}>
-                    Discount{' '}
-                    <FormItem name="DiscountType" noStyle>
-                      <Select
-                        size="large"
-                        onChange={() => {
-                          computeFinalAmount();
-                        }}
-                      >
-                        <Option value="%">%</Option>
-                        <Option value="Flat">Flat</Option>
-                      </Select>
-                    </FormItem>
-                  </Col>
-                  <Col xs={12} md={6}>
-                    <FormItem name="DiscountAmount" noStyle>
-                      <Input
-                        size="large"
-                        onChange={() => {
-                          computeFinalAmount();
-                        }}
-                      ></Input>
-                    </FormItem>
-                  </Col>
-                </Row>
-                <Row gutter={[24, 0]} align="middle" justify="end">
-                  <Col xs={12} md={6}>
-                    Total Amount
-                  </Col>
-                  <Col xs={12} md={6}>
-                    {finalAmount}
-                  </Col>
-                </Row>
-                <Row gutter={[24, 24]}>
-                  <Button type="primary" onClick={onFormSubmit}>
-                    {formType} Purchase
-                  </Button>
-                </Row>
               </Space>
+              <Row gutter={[24, 12]} align="middle" justify="end" className="purchase-summary">
+                <Col xs={12} md={6} lg={3}>
+                  <Text>Sub Total</Text>
+                </Col>
+                <Col xs={12} md={6}>
+                  <Text strong={true}>
+                    {appSettings.Currency} {subTotal.toFixed(2)}
+                  </Text>
+                </Col>
+              </Row>
+              <Row gutter={[24, 12]} align="middle" justify="end" className="purchase-summary">
+                <Col xs={12} md={6} lg={3}>
+                  <Text>Total Tax</Text>
+                </Col>
+                <Col xs={12} md={6}>
+                  <Text strong={true}>
+                    {appSettings.Currency} {totalTax.toFixed(2)}
+                  </Text>
+                </Col>
+              </Row>
+              <Row gutter={[24, 12]} align="middle" justify="end" className="purchase-summary">
+                <Col xs={12} md={6} lg={3}>
+                  <Text>Discount </Text>
+                  <FormItem name="DiscountType" noStyle>
+                    <Select
+                      size="small"
+                      onChange={() => {
+                        computeFinalAmount();
+                      }}
+                    >
+                      <Option value="%">%</Option>
+                      <Option value="Flat">Flat</Option>
+                    </Select>
+                  </FormItem>
+                </Col>
+                <Col xs={12} md={6}>
+                  <FormItem name="DiscountAmount" noStyle>
+                    <Input
+                      size="small"
+                      onChange={() => {
+                        computeFinalAmount();
+                      }}
+                      prefix={<Text>{appSettings.Currency}</Text>}
+                    ></Input>
+                  </FormItem>
+                </Col>
+              </Row>
+              <Row gutter={[24, 12]} align="middle" justify="end" className="purchase-summary">
+                <Col xs={12} md={6} lg={3}>
+                  <Text>Total Amount</Text>
+                </Col>
+                <Col xs={12} md={6}>
+                  <Text strong={true}>
+                    {appSettings.Currency} {finalAmount.toFixed(2)}
+                  </Text>
+                </Col>
+              </Row>
+              <Row gutter={[24, 24]}>
+                <Button type="primary" onClick={onFormSubmit}>
+                  {formType} Purchase
+                </Button>
+              </Row>
             </Form>
           </Card>
         </Col>

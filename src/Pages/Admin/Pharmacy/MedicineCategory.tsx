@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Breadcrumb, { BreadcrumbItem } from '../../../components/Breadcrumb';
-import { Space, Row, Col, Button, Popconfirm, Form, Modal, Table, Typography, Input } from 'antd';
+import { Space, Row, Col, Button, Popconfirm, Form, Modal, Table, Input, PageHeader } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import { HomeFilled, PlusOutlined } from '@ant-design/icons';
 import { EditIcon, TrashIcon } from '../../../CustomIcons';
@@ -8,7 +8,6 @@ import { AdminPath } from '../../../constants';
 import { MedicineCategory } from '../../../models/MedicineCategory';
 import { MedicineCategoryRepository } from '../../../repository/MedicineCategoryRepository';
 const FormItem = Form.Item;
-const { Title } = Typography;
 
 const MedicineCategories = () => {
   let breadcrumbItems: Array<BreadcrumbItem> = [
@@ -158,21 +157,17 @@ const MedicineCategories = () => {
 
   return (
     <>
-      <Row gutter={[16, 24]}>
-        <Col xs={24} md={12}>
-          <Title level={4} className="page-title">
-            Medicine Categories
-          </Title>
-          <Breadcrumb items={breadcrumbItems} className="breadcrumb"></Breadcrumb>
-        </Col>
-        <Col xs={24} md={12} style={{ textAlign: 'right' }}>
-          <Space>
-            <Button type="primary" icon={<PlusOutlined />} onClick={onAddCategoryClick}>
-              Add Category
-            </Button>
-          </Space>
-        </Col>
-      </Row>
+      <PageHeader
+        className="page-title no-print"
+        title={`Medicine Categories`}
+        subTitle={<Breadcrumb items={breadcrumbItems} className="breadcrumb"></Breadcrumb>}
+        extra={[
+          <Button type="primary" icon={<PlusOutlined />} onClick={onAddCategoryClick}>
+            Add Category
+          </Button>,
+        ]}
+      ></PageHeader>
+
       <Row gutter={[16, 24]}>
         <Col xs={24}>
           <Table className="iatros-table" columns={tableColumns} dataSource={categories} rowKey={(record: MedicineCategory) => record.ID}></Table>

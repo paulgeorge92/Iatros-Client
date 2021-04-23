@@ -6,11 +6,10 @@ import { AdminMenuItems, AdminPath } from '../../../../constants';
 import { ColumnsType } from 'antd/lib/table';
 import { Medicine } from '../../../../models/Medicine';
 import { MedicineCategoryRepository } from '../../../../repository/MedicineCategoryRepository';
-import { Button, Col, Row, Space, Typography, Table, Popconfirm } from 'antd';
+import { Button, Col, Row, Space, Table, Popconfirm, PageHeader } from 'antd';
 import { MedicineRepository } from '../../../../repository/MedicineRepository';
 import { Link } from 'react-router-dom';
 import { MedicineCategory } from '../../../../models/MedicineCategory';
-const { Title } = Typography;
 
 const Medicines = () => {
   const [medicines, setMedicines] = useState<Medicine[]>([]);
@@ -134,23 +133,19 @@ const Medicines = () => {
 
   return (
     <>
-      <Row gutter={[16, 24]}>
-        <Col xs={24} md={12}>
-          <Title level={4} className="page-title">
-            Medicines
-          </Title>
-          <Breadcrumb items={breadcrumbItems} className="breadcrumb"></Breadcrumb>
-        </Col>
-        <Col xs={24} md={12} style={{ textAlign: 'right' }}>
-          <Space>
-            <Link to={`${AdminPath}/${AdminMenuItems.getMenu('New Medicine')?.path}`}>
-              <Button type="primary" icon={<PlusOutlined />}>
-                New Medicine
-              </Button>
-            </Link>
-          </Space>
-        </Col>
-      </Row>
+      <PageHeader
+        className="page-title no-print"
+        title={`Medicines`}
+        subTitle={<Breadcrumb items={breadcrumbItems} className="breadcrumb"></Breadcrumb>}
+        extra={[
+          <Link to={`${AdminPath}/${AdminMenuItems.getMenu('New Medicine')?.path}`}>
+            <Button type="primary" icon={<PlusOutlined />}>
+              New Medicine
+            </Button>
+          </Link>,
+        ]}
+      ></PageHeader>
+
       <Row gutter={[16, 24]}>
         <Col xs={24}>
           <Table scroll={{ x: true, scrollToFirstRowOnChange: true }} sticky={true} className="iatros-table" columns={columns} dataSource={medicines}></Table>

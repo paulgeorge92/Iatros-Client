@@ -55,13 +55,13 @@ export class PurchaseRepository {
     });
   }
 
-  public update(item: MedicinePurchase): Promise<boolean> {
+  public update(item: MedicinePurchase, id: number): Promise<boolean> {
     return new Promise(async (resolve, reject) => {
-      let index = Purchases.findIndex((purchase: any) => !!(item.ID === purchase.ID));
+      let index = Purchases.findIndex((purchase: any) => !!(item.ID === id));
       if (index > -1) {
         Purchases[index] = { ...item };
         try {
-          let batches = await this.batchDB.getBatchesByPurchase(item.ID);
+          let batches = await this.batchDB.getBatchesByPurchase(id);
           if (batches.length) {
             batches.forEach(async (batch: MedicineBatch) => {
               var index = item.Batch?.findIndex((x) => x.ID === batch.ID);
