@@ -33,7 +33,7 @@ export class TaxRepository {
     });
   }
 
-  public update(item: Tax): Promise<Tax> {
+  public update(item: Tax): Promise<void> {
     return new Promise((resolve, reject) => {
       let index = Taxes.findIndex((x: any) => x.ID === item.ID);
       if (index > -1) {
@@ -45,7 +45,7 @@ export class TaxRepository {
     });
   }
 
-  public delete(id: number): Promise<Tax> {
+  public delete(id: number): Promise<void> {
     return new Promise((resolve, reject) => {
       let index = Taxes.findIndex((x: any) => x.ID === id);
       if (index > -1) {

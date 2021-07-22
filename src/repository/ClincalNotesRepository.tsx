@@ -38,7 +38,7 @@ export class ClinicalNotesRepository {
     });
   }
 
-  public update(item: ClinicalNote): Promise<ClinicalNote> {
+  public update(item: ClinicalNote): Promise<void> {
     return new Promise((resolve, reject) => {
       let index = ClinicalNotes.findIndex((x: any) => x.ID === item.ID);
       if (index > -1) {
@@ -50,7 +50,7 @@ export class ClinicalNotesRepository {
     });
   }
 
-  public delete(id: number): Promise<ClinicalNote> {
+  public delete(id: number): Promise<void> {
     return new Promise((resolve, reject) => {
       let index = ClinicalNotes.findIndex((x: any) => x.ID === id);
       if (index > -1) {

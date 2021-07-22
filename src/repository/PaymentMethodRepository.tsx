@@ -33,7 +33,7 @@ export class PaymentMethodRepository {
     });
   }
 
-  public update(item: PaymentMethod): Promise<PaymentMethod> {
+  public update(item: PaymentMethod): Promise<void> {
     return new Promise((resolve, reject) => {
       let index = PaymentMethods.findIndex((x: any) => x.ID === item.ID);
       if (index > -1) {
@@ -45,7 +45,7 @@ export class PaymentMethodRepository {
     });
   }
 
-  public delete(id: number): Promise<PaymentMethod> {
+  public delete(id: number): Promise<void> {
     return new Promise((resolve, reject) => {
       let index = PaymentMethods.findIndex((x: any) => x.ID === id);
       if (index > -1) {

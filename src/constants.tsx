@@ -19,6 +19,7 @@ import ViewMedicine from './Pages/Admin/Pharmacy/Medicines/ViewMedicine';
 import { MenuItem } from './models/MenuItem';
 import ViewPurchase from './Pages/Admin/Pharmacy/Purchase/ViewPurchase';
 import Doctors from './Pages/Admin/Doctors/Doctors';
+import Appointments from './Pages/Admin/Appointments/Appointments.';
 
 export const AdminPath = '/admin';
 export const LogoImage = require('./assets/images/Logo.png') as string;
@@ -78,7 +79,7 @@ _AdminMenuItems.menu = [
     index: 3,
     icon: <CalendarIcon />,
     showInMenu: true,
-    component: <ErrorPage404 homeUrl={AdminPath} />,
+    component: <Appointments />,
   },
   {
     name: 'Invoices',

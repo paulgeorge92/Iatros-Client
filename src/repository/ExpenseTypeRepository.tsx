@@ -33,7 +33,7 @@ export class ExpenseTypeRepository {
     });
   }
 
-  public update(item: ExpenseType): Promise<ExpenseType> {
+  public update(item: ExpenseType): Promise<void> {
     return new Promise((resolve, reject) => {
       let index = ExpenseTypes.findIndex((x: any) => x.ID === item.ID);
       if (index > -1) {
@@ -45,7 +45,7 @@ export class ExpenseTypeRepository {
     });
   }
 
-  public delete(id: number): Promise<ExpenseType> {
+  public delete(id: number): Promise<void> {
     return new Promise((resolve, reject) => {
       let index = ExpenseTypes.findIndex((x: any) => x.ID === id);
       if (index > -1) {

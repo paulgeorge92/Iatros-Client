@@ -13,16 +13,16 @@ import { APP_SETTINGS } from './Defaults/AppSettings';
 function reducer(state: AppContext, action: ContextDispatch): AppContext {
   switch (action.type) {
     case ContextActions.LOGIN_USER:
-      return { ...state, currentUser: action.value };
+      return { ...state, session: action.value };
     case ContextActions.LOGOUT_USER:
-      return { ...state, currentUser: {} };
+      return { ...state, session: {} };
     case ContextActions.SETTINGS_UPDATE:
       return { ...state, settings: action.value };
     default:
       return { ...state };
   }
 }
-const initialContext: AppContext = { currentUser: {}, settings: APP_SETTINGS };
+const initialContext: AppContext = { session: {}, settings: APP_SETTINGS };
 const App = () => {
   const [adminContext, dispatchAdmin] = useReducer(reducer, initialContext);
   const [userContext, dispatchUser] = useReducer(reducer, initialContext);

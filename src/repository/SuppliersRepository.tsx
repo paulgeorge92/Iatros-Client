@@ -33,7 +33,7 @@ export class SuppliersRepository {
     });
   }
 
-  public update(item: Supplier): Promise<Supplier> {
+  public update(item: Supplier): Promise<void> {
     return new Promise((resolve, reject) => {
       let index = Suppliers.findIndex((x: any) => x.ID === item.ID);
       if (index > -1) {
@@ -45,7 +45,7 @@ export class SuppliersRepository {
     });
   }
 
-  public delete(id: number): Promise<Supplier> {
+  public delete(id: number): Promise<void> {
     return new Promise((resolve, reject) => {
       let index = Suppliers.findIndex((x: any) => x.ID === id);
       if (index > -1) {

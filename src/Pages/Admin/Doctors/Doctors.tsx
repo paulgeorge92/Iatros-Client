@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 
 import { Table, Row, Col, Button, Space, Tag, Popconfirm, PageHeader } from 'antd';
 import { HomeFilled, PlusOutlined } from '@ant-design/icons';
-import { DoctorIcon, EditIcon, EyeIcon, TrashIcon } from '../../../CustomIcons';
+import { DoctorIcon, EditIcon, TrashIcon } from '../../../CustomIcons';
 import { AdminMenuItems, AdminPath } from '../../../constants';
 import Breadcrumb, { BreadcrumbItem } from '../../../components/Breadcrumb';
 import { ColumnsType } from 'antd/lib/table';
@@ -70,20 +70,20 @@ const Doctors = () => {
       width: '10%',
     },
   ];
-  if (appContext.currentUser.Permissions?.includes('Edit Doctor') || appContext.currentUser.Permissions?.includes('Delete Doctor')) {
+  if (appContext.session?.role?.permissions?.includes('Edit Doctor') || appContext.session?.role?.permissions?.includes('Delete Doctor')) {
     columns.push({
       title: 'Action',
       key: 'Action',
       render: (text: any, row: Doctor) => (
         <Space size="large">
-          {appContext.currentUser.Permissions?.includes('Edit Doctor') ? (
+          {appContext.session?.role?.permissions?.includes('Edit Doctor') ? (
             <Link to={AdminPath + '/' + AdminMenuItems.getMenu('Edit Doctor')?.path.replace(':id', row.ID)}>
               <EditIcon title={`Edit ${row.FirstName} ${row.LastName}`} className="row-edit"></EditIcon>
             </Link>
           ) : (
             <></>
           )}
-          {appContext.currentUser.Permissions?.includes('Delete Doctor') ? (
+          {appContext.session?.role?.permissions?.includes('Delete Doctor') ? (
             <Popconfirm
               title="Are you sure you want to delete this doctor?"
               onConfirm={() => {
@@ -105,9 +105,9 @@ const Doctors = () => {
 
   const doctorDB = new DoctorRepository();
 
-  function onDeleteDoctorClick(id: number) {
-    deleteDoctor(id);
-    getDoctors();
+  async function onDeleteDoctorClick(id: number) {
+    await deleteDoctor(id);
+    await getDoctors();
   }
 
   async function getDoctors() {
@@ -136,7 +136,7 @@ const Doctors = () => {
         subTitle={<Breadcrumb items={breadcrumbItems} className="breadcrumb"></Breadcrumb>}
         extra={[
           <Space>
-            {appContext.currentUser.Permissions?.includes('Add Doctor') ? (
+            {appContext.session?.role?.permissions?.includes('Add Doctor') ? (
               <Link to={`${AdminPath}/${AdminMenuItems.getMenu('Add Doctor')?.path}`}>
                 <Button type="primary" icon={<PlusOutlined />}>
                   New Doctor

@@ -593,3 +593,5 @@ export const ClinicalNotes = [
 
 export const Purchases = [];
 export const Doctors = [];
+
+export const Appointments = [];

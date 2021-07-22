@@ -7,6 +7,7 @@ import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import moment from 'moment';
 import { ContextProvider } from '../models/Context';
 import { ContextActions } from '../constants';
+import { AuthenticationRepository } from '../repository/AuthenticationRepository';
 
 export interface LoginFormProps {
   returnUrl?: string;
@@ -18,6 +19,8 @@ export interface LoginFormProps {
 export const LoginForm = (props: LoginFormProps) => {
   const appContext = useContext(props.context);
   const history = useHistory();
+
+  const authDB = new AuthenticationRepository();
 
   const layout = {
     wrapperCol: { span: 24 },
@@ -39,7 +42,12 @@ export const LoginForm = (props: LoginFormProps) => {
     setter(ele.value);
   };
 
-  const onFinish = () => {
+  const onFinish = async () => {
+    try {
+      let user = await authDB.authenticate(userName, pwd);
+      if (user) {
+      }
+    } catch (error) {}
     appContext.dispatch({ type: ContextActions.LOGIN_USER, value: { id: 1 } });
     sessionStorage.setItem(
       'userSession',

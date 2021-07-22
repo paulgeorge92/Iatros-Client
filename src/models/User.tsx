@@ -1,8 +1,10 @@
-import { Interface } from 'readline';
+import { Role } from './Role';
 
 export interface User {
   id?: number;
-  username?: string;
-  role?: string;
-  Permissions?: string[];
+  userName?: string;
+  name?: string;
+  email?: string;
+  status?: string;
+  role?: Role;
 }

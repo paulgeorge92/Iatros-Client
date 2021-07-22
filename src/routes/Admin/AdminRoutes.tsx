@@ -146,7 +146,7 @@ let AdminRoutes = (props: any) => {
   };
 
   useEffect(() => {
-    if (!appContext.context.currentUser.id && !sessionStorage.getItem('userSession')) {
+    if (!appContext.context.session?.id && !sessionStorage.getItem('userSession')) {
       history.push({
         pathname: `${path}/login`,
         state: { redirectUrl: document.location.pathname.toLowerCase() },
