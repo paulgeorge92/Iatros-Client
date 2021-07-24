@@ -70,20 +70,20 @@ const Doctors = () => {
       width: '10%',
     },
   ];
-  if (appContext.session?.role?.permissions?.includes('Edit Doctor') || appContext.session?.role?.permissions?.includes('Delete Doctor')) {
+  if (appContext.session?.Role?.Permissions?.includes('Edit Doctor') || appContext.session?.Role?.Permissions?.includes('Delete Doctor')) {
     columns.push({
       title: 'Action',
       key: 'Action',
       render: (text: any, row: Doctor) => (
         <Space size="large">
-          {appContext.session?.role?.permissions?.includes('Edit Doctor') ? (
+          {appContext.session?.Role?.Permissions?.includes('Edit Doctor') ? (
             <Link to={AdminPath + '/' + AdminMenuItems.getMenu('Edit Doctor')?.path.replace(':id', row.ID)}>
               <EditIcon title={`Edit ${row.FirstName} ${row.LastName}`} className="row-edit"></EditIcon>
             </Link>
           ) : (
             <></>
           )}
-          {appContext.session?.role?.permissions?.includes('Delete Doctor') ? (
+          {appContext.session?.Role?.Permissions?.includes('Delete Doctor') ? (
             <Popconfirm
               title="Are you sure you want to delete this doctor?"
               onConfirm={() => {
@@ -136,7 +136,7 @@ const Doctors = () => {
         subTitle={<Breadcrumb items={breadcrumbItems} className="breadcrumb"></Breadcrumb>}
         extra={[
           <Space>
-            {appContext.session?.role?.permissions?.includes('Add Doctor') ? (
+            {appContext.session?.Role?.Permissions?.includes('Add Doctor') ? (
               <Link to={`${AdminPath}/${AdminMenuItems.getMenu('Add Doctor')?.path}`}>
                 <Button type="primary" icon={<PlusOutlined />}>
                   New Doctor

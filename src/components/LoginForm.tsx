@@ -1,25 +1,17 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import { Form, Input, Checkbox, Button } from 'antd';
+import { Form, Input, Checkbox, Button, Alert } from 'antd';
 import { UserOutlined, EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
-import moment from 'moment';
-import { ContextProvider } from '../models/Context';
-import { ContextActions } from '../constants';
 import { AuthenticationRepository } from '../repository/AuthenticationRepository';
+import { Session } from '../models/Session';
 
 export interface LoginFormProps {
-  returnUrl?: string;
-  defaultUrl: string;
-  context: React.Context<ContextProvider>;
-  mode: string;
+  onSuccess: Function;
+  name: string;
 }
 
 export const LoginForm = (props: LoginFormProps) => {
-  const appContext = useContext(props.context);
-  const history = useHistory();
-
   const authDB = new AuthenticationRepository();
 
   const layout = {
@@ -33,6 +25,8 @@ export const LoginForm = (props: LoginFormProps) => {
   const [pwd, setPwd] = useState('');
   const [rememberUser, setRememberUser] = useState(false);
 
+  const [message, setMessage] = useState('');
+
   const onRememberChange = (e: CheckboxChangeEvent) => {
     setRememberUser(e.target.checked);
     //set cookie
@@ -43,31 +37,18 @@ export const LoginForm = (props: LoginFormProps) => {
   };
 
   const onFinish = async () => {
+    let session: Session = {};
+    setMessage('');
     try {
-      let user = await authDB.authenticate(userName, pwd);
-      if (user) {
-      }
-    } catch (error) {}
-    appContext.dispatch({ type: ContextActions.LOGIN_USER, value: { id: 1 } });
-    sessionStorage.setItem(
-      'userSession',
-      JSON.stringify({
-        user: userName,
-        session: new Date().getTime().toString(),
-        expiry: moment().add(15, 'minute').toDate().getTime().toString(),
-        mode: props.mode,
-      })
-    );
-
-    if (props.returnUrl) {
-      history.push(props.returnUrl);
-    } else {
-      history.push(props.defaultUrl);
+      session = await authDB.authenticate(userName, pwd);
+      props.onSuccess(session);
+    } catch (error) {
+      setMessage(error);
     }
   };
 
   return (
-    <Form {...layout} name="Admin Login" initialValues={{ userName, pwd, rememberUser }} onFinish={onFinish}>
+    <Form {...layout} name={props.name} initialValues={{ userName, pwd, rememberUser }} onFinish={onFinish}>
       <Form.Item {...tailLayout} name="userName" rules={[{ required: true, message: 'Enter your username or email' }]}>
         <Input
           prefix={<UserOutlined />}
@@ -94,6 +75,7 @@ export const LoginForm = (props: LoginFormProps) => {
         </Checkbox>
       </Form.Item>
       <Form.Item {...tailLayout} name="submit">
+        {message ? <Alert message={message} type="error" showIcon></Alert> : <></>}
         <Button type="primary" htmlType="submit">
           Sign In
         </Button>

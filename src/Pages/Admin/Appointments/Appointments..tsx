@@ -62,20 +62,20 @@ const Appointments = () => {
       sortDirections: ['ascend', 'descend'],
     },
   ];
-  if (appContext.session?.role?.permissions?.includes('Edit Appointment') || appContext.session?.role?.permissions?.includes('Delete Appointment')) {
+  if (appContext.session?.Role?.Permissions?.includes('Edit Appointment') || appContext.session?.Role?.Permissions?.includes('Delete Appointment')) {
     columns.push({
       title: 'Action',
       key: 'Action',
       render: (text: any, row: Appointment) => (
         <Space size="large">
-          {appContext.session?.role?.permissions?.includes('Edit Appointment') ? (
+          {appContext.session?.Role?.Permissions?.includes('Edit Appointment') ? (
             <Link to={AdminPath + '/' + AdminMenuItems.getMenu('Edit Appointment')?.path.replace(':id', row.ID)}>
               <EditIcon title={`Edit`} className="row-edit"></EditIcon>
             </Link>
           ) : (
             <></>
           )}
-          {appContext.session?.role?.permissions?.includes('Delete Appointment') ? (
+          {appContext.session?.Role?.Permissions?.includes('Delete Appointment') ? (
             <Popconfirm
               title="Are you sure you want to delete this appointment?"
               onConfirm={() => {
@@ -128,7 +128,7 @@ const Appointments = () => {
         subTitle={<Breadcrumb items={breadcrumbItems} className="breadcrumb"></Breadcrumb>}
         extra={[
           <Space>
-            {appContext.session?.role?.permissions?.includes('Add Appointment') ? (
+            {appContext.session?.Role?.Permissions?.includes('Add Appointment') ? (
               <Link to={`${AdminPath}/${AdminMenuItems.getMenu('Add Appointment')?.path}`}>
                 <Button type="primary" icon={<PlusOutlined />}>
                   New Appointment

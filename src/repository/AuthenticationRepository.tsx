@@ -1,22 +1,24 @@
 import { Roles, users } from '../dummyUsers';
+import { Session } from '../models/Session';
 
 export class AuthenticationRepository {
   // eslint-disable-next-line
   constructor() {}
 
-  public authenticate(userName: string, password: string) {
+  public authenticate(userName: string, password: string): Promise<Session> {
     return new Promise((resolve, reject) => {
       let user = users.find((item) => item.UserName.toLowerCase() === userName && item.Password === password);
-      let credentials = null;
+      let session: Session = {};
       if (user) {
         let role = Roles.find((item) => item.ID === user?.UserRole);
-        credentials = {
-          userName: user.UserName,
-          role: role,
-          id: user.ID,
-          email: user.Email,
+        session = {
+          ID: user.ID,
+          UserName: user.UserName,
+          SessionKey: '',
+          Role: role,
+          UserID: user.ID,
         };
-        resolve(credentials);
+        resolve(session);
       } else {
         reject('Invalid User name or password');
       }

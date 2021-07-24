@@ -146,19 +146,11 @@ let AdminRoutes = (props: any) => {
   };
 
   useEffect(() => {
-    if (!appContext.context.session?.id && !sessionStorage.getItem('userSession')) {
+    if (!appContext.context.session?.ID) {
       history.push({
         pathname: `${path}/login`,
         state: { redirectUrl: document.location.pathname.toLowerCase() },
       });
-    } else {
-      var session = JSON.parse(sessionStorage.getItem('userSession') || '{}');
-      if (session.mode === 'admin' && new Date(parseInt(session.expiry) || '0') <= new Date()) {
-        history.push({
-          pathname: `${path}/login`,
-          state: { redirectUrl: document.location.pathname.toLowerCase() },
-        });
-      }
     }
     return () => {};
     // eslint-disable-next-line
@@ -182,9 +174,9 @@ let AdminRoutes = (props: any) => {
             <Route exact path={`${path}`}>
               <AdminDashboard />
             </Route>
-            {routes.map((item) => {
+            {routes.map((item, index) => {
               return (
-                <Route exact path={`${path}/${item.path}`} key={`routes-${item.index}`}>
+                <Route exact path={`${path}/${item.path}`} key={`routes-${index}-${item.index}`}>
                   {item.component}
                 </Route>
               );
