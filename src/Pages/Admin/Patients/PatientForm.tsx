@@ -75,7 +75,7 @@ const PatientForm = (props: props) => {
       link: AdminPath + '/' + AdminMenuItems.getMenu('Patients')?.path,
     },
     {
-      title: 'New Patient',
+      title: formType === 'Add' ? 'New Patient' : 'Edit Patient',
     },
   ];
 

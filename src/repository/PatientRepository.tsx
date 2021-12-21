@@ -10,6 +10,7 @@ export class PatientRepository {
       resolve(Patients as Patient[]);
     });
   }
+
   public getByID(id: number): Promise<Patient> {
     return new Promise((resolve, reject) => {
       let index = Patients.findIndex((x: any) => x.ID === id);

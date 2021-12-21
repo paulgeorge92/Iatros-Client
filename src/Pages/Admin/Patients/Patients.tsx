@@ -80,7 +80,9 @@ const Patients = () => {
       key: 'Action',
       render: (text: any, row: Patient) => (
         <Space size="large">
-          <EyeIcon title={`View ${row.FirstName} ${row.LastName}`} className="row-view"></EyeIcon>
+          <Link to={`${AdminPath}/${AdminMenuItems.getMenu('View Patient')?.path.replace(':id', row.ID)}`}>
+            <EyeIcon title={`View ${row.FirstName} ${row.LastName}`} className="row-view"></EyeIcon>
+          </Link>
           <Link to={AdminPath + '/' + AdminMenuItems.getMenu('Edit Patient')?.path.replace(':id', row.ID)}>
             <EditIcon title={`Edit ${row.FirstName} ${row.LastName}`} className="row-edit"></EditIcon>
           </Link>
